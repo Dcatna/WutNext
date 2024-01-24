@@ -1,36 +1,48 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom'
-
+import "./Navbar.css"
 
 type Props = {}
 
 const Navbar = (props: Props) => {
   return (
-    <nav style={{
+    <nav className="navbar" style={{
       textAlign:"center",
+      backgroundColor:"black",
+      paddingBottom:'10px',
+      justifyContent:'center',
+      alignItems:'center',
+      display:'flex'
     }}>
-        <div className = "links" style={{
+        <div className = "nav-links" style={{
       }}>
-        <div className='sections' style={{
-          paddingTop:"15px",
-        }}>
           <Link to="/" style = {{
-            color:"white",
+            color:"#52525b",
+            textDecoration:'none',
+            margin:'10px',
           }}>HOME</Link>
-          <Link to="/teams" style = {{
-            color:"white",
-          }}>TEAM PROPS</Link>
-          <Link to= "/players"style = {{
-            color:"white",
-          }}>PLAYER PROPS</Link>
+          <Link to="/recommened" style = {{
+            color:"#52525b",
+            textDecoration:'none',
+            margin:'10px',
+          }}>RECOMMENED</Link>
+          <Link to= "/pool" style = {{
+            color:"#52525b",
+            textDecoration:'none',
+            margin:'10px',
+          }}>POOL</Link>
           <a style = {{
-            color:"white",
-          }}href="#">PICKS</a>
-          <button  style={{
-          float:'right'
+            color:"#52525b",
+            textDecoration:'none',
+            margin:'10px'
+          }}href="#">PROFILE</a>
+
+          <button className='sign-out-btn' style={{
+          float:'right',
+          
         }}>SIGN OUT!</button>
-        </div>
+
       </div>
     </nav>
   )

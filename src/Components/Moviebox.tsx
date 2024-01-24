@@ -1,22 +1,42 @@
 import React from 'react'
 
-
 export type Data = {
-    title: string, 
-    overview: string,
-    release_date: string,
-    vote_average: number,
-    poster_path: string,
+    title: string | undefined, 
+    overview: string | undefined,
+    release_date: string | undefined,
+    vote_average: number | undefined,
+    poster_path: string | undefined,
 }
 
-const Moviebox = ({title, overview, release_date, vote_average, poster_path}: Data) => {
-    const partial_url = "https://image.tmdb.org/t/p/w500"
+const shortenedDesc = (overview : string | undefined) => {
+    if(overview?.length??0 > 75) {
+        const reduced = overview?.substring(0, 75)
+        return reduced + "..."
+    }
+    else{
+        return overview
+    }
+}
+const Moviebox = ({overview, release_date, vote_average, poster_path}: Data) => {
+    const partial_url = "https://image.tmdb.org/t/p/w200"
   return (
-    <div>
-        <div>
-            <p>{title}</p>
+    <div style={{
+        width:"100px"
+    }}>
+        <div style={{
+                outlineColor: "black",
+                alignItems: "center",
+                border: "1.5px",
+                borderStyle: "solid",
+                borderRadius: "5px",
+                borderColor: "black",
+                marginBottom:"5px",
+                width:"200px",
+                height:'450px',
+                backgroundColor:'darkgrey'
+            }}>
             <img src={partial_url+poster_path} alt="" />
-            <p>{overview}</p>
+            <p>{shortenedDesc(overview)}</p>
             <p>{vote_average}</p>
         </div>
     </div>
