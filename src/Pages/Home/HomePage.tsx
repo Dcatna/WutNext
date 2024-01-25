@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
-import Moviebox, { Data } from '../../Components/Moviebox'
+import Moviebox, { Result, Root } from '../../Components/Moviebox'
 import Movieboxlist from '../../Components/MovieboxList'
 import "./HomePage.css"
 
 const HomePage = () => {
-    const [backdata, setBackData] = useState<Data[]>([])
+    const [backdata, setBackData] = useState<Result[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<any | null>(null)
 
     useEffect(() => {
         fetch("/trending").then(res => 
-          res.json()
+          res.json() 
         ).then((data) =>{
             //console.log(data)
-          setBackData(data.results);
+          setBackData((data as Root).results);
+          console.log((data as Root).results)
           setLoading(false)
         }).catch(error => {
           setError(error);

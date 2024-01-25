@@ -1,42 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import Moviebox, { Data } from './Moviebox'
+import Moviebox, { Result, Root } from './Moviebox'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import "./MovieboxList.css"
-export type MovieList = {
-    items : Data[]
+interface movieBoxListProp{
+    items: Result[]
+}
+const itemsIndex = (items : Result[], currItem : Result) =>{
+    for(let i = 0; i<items.length; i++) {
+        if(items[i].title === currItem.title){
+            return i
+        }
+    }
+    return -1
 }
 
-const Movieboxlist = ({items} : MovieList) => {
-   // console.log(items, items.length)
-    const [arr, setarr] = useState<Data[]>([items[0],items[1], items[2]]) 
-    const [buttonClicks, setButtonClicks] = useState<number>(0)
+const Movieboxlist = ({items} : movieBoxListProp) => {
+    const [arr, setArr] = useState<Result[]>(items.slice(0, 3))
     const [animationParent] = useAutoAnimate()
     
     console.log(arr)
-    const onRightButtonClick = () => {
-        //setButtonClicks(buttonClicks+1)
-        
-        console.log(items.indexOf(arr[2]) + 1)
+    const onLeftButtonClick = () => {
+        const leftMost = itemsIndex(items, arr[0])
 
-        if(items.indexOf(arr[2]) === items.length - 1) { 
-            setarr((prev) => {
-                return [prev[1], prev[2], items[0]]
-             })
-       }
-        else{
-            setarr((prev) => {
-                 return [prev[1], prev[2], items[items.indexOf(arr[2]) + 1]]
-             })
+        if (leftMost !== -1 && items[leftMost - 1]) {
+            setArr((prev) => [items[leftMost - 1], prev[0], prev[1]])
         }
     }
 
-    const onLeftButtonClick = () => {
-        const leftMost = items.indexOf(arr[0]) - 1
-        console.log(leftMost)
-        if(leftMost >= 0){
-            if(items[leftMost + 2]){
-                setarr([items[leftMost], items[leftMost+1], items[leftMost+2]])
-            }
+    const onRightButtonClick = () => {
+        const last = itemsIndex(items, arr[2])
+        console.log(last !== -1)
+        if (last !== -1 && items[last + 1]) {
+            setArr((prev) => [prev[1], prev[2], items[last + 1]])
         }
     }
 
@@ -54,15 +49,11 @@ const Movieboxlist = ({items} : MovieList) => {
             }}>
                 LEFT
             </button>
-        {arr.map((item: Data, index) => (
+        {arr.map((item: Result, index) => (
             <li key={index} style={{
                 margin:'60px'
             }}>
-                    <Moviebox 
-                    overview={item.overview}
-                    release_date={item.release_date}
-                    vote_average={item.vote_average}
-                    poster_path={item.poster_path} title={undefined}                    />
+                    <Moviebox item = {item}/>
                 </li>
                 ))}
             <button onClick={() => {onRightButtonClick()}} style={{

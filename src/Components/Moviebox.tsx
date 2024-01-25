@@ -1,13 +1,33 @@
 import React from 'react'
 
-export type Data = {
-    title: string | undefined, 
-    overview: string | undefined,
-    release_date: string | undefined,
-    vote_average: number | undefined,
-    poster_path: string | undefined,
+export interface Root {
+    page: number
+    results: Result[]
+    total_pages: number
+    total_results: number
+  }
+  
+  export interface Result {
+    adult: boolean
+    backdrop_path: string
+    id: number
+    title: string
+    original_language: string
+    original_title: string
+    overview: string
+    poster_path: string
+    media_type: string
+    genre_ids: number[]
+    popularity: number
+    release_date: string
+    video: boolean
+    vote_average: number
+    vote_count: number
+  }
+  
+interface movieBoxProp {
+    item : Result
 }
-
 const shortenedDesc = (overview : string | undefined) => {
     if(overview?.length??0 > 75) {
         const reduced = overview?.substring(0, 75)
@@ -17,7 +37,7 @@ const shortenedDesc = (overview : string | undefined) => {
         return overview
     }
 }
-const Moviebox = ({overview, release_date, vote_average, poster_path}: Data) => {
+const Moviebox = ({item} : movieBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/w200"
   return (
     <div style={{
@@ -35,9 +55,9 @@ const Moviebox = ({overview, release_date, vote_average, poster_path}: Data) => 
                 height:'450px',
                 backgroundColor:'darkgrey'
             }}>
-            <img src={partial_url+poster_path} alt="" />
-            <p>{shortenedDesc(overview)}</p>
-            <p>{vote_average}</p>
+            <img src={partial_url + item.poster_path} alt="" />
+            <p>{shortenedDesc(item.overview)}</p>
+            <p>{item.vote_average}</p>
         </div>
     </div>
   )
