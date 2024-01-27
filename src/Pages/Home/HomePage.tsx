@@ -28,7 +28,7 @@ const HomePage = () => {
    return (
     <div>
         <Navbar/>
-        {<Movieboxlist ></Movieboxlist>}
+        <Movieboxlist ></Movieboxlist>
     </div>
   )
 }

@@ -41,7 +41,8 @@ const Moviebox = ({item} : movieBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/w200"
   return (
     <div style={{
-        width:"100px"
+        width:"100px",
+        margin:'25px'
     }}>
         <div style={{
                 outlineColor: "black",
@@ -51,13 +52,11 @@ const Moviebox = ({item} : movieBoxProp) => {
                 borderRadius: "5px",
                 borderColor: "black",
                 marginBottom:"5px",
-                width:"200px",
-                height:'450px',
-                backgroundColor:'darkgrey'
+                width:"150px",
+                height:'225px',
+                backgroundColor:'darkgrey',
             }}>
-            <img src={partial_url + item.poster_path} alt="" />
-            <p>{shortenedDesc(item.overview)}</p>
-            <p>{item.vote_average}</p>
+            <img src={partial_url + item.poster_path} alt="Movie Poster" style={{ width: '150px' }} />
         </div>
     </div>
   )

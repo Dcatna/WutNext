@@ -58,15 +58,7 @@ const Movieboxlist = () => {
         }
         return res.json()
     }
-    const {
-        data,
-        error,
-        fetchNextPage,
-        hasNextPage,
-        isFetching,
-        isFetchingNextPage,
-        status,
-      } = useInfiniteQuery({
+    const {data, fetchNextPage} = useInfiniteQuery({
         queryKey: ['trendingMovies'],
         queryFn: fetchMovies,
         initialPageParam: 1,
@@ -94,10 +86,7 @@ const Movieboxlist = () => {
         }
     }, [items])
 
-
-    //if (isFetching && isFetchingNextPage) return <span>Loading...</span>;
-
-    
+    //if (isFetching && isFetchingNextPage) return <span>Loading...</span>;    
     console.log(arr)
     const onLeftButtonClick = () => {
         const leftMost = itemsIndex(items, arr[0])
@@ -111,44 +100,33 @@ const Movieboxlist = () => {
         if(items[last+2] === undefined){
             fetchNextPage()
         }
-        console.log(last !== -1)
+        //console.log(last !== -1)
         if (last !== -1 ) {
             if(items[last + 1]){
                 setArr((prev) => [prev[1], prev[2], items[last + 1]])
-            }
-            else if(items[last+3] === undefined){
-                //call pager function
-                console.log('hieello', data)
-                //fetchNextPage()
-                console.log('after', data)
             }
         }
   
     }
 
   return (
-    <div style={{
-        display: "inline-flex",
-        alignItems: "stretch",
-        width: "max-content",
-        backgroundColor: "#404040",
-        paddingBottom: "15px",
-    }}>
+    <div className='main-container'>
         <ul ref={animationParent} style={{ display: "flex", padding: 0, listStyle: "none",}}>
-            <button onClick={()=>{onLeftButtonClick()}} style={{
+            <button className='slider-button-left' onClick={()=>{onLeftButtonClick()}} style={{
                 
             }}>
                 LEFT
             </button>
         {arr.map((item: Result) => (
             <li key={item.id} style={{
-                margin:'60px'
+                margin:'5px'
             }}>
                     <Moviebox item = {item}/>
                 </li>
                 ))}
-            <button onClick={() => {onRightButtonClick()}} style={{
-                marginLeft:'60px'
+            <button className='slider-button-right' onClick={() => {onRightButtonClick()}} style={{
+                marginLeft:'50px',
+                width:'100%'
             }}>RIGHT</button>
         </ul>
     </div>

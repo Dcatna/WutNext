@@ -1,3 +1,22 @@
 body {
     background-color: #404040;
 }
+
+.main-container{
+    display: inline-flex;
+    align-items: stretch;
+    width: max-content;
+    background-color: #404040;
+    padding-bottom: 15px;
+    height: 150px;
+}
+
+.slider-button-left{
+    margin-top: 30px;
+    height: 225px;
+}
+
+.slider-button-right{
+    margin-top: 30px;
+    height: 225px;
+}
