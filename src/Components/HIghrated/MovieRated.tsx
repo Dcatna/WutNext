@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Moviebox, { Result, Root } from './Moviebox'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import "./MovieboxList.css"
+
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { title } from 'process';
 import { resolve } from 'path';
+import MovieRatedBox, { Result } from './MovieRatedBox';
 
 const itemsIndex = (items : Result[], currItem : Result) =>{
     for(let i = 0; i<items.length; i++) {
@@ -18,23 +18,23 @@ const itemsIndex = (items : Result[], currItem : Result) =>{
 interface FetchMoviesParams {
     pageParam: number;
   }
-const Movieboxlist = () => {
-    //const [item, setItems] = useState<Result[]> = (])
-    
+
+
+const MovieRated = () => {
     const [animationParent] = useAutoAnimate()
   
     //const [page, setPage] = useState(1);
 
     const fetchMovies = async ({pageParam} : FetchMoviesParams) => {
         const apiKey = '11e1be5dc8a3cf947ce265da83199bce';
-        const res = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&page=${pageParam}`);
+        const res = await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&page=${pageParam}`);
         if (!res.ok) {
           throw new Error('Network response was not ok');
         }
         return res.json()
     }
     const {data, fetchNextPage} = useInfiniteQuery({
-        queryKey: ['trendingMovies'],
+        queryKey: ['topRated'],
         queryFn: fetchMovies,
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
@@ -96,7 +96,7 @@ const Movieboxlist = () => {
             <li key={item.id} style={{
                 margin:'5px'
             }}>
-                    <Moviebox item = {item}/>
+                    <MovieRatedBox item = {item}/>
                 </li>
                 ))}
             <button className='slider-button-right' onClick={() => {onRightButtonClick()}} style={{
@@ -108,4 +108,4 @@ const Movieboxlist = () => {
   )
 }
 
-export default Movieboxlist
+export default MovieRated

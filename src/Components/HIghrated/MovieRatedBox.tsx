@@ -7,29 +7,27 @@ export interface Root {
     total_pages: number
     total_results: number
   }
-
+  
   export interface Result {
     adult: boolean
     backdrop_path: string
-    id: number
-    name: string
-    original_language: string
-    original_name: string
-    overview: string
-    poster_path: string
-    media_type: string
     genre_ids: number[]
+    id: number
+    original_language: string
+    original_title: string
+    overview: string
     popularity: number
-    first_air_date: string
+    poster_path: string
+    release_date: string
+    title: string
+    video: boolean
     vote_average: number
     vote_count: number
-    origin_country: string[]
   }
-  export interface showBoxProp{
+  interface movieRatedProp {
     item : Result
-  }
-  
-const Showbox = ({item} : showBoxProp) => {
+}
+const MovieRatedBox = ({item} : movieRatedProp) => {
     const partial_url = "https://image.tmdb.org/t/p/w200"
     return (
       <div style={{
@@ -54,4 +52,4 @@ const Showbox = ({item} : showBoxProp) => {
     )
 }
 
-export default Showbox
+export default MovieRatedBox

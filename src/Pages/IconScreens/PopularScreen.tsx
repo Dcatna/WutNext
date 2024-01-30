@@ -1,10 +1,14 @@
 import React from 'react'
+import MovieRated from '../../Components/HIghrated/MovieRated'
 
 type Props = {}
 
-const PopularScreen = (props: Props) => {
+  
+const PopularScreen = (item: Props) => {
   return (
-    <div>PopularScreen</div>
+    <div>
+        <MovieRated></MovieRated>
+    </div>
   )
 }
 
