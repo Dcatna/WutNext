@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import "./MovieboxList.css"
+
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { title } from 'process';
 import { resolve } from 'path';
-import Showbox, { Result } from './Showbox';
-interface movieBoxListProp{
-    items: Result[]
-}
+import ShowBoxRated, { Result } from './ShowBoxRated';
 
 const itemsIndex = (items : Result[], currItem : Result) =>{
     for(let i = 0; i<items.length; i++) {
@@ -19,12 +16,12 @@ const itemsIndex = (items : Result[], currItem : Result) =>{
     return -1
 }
 
+
 interface FetchMoviesParams {
     pageParam: number;
   }
-const Showboxlist = () => {
-    //const [item, setItems] = useState<Result[]> = (])
-    
+
+const ShowListRated = () => {
     const [animationParent] = useAutoAnimate()
   
     //const [page, setPage] = useState(1);
@@ -100,7 +97,7 @@ const Showboxlist = () => {
             <li key={item.id} style={{
                 margin:'5px'
             }}>
-                    <Showbox item = {item}/>
+                    <ShowBoxRated item = {item}/>
                 </li>
                 ))}
             <button className='slider-button-right' onClick={() => {onRightButtonClick()}} style={{
@@ -112,4 +109,4 @@ const Showboxlist = () => {
   )
 }
 
-export default Showboxlist
+export default ShowListRated

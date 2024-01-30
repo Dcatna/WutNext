@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { title } from 'process';
 import { resolve } from 'path';
