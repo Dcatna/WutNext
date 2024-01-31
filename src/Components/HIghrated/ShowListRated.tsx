@@ -28,14 +28,14 @@ const ShowListRated = () => {
 
     const fetchMovies = async ({pageParam} : FetchMoviesParams) => {
         const apiKey = '11e1be5dc8a3cf947ce265da83199bce';
-        const res = await fetch(`https://api.themoviedb.org/3/trending/tv/week?api_key=${apiKey}&page=${pageParam}`);
+        const res = await fetch(`https://api.themoviedb.org/3/tv/top_rated?api_key=${apiKey}&page=${pageParam}`);
         if (!res.ok) {
           throw new Error('Network response was not ok');
         }
         return res.json()
     }
     const {data, fetchNextPage} = useInfiniteQuery({
-        queryKey: ['trendingTv'],
+        queryKey: ['topRatedTv'],
         queryFn: fetchMovies,
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
