@@ -16,11 +16,13 @@ const queryClient = new QueryClient()
 function App() {
   const currentUser = useSubscription()
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <Outlet/>
-      </div>
-    </QueryClientProvider>
+    <CurrentUserContext.Provider value={currentUser}>
+      <QueryClientProvider client={queryClient}>
+        <div className="App">
+          <Outlet/>
+        </div>
+      </QueryClientProvider>
+    </CurrentUserContext.Provider>
   );
 }
 

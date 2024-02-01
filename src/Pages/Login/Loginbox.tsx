@@ -4,9 +4,10 @@ import "./Loginbox.css"
 import {useForm} from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import {supabase} from '../lib/supabaseClient'
+
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabaseClient'
 interface IFormInput {
     email: string;
     password: string;
@@ -16,10 +17,11 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().min(6).max(15).required()
 })
-
-const Loginbox = () => {
+interface Props {}
+const Loginbox = (props: Props) => {
     const [isJiggling, setIsJiggling] = useState(false);
     const navigate = useNavigate();
+    console.log("IMEHERERERER")
     const handleButtonClick = () => {
         setIsJiggling(true);
         setTimeout(() => setIsJiggling(false), 500); // 500ms is the duration of the animation
@@ -65,9 +67,9 @@ async function submitForm (formData : IFormInput) {
         }
 
   return (
-    <div className='main'>
-    <div className='main-container'>
-        <div className='content-container'>
+    <div className='main-login'>
+    <div className='main-container-login'>
+        <div className='content-container-login'>
             <h1>Sign In!</h1>
             <p>Please enter you user and password</p>
             <form onSubmit={handleSubmit(submitForm)} className='inputs'>

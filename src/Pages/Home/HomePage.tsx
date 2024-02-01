@@ -10,26 +10,27 @@ import ShowboxList from '../../Components/ShowboxList'
 import TrendingScreen from '../IconScreens/TrendingScreen'
 import PopularScreen from '../IconScreens/PopularScreen'
 import RecommendedScreen from '../IconScreens/RecommendedScreen'
+import ProtectedRoute from '../../Components/ProtectedRoute'
 
 const HomePage = () => {
     const [screenTrending, setScreenTrending] = useState(true)
     const [screenPopular, setScreenPopular] = useState(false)
-    const [screenRecommended, setScreenRecommended] = useState(false)
+    //const [screenRecommended, setScreenRecommended] = useState(false)
     function setScreen(screenNumber : number){
       if(screenNumber === 1) {
         setScreenTrending(true)
         setScreenPopular(false)
-        setScreenRecommended(false)
+       // setScreenRecommended(false)
       }
       else if(screenNumber === 2) {
         setScreenTrending(false)
         setScreenPopular(true)
-        setScreenRecommended(false)
+       // setScreenRecommended(false)
       }
       else {
         setScreenTrending(false)
         setScreenPopular(false)
-        setScreenRecommended(true)
+        //setScreenRecommended(true)
       }
     }
    return (
@@ -42,7 +43,9 @@ const HomePage = () => {
             <li onClick={() => setScreen(3)} className='icons'><FontAwesomeIcon className = "icon" icon = {faChildReaching} /></li>
           </ul>
         </div>
-        {(screenTrending===true ? <TrendingScreen></TrendingScreen> : screenPopular === true ? <PopularScreen></PopularScreen> : <RecommendedScreen></RecommendedScreen>)}
+        {screenTrending && <TrendingScreen />}
+            {screenPopular && <PopularScreen />}
+            
     </div>
   )
 }

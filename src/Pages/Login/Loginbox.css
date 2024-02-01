@@ -1,4 +1,4 @@
-.main-container{
+.main-container-login{
     background-color: #ffff;
     width: 30%;
     border-radius: 16px;
@@ -7,7 +7,7 @@
     margin-top: 80px;
 }
 
-.main{
+.main-login{
     justify-content: center;
     display: flex;
     align-items: center;  

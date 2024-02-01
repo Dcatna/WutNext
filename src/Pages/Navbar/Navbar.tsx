@@ -22,7 +22,7 @@ const Navbar = (props: Props) => {
             textDecoration:'none',
             margin:'10px',
           }}>HOME</Link>
-          <Link to="/recommened" style = {{
+          <Link to="/recommended" style = {{
             color:"#52525b",
             textDecoration:'none',
             margin:'10px',
