@@ -17,8 +17,8 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().min(6).max(15).required()
 })
-interface Props {}
-const Loginbox = (props: Props) => {
+
+const Loginbox = () => {
     const [isJiggling, setIsJiggling] = useState(false);
     const navigate = useNavigate();
     console.log("IMEHERERERER")

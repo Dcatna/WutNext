@@ -27,14 +27,16 @@ const Movieboxlist = () => {
 
     const fetchMovies = async ({pageParam} : FetchMoviesParams) => {
         const apiKey = '11e1be5dc8a3cf947ce265da83199bce';
+        
         const res = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&page=${pageParam}`);
         if (!res.ok) {
           throw new Error('Network response was not ok');
         }
         return res.json()
     }
-    const {data, fetchNextPage} = useInfiniteQuery({
+    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery({
         queryKey: ['trendingMovies'],
+        
         queryFn: fetchMovies,
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
@@ -45,7 +47,7 @@ const Movieboxlist = () => {
             }
         },
       });
-    
+
     const items = useMemo(() => {
         return data?.pages.flatMap((page) =>{
             return page.results as Result[]
@@ -72,7 +74,7 @@ const Movieboxlist = () => {
 
     const onRightButtonClick = () => {
         const last = itemsIndex(items, arr[7])
-        if(items[last+2] === undefined){
+        if(items[last+7] === undefined){
             fetchNextPage()
         }
         //console.log(last !== -1)

@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient'
+
 interface IFormInput {
     email: string;
     password: string;
@@ -16,13 +17,11 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().min(3).max(15).required()
 })
-interface Props {}
-
-const Signup = (props: Props) => {
+const Signup = () => {
   const navigate = useNavigate();
  // const [name, setName] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const{register, handleSubmit, formState: { errors }} = useForm<IFormInput>({
       resolver:yupResolver(schema),
     });

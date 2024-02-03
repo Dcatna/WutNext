@@ -4,13 +4,15 @@ import Moviebox, { Result, Root } from '../../Components/Moviebox'
 import Movieboxlist from '../../Components/MovieboxList'
 import "./HomePage.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartSimple, faFire, faChildReaching } from '@fortawesome/free-solid-svg-icons'
+import { faChartSimple, faFire, faChildReaching, faBorderAll,faGripLines} from '@fortawesome/free-solid-svg-icons'
 import Showboxlist from '../../Components/ShowboxList'
 import ShowboxList from '../../Components/ShowboxList'
 import TrendingScreen from '../IconScreens/TrendingScreen'
 import PopularScreen from '../IconScreens/PopularScreen'
 import RecommendedScreen from '../IconScreens/RecommendedScreen'
 import ProtectedRoute from '../../Components/ProtectedRoute'
+import MovieboxScroll from '../../Components/Scrollables/MovieBoxScroll'
+
 
 const HomePage = () => {
     const [screenTrending, setScreenTrending] = useState(true)
@@ -38,13 +40,13 @@ const HomePage = () => {
         <Navbar/>
         <div className='icons-container'>
           <ul className='ul-icons'>
-            <li onClick={() => setScreen(1)} className='icons'><FontAwesomeIcon className = "icon" icon ={faChartSimple} /></li>
-            <li onClick={() => setScreen(2)} className='icons'><FontAwesomeIcon className = "icon" icon = {faFire} /></li>
-            <li onClick={() => setScreen(3)} className='icons'><FontAwesomeIcon className = "icon" icon = {faChildReaching} /></li>
+            <li onClick={() => setScreen(1)} className='icons'><FontAwesomeIcon className = "icon" icon ={faGripLines} /></li>
+            <li onClick={() => setScreen(2)} className='icons'><FontAwesomeIcon className = "icon" icon = {faBorderAll} /></li>
+  
           </ul>
         </div>
         {screenTrending && <TrendingScreen />}
-            {screenPopular && <PopularScreen />}
+            {screenPopular && <MovieboxScroll />}
             
     </div>
   )
