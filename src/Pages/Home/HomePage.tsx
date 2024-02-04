@@ -15,23 +15,23 @@ import MovieboxScroll from '../../Components/Scrollables/MovieBoxScroll'
 
 
 const HomePage = () => {
-    const [screenTrending, setScreenTrending] = useState(true)
-    const [screenPopular, setScreenPopular] = useState(false)
+    const [screenGrid, setScreenGrid] = useState(true)
+    const [screenRows, setScreenRows] = useState(false)
     //const [screenRecommended, setScreenRecommended] = useState(false)
     function setScreen(screenNumber : number){
       if(screenNumber === 1) {
-        setScreenTrending(true)
-        setScreenPopular(false)
+        setScreenGrid(true)
+        setScreenRows(false)
        // setScreenRecommended(false)
       }
       else if(screenNumber === 2) {
-        setScreenTrending(false)
-        setScreenPopular(true)
+        setScreenGrid(false)
+        setScreenRows(true)
        // setScreenRecommended(false)
       }
       else {
-        setScreenTrending(false)
-        setScreenPopular(false)
+        setScreenGrid(false)
+        setScreenRows(false)
         //setScreenRecommended(true)
       }
     }
@@ -40,13 +40,14 @@ const HomePage = () => {
         <Navbar/>
         <div className='icons-container'>
           <ul className='ul-icons'>
-            <li onClick={() => setScreen(1)} className='icons'><FontAwesomeIcon className = "icon" icon ={faGripLines} /></li>
-            <li onClick={() => setScreen(2)} className='icons'><FontAwesomeIcon className = "icon" icon = {faBorderAll} /></li>
+            <li onClick={() => setScreen(1)} className='icons'><FontAwesomeIcon className = "icon" icon = {faBorderAll} /></li>
+            <li onClick={() => setScreen(2)} className='icons'><FontAwesomeIcon className = "icon" icon = {faGripLines}/></li>
   
           </ul>
         </div>
-        {screenTrending && <TrendingScreen />}
-            {screenPopular && <MovieboxScroll />}
+        {screenGrid && <MovieboxScroll />}
+        {screenRows && <TrendingScreen />}
+            
             
     </div>
   )
