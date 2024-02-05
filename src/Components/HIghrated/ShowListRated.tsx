@@ -3,13 +3,12 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { title } from 'process';
-import { resolve } from 'path';
-import ShowBoxRated, { Result } from './ShowBoxRated';
+import ShowBoxRated from './ShowBoxRated';
+import {MovieListResult} from "../../data/types/MovieListResponse";
 
-const itemsIndex = (items : Result[], currItem : Result) =>{
+const itemsIndex = (items : MovieListResult[], currItem : MovieListResult) =>{
     for(let i = 0; i<items.length; i++) {
-        if(items[i].name === currItem.name){
+        if(items[i].title === currItem.title){
             return i
         }
     }
@@ -49,12 +48,11 @@ const ShowListRated = () => {
     
     const items = useMemo(() => {
         return data?.pages.flatMap((page) =>{
-            return page.results as Result[]
+            return page.results as MovieListResult[]
         })??[]    //returns empty list if data is null ??[]
     }, [data])
-    console.log(items)
 
-    const [arr, setArr] = useState<Result[]>([])
+    const [arr, setArr] = useState<MovieListResult[]>([])
 
     useEffect(() =>{
         if(arr.length === 0){
@@ -93,7 +91,7 @@ const ShowListRated = () => {
             }}>
                 LEFT
             </button>
-        {arr.map((item: Result) => (
+        {arr.map((item: MovieListResult) => (
             <li key={item.id} style={{
                 margin:'5px'
             }}>

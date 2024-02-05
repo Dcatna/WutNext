@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react'
-import "./Loginbox.css"
 import {useForm} from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'

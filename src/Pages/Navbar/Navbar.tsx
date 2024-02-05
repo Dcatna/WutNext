@@ -1,49 +1,30 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom'
-import "./Navbar.css"
+import {Button} from "../../Components/Button";
 
 type Props = {}
 
 const Navbar = (props: Props) => {
   return (
-    <nav className="navbar" style={{
-      textAlign:"center",
-      backgroundColor:"black",
-      paddingBottom:'10px',
-      justifyContent:'center',
-      alignItems:'center',
-      display:'flex'
-    }}>
-        <div className = "nav-links" style={{
-      }}>
-          <Link to="/" style = {{
-            color:"#52525b",
-            textDecoration:'none',
-            margin:'10px',
-          }}>HOME</Link>
-          <Link to="/recommended" style = {{
-            color:"#52525b",
-            textDecoration:'none',
-            margin:'10px',
-          }}>RECOMMENED</Link>
-          <Link to= "/pool" style = {{
-            color:"#52525b",
-            textDecoration:'none',
-            margin:'10px',
-          }}>POOL</Link>
-          <a style = {{
-            color:"#52525b",
-            textDecoration:'none',
-            margin:'10px'
-          }}href="#">PROFILE</a>
-
-          <button className='sign-out-btn' style={{
-          float:'right',
-          
-        }}>SIGN OUT!</button>
-
-      </div>
+    <nav>
+        <div className="w-screen flex justify-center items-center">
+            <Button asChild variant="ghost">
+                <Link to="/">Home</Link>
+            </Button>
+            <Button asChild variant="ghost" className="rounded-md">
+                <Link to="/recommended">Recommended</Link>
+            </Button>
+            <Button  asChild variant="ghost" className="rounded-md">
+                <Link to= "/pool">Pool</Link>
+            </Button>
+            <Button variant="ghost" className="rounded-md">
+                Profile
+            </Button>
+            <Button  variant="ghost" className="rounded-md">
+                Sign Out
+            </Button>
+        </div>
     </nav>
   )
 }
