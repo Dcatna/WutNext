@@ -14,9 +14,9 @@ class TMDBCClient {
         .withCapacity(this.reqPerMin)
         .withFixedIntervalRefillStrategy(
              this.reqPerMin,
-            // 60 sec to nanoseconds
-            60 * 1_000_000_000
-    )
+            // 60 sec to milliseconds
+            60 * 1000
+        )
     .build()
 
     // Create an AbortController instance

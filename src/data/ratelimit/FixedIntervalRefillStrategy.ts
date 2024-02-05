@@ -26,7 +26,7 @@ export class FixedIntervalRefillStrategy implements RefillStrategy {
 
         private readonly ticker: Ticker
         private readonly numTokensPerPeriod: number
-        private readonly periodNanos: number
+        private readonly periodMillis: number
 
         private lastRefillTime: number
         private nextRefillTime: number
@@ -35,13 +35,13 @@ export class FixedIntervalRefillStrategy implements RefillStrategy {
     constructor(
             ticker: Ticker,
             numTokensPerPeriod: number,
-            periodNanos: number
+            periodMillis: number
         ) {
             this.ticker = ticker
             this.numTokensPerPeriod = numTokensPerPeriod
-            this.periodNanos = periodNanos
-            this.lastRefillTime =  -this.periodNanos
-            this.nextRefillTime =  -this.periodNanos
+            this.periodMillis = periodMillis
+            this.lastRefillTime =  -this.periodMillis
+            this.nextRefillTime =  -this.periodMillis
         }
 
 
@@ -52,13 +52,13 @@ export class FixedIntervalRefillStrategy implements RefillStrategy {
             }
             // We now know that we need to refill the bucket with some tokens, the question is how many.  We need to count how
             // many periods worth of tokens we've missed.
-            const numPeriods = Math.max(0, (now - this.lastRefillTime) / this.periodNanos);
+            const numPeriods = Math.max(0, (now - this.lastRefillTime) / this.periodMillis);
 
             // Move the last refill time forward by this many periods.
-            this.lastRefillTime += numPeriods * this.periodNanos
+            this.lastRefillTime += numPeriods * this.periodMillis
 
             // ...and we'll refill again one period after the last time we refilled.
-            this.nextRefillTime = this.lastRefillTime + this.periodNanos
+            this.nextRefillTime = this.lastRefillTime + this.periodMillis
 
             return numPeriods * this.numTokensPerPeriod
     }

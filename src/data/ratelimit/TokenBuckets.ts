@@ -56,13 +56,13 @@ class TokenBucketBuilder {
     /** Refill tokens at a fixed interval.  */
     withFixedIntervalRefillStrategy(
         refillTokens: number,
-        periodNanos: number,
+        periodMillis: number,
     ): TokenBucketBuilder {
         return this.withRefillStrategy(
             new FixedIntervalRefillStrategy(
                 this.ticker,
                 refillTokens,
-                periodNanos,
+                periodMillis,
             )
         )
     }
