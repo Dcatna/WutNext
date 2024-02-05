@@ -125,6 +125,7 @@ const FilterSideBar = (
                     const selected = selectedFilters.includes(id)
                     return (
                         <Badge
+                            itemID={id.toString()}
                             className="hover:bg-primary rounded-md ms-2 mb-1"
                             onClick={() => onFilterClick(id)}
                             variant={selected ? "default" : "outline"}
@@ -140,6 +141,7 @@ const FilterSideBar = (
                     const selected = false
                     return (
                         <Badge
+                            itemID={rating.certification + rating.order}
                             className="hover:bg-primary rounded-md ms-2 mb-1"
                             onClick={() => {}}
                             variant={selected ? "default" : "outline"}
