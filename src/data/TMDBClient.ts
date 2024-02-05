@@ -32,23 +32,34 @@ class TMDBCClient {
     async fetchMovieList(
         page: number,
         type: MovieListType,
+        with_genres : string | undefined = " ",
         region: string | undefined = undefined,
-        language: string | undefined = "en-US"
+        language: string | undefined = "en-US",
+        
+        sort_by : string | undefined = "popularity.desc",
+        include_adult : boolean | undefined = true,
+        include_video : boolean | undefined = false
+
     ): Promise<MovieListResponse> {
 
         // Obtain a reference to the AbortSignal
         const signal = this.controller.signal;
 
         const url = buildUrl(
-            `${this.BASE_URL}/movie/${type}`,
+            `${this.BASE_URL}/discover/${type}`,
             [
                 this.apiKeyParam,
                 { name: "page", value: page },
-                { name: "region", value: region},
-                { name: "language", value: language }
+                { name: "language", value: language },
+                { name: "with_genres", value: with_genres},
+                { name: "sort_by", value: sort_by},
+                { name: "include_adult", value: include_adult},
+                { name: "include_video", value: include_video},
+
             ]
         )
-
+        console.log(with_genres)
+        console.log(url)
         const res = await this.fetchWithTimeout(url, signal);
 
         if (!res.ok) {
@@ -84,7 +95,7 @@ class TMDBCClient {
 
 type Param = {
     name: string
-    value: string | number | undefined
+    value: string | number | boolean |undefined
 }
 
 function buildUrl(base: string, args: Param[]): string {

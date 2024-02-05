@@ -23,4 +23,4 @@ export interface MovieListResult {
     vote_count: number
 }
 
-export type MovieListType = "popular" | "top_rated" | "upcoming" | "now_playing"
+export type MovieListType = "popular" | "top_rated" | "upcoming" | "now_playing" | "discover" | "popularity.desc" | "movie"

@@ -10,20 +10,12 @@ import {MovieListResult} from "../../data/types/MovieListResponse";
 import {TMDBClientContext} from "../../App";
 import {Genre, Rating} from "../../data/types/types";
 
-const itemsIndex = (items : MovieListResult[], currItem : MovieListResult) =>{
-    for(let i = 0; i<items.length; i++) {
-        if(items[i].title === currItem.title){
-            return i
-        }
-    }
-    return -1
-}
-
 
 const MovieboxScroll = () => {
 
     const [appliedFilters, setAppliedFilters] = useState<number[]>([])
-
+    const [genresString, setGenresString] = useState<string>("")
+    const [isGenresStringReady, setIsGenresStringReady] = useState(false)
     const client = useContext(TMDBClientContext)
 
     const handleFilterButtons = (filter : number) => {
@@ -33,16 +25,37 @@ const MovieboxScroll = () => {
                 : [...prevFilters, filter]
         )
     }
+    useEffect(() => {
+        const newStr = filterStringBuilder(appliedFilters);
+        setGenresString(newStr);
+    }, [appliedFilters]);
+    useEffect(() => {
+        // Function that uses genreString
+        console.log(genresString); // Should log the updated value
+      }, [genresString]); // Ensure genreString is in the dependency array
+      
 
-    const { data, fetchNextPage, isFetchingNextPage, hasNextPage} = useInfiniteQuery({
-        queryKey: ['trendingMovies'],
-        queryFn: ({ pageParam  }) => client.fetchMovieList(pageParam, "popular"),
+    const filterStringBuilder = (appliedFilters : number[]) => {
+        let retString = "";
+        for (let i = 0; i < appliedFilters.length; i++) {
+            if (i === appliedFilters.length - 1) {
+                retString += appliedFilters[i].toString();
+            } else {
+                retString += appliedFilters[i].toString() + ",";
+            }
+        }
+        return retString;
+    }
+    
+    const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
+        queryKey: ['trendingMovies', genresString],
+        queryFn: ({ pageParam }) => client.fetchMovieList(pageParam, "movie", genresString),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
             if (lastPage.page < lastPage.total_pages) {
-                return lastPage.page + 1; // Return the next page number
+                return lastPage.page + 1;
             } else {
-                return undefined; // No more pages left
+                return undefined;
             }
         },
     });
@@ -60,16 +73,14 @@ const MovieboxScroll = () => {
 
     }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
+    
 
     const items = useMemo(() => {
 
-        const res = data?.pages.flatMap((page) => page.results) ?? []
-
-        return appliedFilters.length < 1 ? res : res.filter((it: MovieListResult) => {
-            return !it.genre_ids.every((it) => !appliedFilters.includes(it))
-        })
+        return data?.pages.flatMap((page) => page.results) ?? []
 
     }, [data, appliedFilters])
+
 
     return (
         <div className="flex flex-row h-full w-full">
