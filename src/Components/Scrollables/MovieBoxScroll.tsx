@@ -29,11 +29,6 @@ const MovieboxScroll = () => {
         const newStr = filterStringBuilder(appliedFilters);
         setGenresString(newStr);
     }, [appliedFilters]);
-    useEffect(() => {
-        // Function that uses genreString
-        console.log(genresString); // Should log the updated value
-      }, [genresString]); // Ensure genreString is in the dependency array
-      
 
     const filterStringBuilder = (appliedFilters : number[]) => {
         let retString = "";
