@@ -11,8 +11,9 @@ const MovieInfo = () => {
     const movie : movieBoxProp = location.state
     const client = useContext(TMDBClientContext)
     const [videoData, setVideoData] = useState<MovieTrailer>()
+
     async function fetchMovieTrailer() {
-        const video_response: Promise<MovieTrailer> = client.fetchTrailer(movie.item.id); // Assume this function returns a Promise<MovieTrailer>
+        const video_response: Promise<MovieTrailer> = client.fetchTrailer(movie.item.id);
         const trailer: MovieTrailer = await video_response;
         
         setVideoData(trailer)
