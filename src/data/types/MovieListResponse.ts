@@ -41,4 +41,16 @@ export interface MovieTrailer {
     id: string
   }
 
-export type MovieListType = "popular" | "top_rated" | "upcoming" | "now_playing" | "discover" | "popularity.desc" | "movie"
+export type MovieListType = "popular" | "top_rated" | "upcoming" | "now_playing" | "discover"
+export type ResourceType =  "movie"
+export type SortType =
+    "popularity.desc"
+    | "popularity.asc"
+    | "original_title.desc"
+    | "original_title.asc"
+    | "revenue.desc"
+    | "revenue.asc"
+    | "title.desc"
+    | "title.asc"
+    | undefined
+

@@ -13,38 +13,27 @@ import {Genre, Rating} from "../../data/types/types";
 
 const MovieboxScroll = () => {
 
-    const [appliedFilters, setAppliedFilters] = useState<number[]>([])
-    const [genresString, setGenresString] = useState<string>("")
+    const [genreIds, setGenreIds] = useState<number[]>([])
     const client = useContext(TMDBClientContext)
 
     const handleFilterButtons = (filter : number) => {
-        setAppliedFilters((prevFilters : number[]) =>
+        setGenreIds((prevFilters : number[]) =>
             prevFilters.includes(filter)
-                ? prevFilters.filter((it) => it !== filter)
+                ? prevFilters.filter((it) => it != filter)
                 : [...prevFilters, filter]
         )
     }
 
-    useEffect(() => {
-        const newStr = filterStringBuilder(appliedFilters);
-        setGenresString(newStr);
-    }, [appliedFilters]);
+    const genres = useMemo<string[]>(() => {
+        return genreIds.map((id) =>
+            genreData.genres
+                .find((genre) => genre.id === id)?.name)
+                .filter((genre) => genre != undefined) as string[]
+    }, [genreIds])
 
-    const filterStringBuilder = (appliedFilters : number[]) => {
-        let retString = "";
-        for (let i = 0; i < appliedFilters.length; i++) {
-            if (i === appliedFilters.length - 1) {
-                retString += appliedFilters[i].toString();
-            } else {
-                retString += appliedFilters[i].toString() + ",";
-            }
-        }
-        return retString;
-    }
-    
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
-        queryKey: ['trendingMovies', genresString],
-        queryFn: ({ pageParam }) => client.fetchMovieList(pageParam, "movie", genresString),
+        queryKey: ['trendingMovies', genres],
+        queryFn: ({ pageParam }) => client.fetchMovieList(pageParam, "movie", genres),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
             if (lastPage.page < lastPage.total_pages) {
@@ -74,20 +63,20 @@ const MovieboxScroll = () => {
 
         return data?.pages.flatMap((page) => page.results) ?? []
 
-    }, [data, appliedFilters])
+    }, [data, genreIds])
 
     
     return (
-        <div className="flex flex-row h-full w-full">
-            <div className="w-1/4">
-               <FilterSideBar
-                   genres={genreData.genres}
-                   ratings={ratingData.certifications.US.sort((a, b) => a.order - b.order)}
-                   selectedFilters={appliedFilters}
-                   onFilterClick={(filter) => handleFilterButtons(filter)}
-               />
+        <div className="flex md:flex-row flex-col h-full w-full pe-12">
+            <div className="md:w-1/4 w-full sm:row-span-1">
+                <FilterSideBar
+                    genres={genreData.genres}
+                    ratings={ratingData.certifications.US.sort((a, b) => a.order - b.order)}
+                    selectedGenres={genreIds}
+                    onFilterClick={(filter) => handleFilterButtons(filter)}
+                />
             </div>
-            <div className="w-3/4 grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-2 gap-4">
+            <div className="md:w-3/4 w-full grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {items.map((movie: MovieListResult) => (
                     <div>
                         <Moviebox key={movie.id} item={movie}></Moviebox>
@@ -101,12 +90,12 @@ const MovieboxScroll = () => {
 type FilterSidebarProps = {
     genres: Genre[]
     ratings: Rating[]
-    selectedFilters: number[],
+    selectedGenres: number[],
     onFilterClick: (id: number) => void
 }
 
 const FilterSideBar = (
-    { genres, selectedFilters, onFilterClick, ratings }: FilterSidebarProps
+    { genres, selectedGenres, onFilterClick, ratings }: FilterSidebarProps
 ) => {
     return (
         <div className="ms-4 me-4">
@@ -128,7 +117,7 @@ const FilterSideBar = (
             <Card className="rounded-md shadow-card mt-4 mb-4">
                 <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight m-4">Genres</h2>
                 {genres.map(({id, name}) => {
-                    const selected = selectedFilters.includes(id)
+                    const selected = selectedGenres.includes(id)
                     return (
                         <Badge
                             itemID={id.toString()}
