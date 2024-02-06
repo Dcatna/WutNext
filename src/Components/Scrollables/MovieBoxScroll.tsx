@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react'
 import genreData from './genres.json'
 import ratingData from './ratings.json'
-import {QueryFunctionContext, useInfiniteQuery} from '@tanstack/react-query';
+import {useInfiniteQuery} from '@tanstack/react-query';
 import Moviebox from '../Moviebox';
 import {Badge} from "../Badge";
 import {Card} from "../Card";
@@ -15,16 +15,16 @@ const MovieboxScroll = () => {
 
     const [appliedFilters, setAppliedFilters] = useState<number[]>([])
     const [genresString, setGenresString] = useState<string>("")
-    const [isGenresStringReady, setIsGenresStringReady] = useState(false)
     const client = useContext(TMDBClientContext)
 
     const handleFilterButtons = (filter : number) => {
         setAppliedFilters((prevFilters : number[]) =>
             prevFilters.includes(filter)
-                ? prevFilters.filter((it) => it != filter)
+                ? prevFilters.filter((it) => it !== filter)
                 : [...prevFilters, filter]
         )
     }
+
     useEffect(() => {
         const newStr = filterStringBuilder(appliedFilters);
         setGenresString(newStr);
@@ -76,7 +76,7 @@ const MovieboxScroll = () => {
 
     }, [data, appliedFilters])
 
-
+    
     return (
         <div className="flex flex-row h-full w-full">
             <div className="w-1/4">

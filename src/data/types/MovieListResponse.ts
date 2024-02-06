@@ -23,4 +23,22 @@ export interface MovieListResult {
     vote_count: number
 }
 
+export interface MovieTrailer {
+    id: number
+    results: MovieTrailerResult[]
+  }
+  
+  export interface MovieTrailerResult {
+    iso_639_1: string
+    iso_3166_1: string
+    name: string
+    key: string
+    site: string
+    size: number
+    type: string
+    official: boolean
+    published_at: string
+    id: string
+  }
+
 export type MovieListType = "popular" | "top_rated" | "upcoming" | "now_playing" | "discover" | "popularity.desc" | "movie"

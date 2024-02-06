@@ -1,4 +1,4 @@
-import {MovieListResponse, MovieListType} from "./types/MovieListResponse";
+import {MovieListResponse, MovieListType, MovieTrailer} from "./types/MovieListResponse";
 import {TokenBuckets} from "./ratelimit/TokenBuckets";
 import {TokenBucket} from "./ratelimit/TokenBucket";
 import {sign} from "node:crypto";
@@ -58,8 +58,6 @@ class TMDBCClient {
 
             ]
         )
-        console.log(with_genres)
-        console.log(url)
         const res = await this.fetchWithTimeout(url, signal);
 
         if (!res.ok) {
@@ -68,8 +66,35 @@ class TMDBCClient {
 
         return await res.json() as MovieListResponse
     }
+    //url for trailers = 'https://api.themoviedb.org/3/movie/movie_id/videos?language=en-US'
+    //https://api.themoviedb.org/3/movie/videos?api_key=11e1be5dc8a3cf947ce265da83199bce&movie_id=866398&language=en-US
+    async fetchTrailer(
+        move_id : number,
+        type : string | undefined = "videos",
+        language : string | undefined = "en-US"
 
+    ): Promise<MovieTrailer> {
 
+        // Obtain a reference to the AbortSignal
+        const signal = this.controller.signal;
+
+        const url = buildUrl(
+            `${this.BASE_URL}/movie/${move_id}/${type}`,
+            [
+                this.apiKeyParam,
+                { name: "language", value: language },
+                
+
+            ]
+        )
+        const res = await this.fetchWithTimeout(url, signal);
+        console.log(url)
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        return await res.json() as MovieTrailer
+    }
     cancelOngoingRequests() {
         this.controller.abort();
         this.controller = new AbortController()
