@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines} from '@fortawesome/free-solid-svg-icons'
 import TrendingScreen from '../IconScreens/TrendingScreen'
 import MovieboxScroll from '../../Components/Scrollables/MovieBoxScroll'
+import ShowBoxScroll from '../../Components/Scrollables/ShowBoxScroll'
 
 type Screen = "GRID" | "ROW"
 
@@ -11,8 +12,11 @@ const HomePage = () => {
     const [screen, setScreen] = useState<Screen>("GRID")
 
    return (
-    <div className="min-h-screen w-screen">
-        <div >
+    <body className='overflow-x-hidden'>
+      
+    
+    <div className="min-h-screen w-screen ">
+        <div className='mb-5'>
             <Navbar />
         </div>
         <div>
@@ -22,8 +26,9 @@ const HomePage = () => {
           </ul>
         </div>
         {screen === "GRID" && <MovieboxScroll />}
-        {screen === "ROW" && <TrendingScreen />}
+        {screen === "ROW" && <ShowBoxScroll />}
     </div>
+    </body>
   )
 }
 

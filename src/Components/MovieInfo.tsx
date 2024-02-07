@@ -20,7 +20,7 @@ const MovieInfo = () => {
         const trailer: MovieTrailer = await video_response;
         
         setVideoData(trailer)
-    }
+    }   
 
     useEffect(() => {
         fetchMovieTrailer()
@@ -37,7 +37,7 @@ const MovieInfo = () => {
         </div>
     </div>
         <div className='h-screen flex items-center justify-center'>
-            <VideoComponent videoKey={videoData?.results[0].key}></VideoComponent>
+            <VideoComponent videoKey={videoData?.results[0]?.key}></VideoComponent>
             
         </div>
     </div>

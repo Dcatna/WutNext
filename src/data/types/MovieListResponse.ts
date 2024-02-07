@@ -42,7 +42,7 @@ export interface MovieTrailer {
   }
 
 export type MovieListType = "popular" | "top_rated" | "upcoming" | "now_playing" | "discover"
-export type ResourceType =  "movie"
+export type ResourceType =  "movie" | "tv"
 export type SortType =
     "popularity.desc"
     | "popularity.asc"

@@ -11,6 +11,7 @@ export interface movieBoxProp {
 const Moviebox = ({item} : movieBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/"
     return (
+        
         <Link to={'/info'} state={{item}}>
             <div className="group relative">
                 <img
