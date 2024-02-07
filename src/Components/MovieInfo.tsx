@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { movieBoxProp } from './Moviebox'
 import { TMDBClientContext } from '../App'
 import { MovieTrailer } from '../data/types/MovieListResponse'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBorderAll,faGripLines, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
+import Navbar from '../Pages/Navbar/Navbar'
 
 
 const MovieInfo = () => {
@@ -25,9 +28,18 @@ const MovieInfo = () => {
 
 
   return (
-    <div>
-        <VideoComponent videoKey={videoData?.results[0].key}></VideoComponent>
-        <p>{movie.item.title}</p>
+    <div className=''>
+        <Navbar></Navbar>
+    <div className="flex items-center justify-between">
+
+        <div className="flex-1 relative">
+            <p className="absolute left-1/2 transform -translate-x-1/2">{movie.item.title}</p>
+        </div>
+    </div>
+        <div className='h-screen flex items-center justify-center'>
+            <VideoComponent videoKey={videoData?.results[0].key}></VideoComponent>
+            
+        </div>
     </div>
   )
 }

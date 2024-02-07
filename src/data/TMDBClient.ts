@@ -33,7 +33,7 @@ class TMDBCClient {
     async fetchMovieList(
         page: number,
         type: ResourceType,
-        with_genres : string[],
+        with_genres : number[],
         region: string | undefined = undefined,
         language: string | undefined = "en-US",
         sort_by : SortType = undefined,
@@ -55,11 +55,38 @@ class TMDBCClient {
                 { name: "include_video", value: include_video},
             ],
             [
-                { name: "with_genres", value: with_genres, join: "AND"},
+                { name: "with_genres", value: with_genres, join: "OR"},
             ]
         )
         const res = await this.fetchWithTimeout(url, signal);
+        console.log(url)
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
 
+        return await res.json() as MovieListResponse
+    }
+    async fetchSearchList(
+        page: number,
+        type: ResourceType,
+        query: string | undefined = "",
+        language: string | undefined = "en-US"
+    ): Promise<MovieListResponse> {
+
+        // Obtain a reference to the AbortSignal
+        const signal = this.controller.signal;
+
+        const url = buildUrl(
+            `${this.BASE_URL}/search/${type}`,
+            [
+                this.apiKeyParam,
+                { name: "page", value: page },
+                { name: "language", value: language },
+                { name: "query", value: query}
+            ],
+        )
+        const res = await this.fetchWithTimeout(url, signal);
+        console.log(url)
         if (!res.ok) {
             throw new Error('Network response was not ok');
         }

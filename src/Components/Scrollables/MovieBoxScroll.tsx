@@ -24,16 +24,11 @@ const MovieboxScroll = () => {
         )
     }
 
-    const genres = useMemo<string[]>(() => {
-        return genreIds.map((id) =>
-            genreData.genres
-                .find((genre) => genre.id === id)?.name)
-                .filter((genre) => genre != undefined) as string[]
-    }, [genreIds])
+    
 
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
-        queryKey: ['trendingMovies', genres],
-        queryFn: ({ pageParam }) => client.fetchMovieList(pageParam, "movie", genres),
+        queryKey: ['trendingMovies', genreIds],
+        queryFn: ({ pageParam }) => client.fetchMovieList(pageParam, "movie", genreIds),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
             if (lastPage.page < lastPage.total_pages) {
@@ -60,7 +55,6 @@ const MovieboxScroll = () => {
     
 
     const items = useMemo(() => {
-
         return data?.pages.flatMap((page) => page.results) ?? []
 
     }, [data, genreIds])

@@ -2,6 +2,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import {Button} from "../../Components/Button";
+import { faBorderAll,faGripLines, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type Props = {}
 
@@ -24,6 +26,7 @@ const Navbar = (props: Props) => {
             <Button  variant="ghost" className="rounded-md">
                 Sign Out
             </Button>
+            <Link to={"/search"}><FontAwesomeIcon icon = {faMagnifyingGlass} /></Link>
         </div>
     </nav>
   )
