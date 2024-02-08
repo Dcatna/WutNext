@@ -109,8 +109,8 @@ const ItemsGrid = ({items, searching}: ItemProps) => {
         )
     } else {
         return (
-            <div className="w-full px-4 md:px-0">
-                <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4">
+            <div className="w-full px-4 md:px-0 p-12">
+                <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 p-6">
                 {items.map((item: MovieListResult) => (
                         <div key={item.id ? item.id : 1}>
                             <Moviebox item={item}></Moviebox>
