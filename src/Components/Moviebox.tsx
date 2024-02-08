@@ -1,8 +1,6 @@
 import React, {useState} from 'react'
 import {MovieListResult} from "../data/types/MovieListResponse";
 import { Link } from 'react-router-dom';
-import {Skeleton} from "./Skeleton";
-import {boolean} from "yup";
 
   
 export interface movieBoxProp {
