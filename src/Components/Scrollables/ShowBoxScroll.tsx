@@ -9,9 +9,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../
 import {MovieListResult} from "../../data/types/MovieListResponse";
 import {TMDBClientContext} from "../../App";
 import {Genre, Rating} from "../../data/types/types";
-
-
-
+import Showbox from '../Showbox';
 
 
 const ShowBoxScroll = () => {
@@ -26,8 +24,6 @@ const ShowBoxScroll = () => {
                 : [...prevFilters, filter]
         )
     }
-
-    
 
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
         queryKey: ['trendingShows', genreIds],
@@ -55,14 +51,11 @@ const ShowBoxScroll = () => {
 
     }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
-    
-
     const items = useMemo(() => {
         return data?.pages.flatMap((page) => page.results) ?? []
 
     }, [data, genreIds])
-
-    
+  
     return (
         <div className="flex md:flex-row flex-col h-full w-full pe-12">
             <div className="md:w-1/4 w-full sm:row-span-1">
@@ -76,13 +69,12 @@ const ShowBoxScroll = () => {
             <div className="md:w-3/4 w-full grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {items.map((movie: MovieListResult) => (
                     <div>
-                        <Moviebox key={movie.id} item={movie}></Moviebox>
+                        <Showbox key={movie.id} item={movie}></Showbox>
                     </div>))}
             </div>
         </div>
     )
 }
-
 
 type FilterSidebarProps = {
     genres: Genre[]

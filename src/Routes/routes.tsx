@@ -7,6 +7,8 @@ import RecommendedScreen from "../Pages/IconScreens/RecommendedScreen";
 import ProtectedRoute from "../Components/ProtectedRoute";
 import MovieInfo from "../Components/MovieInfo";
 import SearchPage from "../Pages/SearchPage";
+import Profile from "../Components/Profile";
+import Pool from "../Components/Pool";
 
 export const router = createBrowserRouter([
     {
@@ -16,6 +18,8 @@ export const router = createBrowserRouter([
             {path:"/", element:<HomePage />},
             {path:"/recommended", element: <ProtectedRoute><RecommendedScreen/></ProtectedRoute>},
             {path:"/search", element: <SearchPage/>},
+            {path:"/profile", element:<ProtectedRoute><Profile/></ProtectedRoute> },
+            {path:"/pool", element:<ProtectedRoute><Pool/></ProtectedRoute> },
         ]
     }, 
     {path:"/signin", element:<Loginbox />},

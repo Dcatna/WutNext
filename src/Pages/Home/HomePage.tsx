@@ -20,13 +20,15 @@ const HomePage = () => {
             <Navbar />
         </div>
         <div>
-          <ul>
+          <ul className='flex items-center justify-center'>
             <li onClick={() => setScreen("GRID")}><FontAwesomeIcon icon = {faBorderAll} /></li>
             <li onClick={() => setScreen("ROW")}><FontAwesomeIcon icon = {faGripLines}/></li>
           </ul>
         </div>
-        {screen === "GRID" && <MovieboxScroll />}
-        {screen === "ROW" && <ShowBoxScroll />}
+        <div>
+            {screen === "GRID" && <MovieboxScroll />}
+            {screen === "ROW" && <ShowBoxScroll />}
+        </div>
     </div>
     </body>
   )

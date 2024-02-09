@@ -5,9 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { MovieListResult } from '../data/types/MovieListResponse'
 import Moviebox from '../Components/Moviebox'
 import Navbar from './Navbar/Navbar'
-interface pageParm {
-    pageParam : number
-}
+
 const SearchPage = () => {
     const [currSearch, setCurrSearch] = useState<string>("")
     const client = useContext(TMDBClientContext)
@@ -18,7 +16,6 @@ const SearchPage = () => {
             if (currSearch !== "") {
                 return client.fetchSearchList(pageParam, "movie", currSearch);
             } else {
-                console.log('hi')
                 return client.fetchMovieList(pageParam, "movie", []);
             }
         },

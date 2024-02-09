@@ -1,5 +1,6 @@
 import React from 'react'
 import {MovieListResult} from "../data/types/MovieListResponse";
+import { Link } from 'react-router-dom';
 
 
 export interface showBoxProp{
@@ -7,27 +8,24 @@ export interface showBoxProp{
 }
   
 const Showbox = ({item} : showBoxProp) => {
-    const partial_url = "https://image.tmdb.org/t/p/w200"
+    const partial_url = "https://image.tmdb.org/t/p/original/"
     return (
-      <div style={{
-          width:"100px",
-          margin:'25px'
-      }}>
-          <div style={{
-                  outlineColor: "black",
-                  alignItems: "center",
-                  border: "1.5px",
-                  borderStyle: "solid",
-                  borderRadius: "5px",
-                  borderColor: "black",
-                  marginBottom:"5px",
-                  width:"150px",
-                  height:'225px',
-                  backgroundColor:'darkgrey',
-              }}>
-              <img src={partial_url + item.poster_path} alt="Movie Poster" style={{ width: '150px' }} />
-          </div>
-      </div>
+        
+        <Link to={'/info'} state={{item}}>
+            <div className="group relative">
+                <img
+                    className="w-full h-full rounded-md animate-in"
+                    src={partial_url + item.poster_path}
+                    alt="Movie Poster"
+                />
+                <div className="rounded-md absolute bottom-0 left-0 bg-gradient-to-t from-black to-transparent w-full h-4/6"/>
+                <div className="rounded-md absolute bottom-0 left-0 h-full w-full hover:bg-gradient-to-t from-slate-900 to-transparent bg-transparent"/>
+                <text
+                    className="rounded-md line-clamp-2 absolute bottom-0 left-0 m-2 group-hover:animate-bounce">
+                    {item.title}
+                </text>
+            </div>
+        </Link>
     )
 }
 

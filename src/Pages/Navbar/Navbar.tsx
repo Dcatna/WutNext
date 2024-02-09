@@ -4,10 +4,14 @@ import { Link } from 'react-router-dom'
 import {Button} from "../../Components/Button";
 import { faBorderAll,faGripLines, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { supabase } from '../../lib/supabaseClient';
 
 type Props = {}
 
 const Navbar = (props: Props) => {
+    async function signOut() {
+        return supabase.auth.signOut()
+    }
   return (
     <nav>
         <div className="w-screen flex justify-center items-center">
@@ -21,9 +25,9 @@ const Navbar = (props: Props) => {
                 <Link to= "/pool">Pool</Link>
             </Button>
             <Button variant="ghost" className="rounded-md">
-                Profile
+                <Link to = "/profile">Profile</Link>
             </Button>
-            <Button  variant="ghost" className="rounded-md">
+            <Button onClick={signOut} variant="ghost" className="rounded-md">
                 Sign Out
             </Button>
             <Link to={"/search"}><FontAwesomeIcon icon = {faMagnifyingGlass} /></Link>
