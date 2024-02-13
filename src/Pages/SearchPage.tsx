@@ -5,6 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { MovieListResult } from '../data/types/MovieListResponse'
 import Moviebox from '../Components/Moviebox'
 import Navbar from './Navbar/Navbar'
+import { Skeleton } from '../Components/Skeleton'
 interface pageParm {
     pageParam : number
 }

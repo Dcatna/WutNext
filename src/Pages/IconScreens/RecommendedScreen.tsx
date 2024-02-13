@@ -8,6 +8,7 @@ const RecommendedScreen = (props: Props) => {
   return (
     <div>
       <Navbar></Navbar>
+      <p>hi</p>
     </div>
   )
 }

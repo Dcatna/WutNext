@@ -77,9 +77,9 @@ async function submitForm (formData : IFormInput) {
         <h1 className="text-xl font-bold mb-4 text-black">Sign In!</h1>
         <p className="mb-8 text-black">Please enter your user and password</p>
         <form className="space-y-6" onSubmit={handleSubmit(submitForm)}>
-            <input type="text" placeholder="Email" {...register('email')} className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600 text-black"/>
+            <input type="email" id='email' autoComplete='email' placeholder="Email" {...register('email')} className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600 text-black"/>
             <p className='text-black'>{errors.email?.message}</p>
-            <input type="password" placeholder="Password" {...register('password')} className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600 text-black"/>
+            <input type="password" id='password' autoComplete='password' placeholder="Password" {...register('password')} className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600 text-black"/>
             <p className='text-black'>{errors.password?.message}</p>
             <button type="submit" className="w-full py-2 px-4 bg-purple-600 text-white rounded hover:bg-purple-700 focus:outline-none focus:bg-purple-700">Login</button>
         </form>

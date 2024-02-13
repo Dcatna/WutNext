@@ -18,7 +18,7 @@ export async function signOut() {
 
 
 export function useSubscription(){ //session
-    const [session, setSession] = useState<Session | null>()
+    const [session, setSession] = useState<Session | null>(null)
     async function initSes() {
         const {data, error} = await supabase.auth.getSession()
         setSession(data.session)
