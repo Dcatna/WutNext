@@ -28,7 +28,7 @@ const MovieInfo = () => {
 
 
   return (
-    <div className=''>
+    <div className='overflow-x-hidden'>
         <Navbar></Navbar>
     <div className="flex items-center justify-between">
 

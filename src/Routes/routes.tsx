@@ -9,6 +9,7 @@ import MovieInfo from "../Components/MovieInfo";
 import SearchPage from "../Pages/SearchPage";
 import Profile from "../Components/Profile";
 import Pool from "../Components/Pool";
+import FavoritesList from "../Components/FavoritesList";
 
 export const router = createBrowserRouter([
     {
@@ -24,5 +25,6 @@ export const router = createBrowserRouter([
     }, 
     {path:"/signin", element:<Loginbox />},
     {path:"/info", element: <MovieInfo/>},
-    {path:"/signup", element:<Signup />}
+    {path:"/signup", element:<Signup />},
+    {path:"/favorites", element:<FavoritesList/>}
 ])

@@ -2,25 +2,33 @@ import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { CurrentUserContext } from '../App';
-import { Session } from '@supabase/supabase-js';
 
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+  const [loading, setLoading] = useState(true);
+  const currentUserSession = useContext(CurrentUserContext);
 
+  useEffect(() => {
+    const checkAuthState = async () => {
+      if (currentUserSession?.user) {
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    };
+    checkAuthState();
+  }, [currentUserSession]);
 
-const ProtectedRoute = ({children} : {children : ReactNode}) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [session, setSession] = useState<Session | null>()
-    const [loading, setLoading] = useState(true)
-    const currentUserSession = useContext(CurrentUserContext)
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-    if(currentUserSession === null) {
-        return <div>Loading..</div>
-    }
+  if (!currentUserSession?.user) {
+    // User is not authenticated
+    return <Navigate to="/signin" replace />;
+  }
 
-    if(currentUserSession?.user == null) {
-        return <Navigate to="/signin" replace/>
-    }
-    return <>{children}</>
-  
-}
+  // User is authenticated, render the children
+  return <>{children}</>;
+};
 
-export default ProtectedRoute
+export default ProtectedRoute;
