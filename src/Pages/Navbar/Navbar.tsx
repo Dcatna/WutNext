@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {Button} from "../../Components/Button";
 import { faBorderAll,faGripLines, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,9 +9,14 @@ import { supabase } from '../../lib/supabaseClient';
 type Props = {}
 
 const Navbar = (props: Props) => {
+    let navigate = useNavigate();
+
     async function signOut() {
         return supabase.auth.signOut()
+        
+        
     }
+
   return (
     <nav>
         <div className="w-screen flex justify-center items-center">
