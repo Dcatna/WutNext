@@ -13,14 +13,9 @@ const ProtectedRoute = ({children} : {children : ReactNode}) => {
     const currentUserSession = useContext(CurrentUserContext)
     console.log('hi')
     useEffect(() => {
-        // Assuming you have a method to check the session more directly, e.g., check current session state.
-        // If such a method does not exist, you might need to ensure currentUserSession is populated correctly on app initialization.
         const sessionCheck = async () => {
             const session = await supabase.auth.getSession();
-            setLoading(false); // Set loading to false after checking session.
-            if (!session) {
-                // Handle case where no session is found.
-            }
+            setLoading(false); 
         };
         sessionCheck();
     }, [currentUserSession]);

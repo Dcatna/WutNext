@@ -8,6 +8,15 @@ import FavoritesList from './FavoritesList'
 import { Link } from 'react-router-dom'
 import user_image from './user_default.jpg'
 import { Button } from './Button'
+import UserFavMovies from './ProfileNav/UserFavMovies'
+import UserFavShows from './ProfileNav/UserFavShows'
+import UserProfile from './ProfileNav/UserProfile'
+import UserPreferences from './ProfileNav/UserPreferences'
+import { UserSearch } from 'lucide-react'
+import UserSettings from './ProfileNav/UserSettings'
+import UserActivity from './ProfileNav/UserActivity'
+import UserLists from './ProfileNav/UserLists'
+
 export interface favs {
   movie_id: bigint
   poster_path: string
@@ -15,9 +24,12 @@ export interface favs {
   overview: string
   vote_average: number
 }
+
+type Screens = "MOVIE" | "SHOW" | "PROFILE" | "ACTIVITY" | "PREFERENCES" | "SETTINGS" | "LISTS"
+
 const Profile = () => {
   const currentUserSession = useContext(CurrentUserContext) 
-
+  const [currScreen, setCurrScreen] = useState<Screens>("PROFILE")
   return (
     <div className='overflow-x-hidden'>
       <Navbar></Navbar>
@@ -28,45 +40,45 @@ const Profile = () => {
         </div>
           
         </div>
-      <div className='mt-10'>
-        <ProfileNav></ProfileNav>
+    <div className='mt-10'>
+      <div className='items-center justify-center flex'>
+        <div>
+          <Button onClick={() => setCurrScreen("PROFILE")} variant="ghost">
+              Profile
+          </Button>
+          <Button onClick={() => setCurrScreen("MOVIE")} variant="ghost" className="rounded-md">
+              Favorite Movies
+          </Button>
+          <Button onClick={() => setCurrScreen("SHOW")} variant="ghost" className="rounded-md">
+              Favorites Shows
+          </Button>
+          <Button onClick={() => setCurrScreen("ACTIVITY")} variant="ghost" className="rounded-md">
+              Activity
+          </Button>
+          <Button onClick={() => setCurrScreen("PREFERENCES")} variant="ghost" className="rounded-md">
+              Preferences
+          </Button>
+          <Button onClick={() => setCurrScreen("LISTS")} variant="ghost" className="rounded-md">
+              Lists
+          </Button>
+          <Button onClick={() => setCurrScreen("SETTINGS")} variant="ghost" className="rounded-md">
+              Settings
+          </Button>
+        </div>
+      </div>
+        <div className='' style={{marginLeft:"400px"}}>
+          {currScreen === "MOVIE" && <UserFavMovies/>}
+          {currScreen === "SHOW" && <UserFavShows/>}
+          {currScreen === "PROFILE" && <UserProfile/>}
+          {currScreen === "PREFERENCES" && <UserPreferences/>}
+          {currScreen === "ACTIVITY" && <UserActivity/>}
+          {currScreen === "SETTINGS" && <UserSettings/>}
+          {currScreen === "LISTS" && <UserLists/>}
+        </div>
       </div>
     </div>
   )
 }
-
-
-
-const ProfileNav = () => {
-  return (
-    <nav>
-    <div className='items-center justify-center flex'>
-      <div>
-        <Button  variant="ghost">
-            Profile
-        </Button>
-        <Button  variant="ghost" className="rounded-md">
-            Favorite Movies
-        </Button>
-        <Button   variant="ghost" className="rounded-md">
-             Favorites Shows
-        </Button>
-        <Button  variant="ghost" className="rounded-md">
-            Activity
-        </Button>
-        <Button  variant="ghost" className="rounded-md">
-            Preferences
-        </Button>
-        <Button  variant="ghost" className="rounded-md">
-            Settings
-        </Button>
-      </div>
-    </div>
-    </nav>
-  )
-}
-
-
 
 export default Profile
 

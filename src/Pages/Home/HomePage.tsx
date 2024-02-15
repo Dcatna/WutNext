@@ -6,10 +6,10 @@ import TrendingScreen from '../IconScreens/TrendingScreen'
 import MovieboxScroll from '../../Components/Scrollables/MovieBoxScroll'
 import ShowBoxScroll from '../../Components/Scrollables/ShowBoxScroll'
 
-type Screen = "GRID" | "ROW"
+type Screen = "MOVIE" | "SHOW"
 
 const HomePage = () => {
-    const [screen, setScreen] = useState<Screen>("GRID")
+    const [screen, setScreen] = useState<Screen>("MOVIE")
 
    return (
     <body className='overflow-x-hidden'>
@@ -19,15 +19,15 @@ const HomePage = () => {
         <div className='mb-5'>
             <Navbar />
         </div>
-        <div>
-          <ul className='flex items-center justify-center'>
-            <li onClick={() => setScreen("GRID")}><FontAwesomeIcon icon = {faBorderAll} /></li>
-            <li onClick={() => setScreen("ROW")}><FontAwesomeIcon icon = {faGripLines}/></li>
-          </ul>
+        <div className='flex justify-center items-center space-x-4 py-2 cursor-pointer'>
+          
+            <div onClick={() => setScreen("MOVIE")} className=''>Movies</div>
+            <div> | </div>
+            <div onClick={() => setScreen("SHOW")}>Shows</div>
         </div>
         <div>
-            {screen === "GRID" && <MovieboxScroll />}
-            {screen === "ROW" && <ShowBoxScroll />}
+            {screen === "MOVIE" && <MovieboxScroll />}
+            {screen === "SHOW" && <ShowBoxScroll />}
         </div>
     </div>
     </body>
