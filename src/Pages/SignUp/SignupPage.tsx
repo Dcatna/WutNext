@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import * as yup from 'yup'
@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient'
+import { CurrentUserContext } from '../../App'
 
 interface IFormInput {
     email: string;
@@ -20,11 +21,22 @@ const Signup = () => {
   const navigate = useNavigate();
  // const [name, setName] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const client = useContext(CurrentUserContext)
+  
   const{register, handleSubmit, formState: { errors }} = useForm<IFormInput>({
       resolver:yupResolver(schema),
     });
-
+async function addUser(formData : IFormInput){
+  try{
+    const {data, error} = await supabase.from("users").insert([{
+      user_id: client?.user.id,
+      email: formData.email,
+      username: formData.email.slice(0, formData.email.indexOf("@")),
+    }])
+  }catch(error) {
+    console.log(error)
+  }
+}
 async function submitForm (formData : IFormInput) {
   setIsSubmitting(true);
   console.log(formData.email, formData.password)
@@ -34,6 +46,7 @@ async function submitForm (formData : IFormInput) {
       password: formData.password,
   
     });
+    addUser(formData)
     navigate("/")
   }
  catch (error) {
