@@ -12,7 +12,7 @@ async function fetchRecs(){
   return res 
 }
 const RecommendedScreen = () => {
-  const [recommendations, setRecommendations] = useState<genres | null>()
+  const [recommendations, setRecommendations] = useState()
 
   useEffect(() => {
     async function fetchRecs() {
@@ -21,8 +21,8 @@ const RecommendedScreen = () => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        const data : genres = await response.json(); // Assuming the response is in the correct shape
-        console.log(data)
+        const data  = await response.json(); // Assuming the response is in the correct shape
+        console.log(data.)
         setRecommendations(data);
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
@@ -31,11 +31,11 @@ const RecommendedScreen = () => {
 
     fetchRecs();
   }, [])
-
+  
   return (
     <div>
       <Navbar></Navbar>
-      <p>hi</p>
+      <p>rec</p>
     </div>
   )
 }

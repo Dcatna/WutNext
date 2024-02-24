@@ -26,17 +26,8 @@ const Signup = () => {
   const{register, handleSubmit, formState: { errors }} = useForm<IFormInput>({
       resolver:yupResolver(schema),
     });
-async function addUser(formData : IFormInput){
-  try{
-    const {data, error} = await supabase.from("users").insert([{
-      user_id: client?.user.id,
-      email: formData.email,
-      username: formData.email.slice(0, formData.email.indexOf("@")),
-    }])
-  }catch(error) {
-    console.log(error)
-  }
-}
+
+
 async function submitForm (formData : IFormInput) {
   setIsSubmitting(true);
   console.log(formData.email, formData.password)
@@ -46,8 +37,17 @@ async function submitForm (formData : IFormInput) {
       password: formData.password,
   
     });
-    addUser(formData)
+    if (data.user) {
+      // Add additional user info to your custom 'users' table
+      const { error: insertError } = await supabase.from("users").insert([{
+        user_id: data.user.id, // Use the ID from the signed-up user
+        email: formData.email,
+        username: formData.email.slice(0, formData.email.indexOf("@")),
+      }]);
+
+      if (insertError) throw insertError;
     navigate("/")
+  }
   }
  catch (error) {
   if (error instanceof Error) {
