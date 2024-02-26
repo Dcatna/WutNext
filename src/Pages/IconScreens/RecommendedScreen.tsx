@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
+import { CurrentUserContext } from '../../App'
 
 
 interface genres {
@@ -13,19 +14,26 @@ async function fetchRecs(){
 }
 const RecommendedScreen = () => {
   const [recommendations, setRecommendations] = useState()
-
+  const currentUserSession = useContext(CurrentUserContext) 
+  const userToken = currentUserSession?.access_token
   useEffect(() => {
     async function fetchRecs() {
       try {
-        const response = await fetch('/recommendations');
+        const response = await fetch('/recommendations', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${userToken}`
+          }
+        })
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('Network response was not ok')
         }
-        const data  = await response.json(); // Assuming the response is in the correct shape
-        console.log(data)
-        setRecommendations(data);
+        const data  = await response.json() // Assuming the response is in the correct shape
+        console.log(data[0]['genre_ratings'])
+        setRecommendations(data[0]['genre_ratings'])
       } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
+        console.log(error)
+        console.error('There was a problem with the fetch operation:', error)
       }
     }
 
@@ -35,7 +43,7 @@ const RecommendedScreen = () => {
   return (
     <div>
       <Navbar></Navbar>
-      <p>rec</p>
+      <p>{recommendations}</p>
     </div>
   )
 }

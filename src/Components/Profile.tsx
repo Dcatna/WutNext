@@ -23,6 +23,7 @@ export interface favs {
   title: string
   overview: string
   vote_average: number
+  
 }
 
 type Screens = "MOVIE" | "SHOW" | "PROFILE" | "ACTIVITY" | "PREFERENCES" | "SETTINGS" | "LISTS"
