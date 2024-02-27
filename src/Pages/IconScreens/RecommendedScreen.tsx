@@ -9,15 +9,12 @@ import Moviebox from '../../Components/Moviebox'
 interface genres {
   [key:string] : number
 }
-//gonna prompt user with 5 or so shows/movies depending on what they are looking for then show recs, if they dont know any 
-//of the shows just show them mix of popular and highest rated, and let them like movies and shows
-async function fetchRecs(){
-  const res = await fetch('/recommendations')
-  return res 
-}
+
 const RecommendedScreen = () => {
   
-
+  let firstind = 0
+  let secondind = 2 
+  let realPage = 1
   const client = useContext(TMDBClientContext)
   const [recGenres, setRecGenres] = useState<number[]>([])
   const [recActors, setRecActors] = useState<string[]>([])
@@ -50,29 +47,26 @@ const RecommendedScreen = () => {
 
     fetchRecs();
   }, [])
-
+  
   console.log(passInGenres)
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
-      queryKey: ['discoverMovies', recActors, recGenres],
-      queryFn: ({ pageParam }) => client.fetchRecommendedList(pageParam, "movie", passInGenres, recActors),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage) => {
-          if (lastPage.page < lastPage.total_pages) {
-              return lastPage.page + 1;
-          } else {
-              return undefined;
-          }
-      },
+    queryKey: ['discoverMovies', recGenres.slice(0,2)],
+    queryFn: ({ pageParam = 1 }) => client.fetchRecommendedList(pageParam, "movie", passInGenres, recActors),
+    getNextPageParam: (lastPage) => lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+    initialPageParam: 1, // Explicitly set initialPageParam
   });
+  
 
   useEffect(() => {
       const handleScroll = () => {
           //checking if we are near the bottom of the screen
           if(window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 50) {
               fetchNextPage().catch((e) => alert(e.toLocaleString()))
+              setPassInGenres(recGenres)
+              
           }
-          setPassInGenres(recGenres)
-
+          
+          
       }
 
       window.addEventListener('scroll', handleScroll)
@@ -82,13 +76,13 @@ const RecommendedScreen = () => {
 
   
 
-  const items = useMemo(() => {
+  const itemsRec = useMemo(() => {
       return data?.pages.flatMap((page) => page.results) ?? []
 
   }, [data, recActors, recGenres])
 
 
-  console.log(items)
+  console.log(itemsRec)
 
   
   return (
@@ -96,11 +90,11 @@ const RecommendedScreen = () => {
       <div>
       <Navbar></Navbar>
       </div>
-      <div className="flex-grow grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
-    {items.map((movie: MovieListResult) => (
-      <Moviebox key={movie.id} item={movie} />
-    ))}
-    </div>
+        <div className="flex-grow grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
+          {itemsRec.map((movie: MovieListResult) => (
+            <Moviebox key={movie.id} item={movie} />
+          ))}
+      </div>
 
 </div>
 
