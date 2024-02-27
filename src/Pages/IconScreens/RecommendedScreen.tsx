@@ -21,6 +21,7 @@ const RecommendedScreen = () => {
   const client = useContext(TMDBClientContext)
   const [recGenres, setRecGenres] = useState<number[]>([])
   const [recActors, setRecActors] = useState<string[]>([])
+  const [passInGenres, setPassInGenres] = useState<number[]>(recGenres.slice(0, 1))
   const currentUserSession = useContext(CurrentUserContext) 
   const userToken = currentUserSession?.access_token
   useEffect(() => {
@@ -38,6 +39,7 @@ const RecommendedScreen = () => {
         const data  = await response.json()
         setRecActors(data[0])
         setRecGenres(data[1])
+        setPassInGenres(data[1].slice(0, 2))
        // console.log(data[0]['genre_ratings'])
 
       } catch (error) {
@@ -49,9 +51,10 @@ const RecommendedScreen = () => {
     fetchRecs();
   }, [])
 
+  console.log(passInGenres)
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
       queryKey: ['discoverMovies', recActors, recGenres],
-      queryFn: ({ pageParam }) => client.fetchRecommendedList(pageParam, "movie", recGenres, recActors),
+      queryFn: ({ pageParam }) => client.fetchRecommendedList(pageParam, "movie", passInGenres, recActors),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
           if (lastPage.page < lastPage.total_pages) {
@@ -68,6 +71,8 @@ const RecommendedScreen = () => {
           if(window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 50) {
               fetchNextPage().catch((e) => alert(e.toLocaleString()))
           }
+          setPassInGenres(recGenres)
+
       }
 
       window.addEventListener('scroll', handleScroll)

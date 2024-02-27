@@ -55,7 +55,7 @@ class TMDBCClient {
                 { name: "include_video", value: include_video},
             ],
             [
-                { name: "with_genres", value: with_genres, join: "OR"},
+                { name: "with_genres", value: with_genres, join: "AND"},
             ]
         )
         const res = await this.fetchWithTimeout(url, signal);
