@@ -21,10 +21,11 @@ export const router = createBrowserRouter([
             {path:"/search", element: <SearchPage/>},
             {path:"/profile", element:<ProtectedRoute><Profile/></ProtectedRoute> },
             {path:"/pool", element:<ProtectedRoute><Pool/></ProtectedRoute> },
+            {path:"/info", element: <MovieInfo/>},
         ]
     }, 
     {path:"/signin", element:<Loginbox />},
-    {path:"/info", element: <MovieInfo/>},
+    
     {path:"/signup", element:<Signup />},
     {path:"/favorites", element:<FavoritesList/>}
 ])

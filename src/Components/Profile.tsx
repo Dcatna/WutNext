@@ -18,12 +18,12 @@ import UserActivity from './ProfileNav/UserActivity'
 import UserLists from './ProfileNav/UserLists'
 
 export interface favs {
-  movie_id: bigint
+  id: number
   poster_path: string
   title: string
   overview: string
   vote_average: number
-  
+
 }
 
 type Screens = "MOVIE" | "SHOW" | "PROFILE" | "ACTIVITY" | "PREFERENCES" | "SETTINGS" | "LISTS"

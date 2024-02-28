@@ -21,7 +21,7 @@ const Moviebox = ({item} : movieBoxProp) => {
         event.stopPropagation();
         console.log(item)
         const {data, error} = await supabase.from("favoritemovies").insert([{
-            movie_id: item.id, 
+            id: item.id, 
             user_id: client?.user.id, 
             poster_path: item.poster_path,
             title: item.title,

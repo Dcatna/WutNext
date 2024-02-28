@@ -4,6 +4,8 @@ import { CurrentUserContext, TMDBClientContext } from '../../App'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { MovieListResponse, MovieListResult } from '../../data/types/MovieListResponse'
 import Moviebox from '../../Components/Moviebox'
+import { supabase } from '../../lib/supabaseClient'
+import { favs } from '../../Components/Profile'
 
 
 interface genres {
@@ -19,6 +21,7 @@ const RecommendedScreen = () => {
   const client = useContext(TMDBClientContext)
   const [recGenres, setRecGenres] = useState<number[]>([])
   const [recActors, setRecActors] = useState<string[]>([])
+  const [favMovies, setFavMovies] = useState<favs[]>([])
   const [passInGenres, setPassInGenres] = useState<number[]>(recGenres.slice(0, 1))
   const [loading, setLoading] = useState<boolean>(true)
   const currentUserSession = useContext(CurrentUserContext) 
@@ -47,6 +50,18 @@ const RecommendedScreen = () => {
       }
     }
     fetchRecs();
+  }, [])
+
+  useEffect(() => {
+    async function getFavs(){
+      try{
+        const {data, error} = await supabase.from("favoritemovies").select("*")
+        setFavMovies(data as favs[])
+      }catch(error) {
+        console.log(error)
+      }
+    }
+   getFavs()
   }, [])
 
   console.log(passInGenres)
@@ -96,7 +111,7 @@ const RecommendedScreen = () => {
 
   }, [data, recActors, recGenres])
 
-
+  console.log(favMovies)
   console.log(itemsRec)
 
   if(loading == true) return <div>Loading...</div>
@@ -106,9 +121,11 @@ const RecommendedScreen = () => {
       <Navbar></Navbar>
       </div>
         <div className="flex-grow grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
-          {itemsRec.map((movie: MovieListResult) => (
-            <Moviebox key={movie.id} item={movie} />
-          ))}
+        {itemsRec
+    .filter(movie => !favMovies.some(favMovie => favMovie.id === movie.id))
+    .map((movie: MovieListResult) => (
+      <Moviebox key={movie.id} item={movie} />
+    ))}
       </div>
 
 </div>

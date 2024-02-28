@@ -71,7 +71,7 @@ const UserProfile = (props: Props) => {
             LEFT
         </button>
     {arr.map((item: favs) => (
-        <li key={item.movie_id} style={{
+        <li key={item.id} style={{
             margin:'5px'
         }}>
                 <FavoritesBox item = {item}/>
