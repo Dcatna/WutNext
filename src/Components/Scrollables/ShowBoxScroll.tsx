@@ -6,7 +6,7 @@ import Moviebox from '../Moviebox';
 import {Badge} from "../Badge";
 import {Card} from "../Card";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../Select";
-import {MovieListResult} from "../../data/types/MovieListResponse";
+import {MovieListResult, ShowListResult} from "../../data/types/MovieListResponse";
 import {TMDBClientContext} from "../../App";
 import {Genre, Rating} from "../../data/types/types";
 import Showbox from '../Showbox';
@@ -67,7 +67,7 @@ const ShowBoxScroll = () => {
                 />
             </div>
             <div className="md:w-3/4 w-full grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {items.map((movie: MovieListResult) => (
+                {items.map((movie: ShowListResult) => (
                     <div>
                         <Showbox key={movie.id} item={movie}></Showbox>
                     </div>))}

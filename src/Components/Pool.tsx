@@ -7,7 +7,15 @@ const Pool = (props: Props) => {
   return (
     <div>
       <Navbar></Navbar>
-      pool
+      <div>
+        POOL
+      </div>
+      <div>
+        User Search 
+      </div>
+      <div>
+        
+      </div>
     </div>
   )
 }

@@ -1,10 +1,10 @@
 import React from 'react'
-import {MovieListResult} from "../data/types/MovieListResponse";
+import {MovieListResult, ShowListResult} from "../data/types/MovieListResponse";
 import { Link } from 'react-router-dom';
 
 
 export interface showBoxProp{
-    item : MovieListResult
+    item : ShowListResult
 }
   
 const Showbox = ({item} : showBoxProp) => {
@@ -22,7 +22,7 @@ const Showbox = ({item} : showBoxProp) => {
                 <div className="rounded-md absolute bottom-0 left-0 h-full w-full hover:bg-gradient-to-t from-slate-900 to-transparent bg-transparent"/>
                 <text
                     className="rounded-md line-clamp-2 absolute bottom-0 left-0 m-2 group-hover:animate-bounce">
-                    {item.title}
+                    {item.name}
                 </text>
             </div>
         </Link>

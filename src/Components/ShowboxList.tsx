@@ -3,14 +3,14 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import Showbox  from './Showbox';
-import {MovieListResult} from "../data/types/MovieListResponse";
+import {MovieListResult, ShowListResponse, ShowListResult} from "../data/types/MovieListResponse";
 interface movieBoxListProp{
     items: MovieListResult[]
 }
 
-const itemsIndex = (items : MovieListResult[], currItem : MovieListResult) =>{
+const itemsIndex = (items : ShowListResult[], currItem : ShowListResult) =>{
     for(let i = 0; i<items.length; i++) {
-        if(items[i].title === currItem.title){
+        if(items[i].name === currItem.name){
             return i
         }
     }
@@ -29,7 +29,7 @@ const Showboxlist = () => {
 
     const fetchMovies = async ({pageParam} : FetchMoviesParams) => {
         const apiKey = '11e1be5dc8a3cf947ce265da83199bce';
-        const res = await fetch(`https://api.themoviedb.org/3/trending/tv/week?api_key=${apiKey}&page=${pageParam}`);
+        const res = await fetch(`https://api.themoviedb.org/3/popular/tv/week?api_key=${apiKey}&page=${pageParam}`);
         if (!res.ok) {
           throw new Error('Network response was not ok');
         }
@@ -55,7 +55,7 @@ const Showboxlist = () => {
     }, [data])
     console.log(items)
 
-    const [arr, setArr] = useState<MovieListResult[]>([])
+    const [arr, setArr] = useState<ShowListResult[]>([])
 
     useEffect(() =>{
         if(arr.length === 0){
@@ -94,7 +94,7 @@ const Showboxlist = () => {
             }}>
                 LEFT
             </button>
-        {arr.map((item: MovieListResult) => (
+        {arr.map((item: ShowListResult) => (
             <li key={item.id} style={{
                 margin:'5px'
             }}>

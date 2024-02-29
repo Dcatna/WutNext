@@ -1,4 +1,4 @@
-import {MovieListResponse, MovieListType, MovieTrailer, ResourceType, SortType} from "./types/MovieListResponse";
+import {MovieListResponse, MovieListType, MovieTrailer, ResourceType, ShowListResponse, SortType} from "./types/MovieListResponse";
 import {TokenBuckets} from "./ratelimit/TokenBuckets";
 import {TokenBucket} from "./ratelimit/TokenBucket";
 import {sign} from "node:crypto";
@@ -114,7 +114,7 @@ class TMDBCClient {
         sort_by : SortType = undefined,
         include_adult : boolean | undefined = true,
         include_video : boolean | undefined = false
-    ): Promise<MovieListResponse> {
+    ): Promise<ShowListResponse> {
 
         // Obtain a reference to the AbortSignal
         const signal = this.controller.signal;
@@ -139,7 +139,7 @@ class TMDBCClient {
             throw new Error('Network response was not ok');
         }
 
-        return await res.json() as MovieListResponse
+        return await res.json() as ShowListResponse
     }
 
     async fetchSearchList(
