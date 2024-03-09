@@ -6,7 +6,9 @@ import { MovieTrailer } from '../data/types/MovieListResponse'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../Pages/Navbar/Navbar'
+import { Cast, Credit } from '../data/types/types'
 
+const partial_url = "https://image.tmdb.org/t/p/original/"
 
 const MovieInfo = () => {
 
@@ -14,14 +16,20 @@ const MovieInfo = () => {
     const movie : movieBoxProp = location.state
     const client = useContext(TMDBClientContext)
     const [videoData, setVideoData] = useState<MovieTrailer>()
+    const [actors, setActors] = useState<Cast[]>()
 
     async function fetchMovieTrailer() {
         const video_response: Promise<MovieTrailer> = client.fetchTrailer(movie.item.id);
-        const trailer: MovieTrailer = await video_response;
+        
+        const trailer: MovieTrailer = await video_response
         
         setVideoData(trailer)
     }   
-
+    async function fetchCredits() {
+      const cred : Promise<Credit> = client.fetchCreditList(movie.item.id)
+      const credits : Credit = await cred
+      setActors(credits.cast)
+    }
     useEffect(() => {
         fetchMovieTrailer()
     }, [])
@@ -32,13 +40,27 @@ const MovieInfo = () => {
         <Navbar></Navbar>
     <div className="flex items-center justify-between">
 
-        <div className="flex-1 relative">
-            <p className="absolute left-1/2 transform -translate-x-1/2">{movie.item.title}</p>
+    </div>
+    <div className='relative mt-10 ml-10 flex' style={{ height: '500px' }}>
+      <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.item.poster_path})` }}></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10"></div>
+        <div className='z-20 flex items-center p-10'>
+          <img className="h-96 w-auto object-cover" src={partial_url + movie.item.poster_path} alt="" />
+          <div className='ml-10 text-white'>
+            <p className="text-2xl">{movie.item.title}</p>
+            <p className='mt-5'>{movie.item.vote_average}</p>
+            <p className='mt-5'>OverView</p>
+            <p >{movie.item.overview}</p>
+          </div>
         </div>
     </div>
-        <div className='h-screen flex items-center justify-center'>
-            <VideoComponent videoKey={videoData?.results[0]?.key}></VideoComponent>
-            
+
+      <div>
+
+      </div>
+      <div className='mt-10 ml-10'>
+        
+        <VideoComponent videoKey={videoData?.results[0]?.key}></VideoComponent>
         </div>
     </div>
   )
@@ -59,8 +81,5 @@ function VideoComponent({videoKey} : video) {
       </iframe>
     );
   }
-  
-  // Usage example:
-  // <VideoComponent videoKey="QUCzcEz4FKw" />
-  
+
 export default MovieInfo

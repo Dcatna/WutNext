@@ -3,6 +3,7 @@ import {TokenBuckets} from "./ratelimit/TokenBuckets";
 import {TokenBucket} from "./ratelimit/TokenBucket";
 import {sign} from "node:crypto";
 import {buildUrl} from "./query/query";
+import { Credit } from "./types/types";
 
 
 class TMDBCClient {
@@ -65,6 +66,32 @@ class TMDBCClient {
         }
 
         return await res.json() as MovieListResponse
+    }
+    //`https://api.themoviedb.org/3/movie/${movie_id}/credits?api_key=${apiKey}`
+    async fetchCreditList(
+        movie_id: number,
+        //type: ResourceType,
+        language: string | undefined = "en-US",
+    ): Promise<Credit> {
+
+        // Obtain a reference to the AbortSignal
+        const signal = this.controller.signal;
+
+        const url = buildUrl(
+            `${this.BASE_URL}/movie/${movie_id}}/credits`,
+            [
+                this.apiKeyParam,
+                { name: "language", value: language },
+
+            ],
+        )
+        const res = await this.fetchWithTimeout(url, signal);
+        console.log(url)
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await res.json() as Credit
     }
     async fetchRecommendedList(
         page: number,
