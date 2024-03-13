@@ -62,10 +62,16 @@ const MovieInfo = () => {
       </div>
       <div className='mt-10 ml-10'>
         
-        <VideoComponent videoKey={videoData?.results[0]?.key}></VideoComponent>
-        <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'100px'}}>{actors?.map((actor) => (
+        
+        
+        <p className='mt-5 ml-[40px]'>Cast</p>
+        <div className='flex overflow-x-auto' style={{width: '1000px', marginLeft:'40px'}}>{actors?.map((actor) => (
           <ActorBox actor={actor}></ActorBox>
         ))}</div>
+        <p className='mt-5 ml-[40px]'>Media</p>
+        <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'40px'}}>{videoData?.results.map((video) => (
+          <VideoComponent videoKey={video.key}></VideoComponent>
+        ))}</div> 
         </div>
     </div>
   )
@@ -82,7 +88,8 @@ function VideoComponent({videoKey} : video) {
         height="315" 
         src={embedUrl} 
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowFullScreen>
+        allowFullScreen
+        className='mx-5'>
       </iframe>
     );
   }
