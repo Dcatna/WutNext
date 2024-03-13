@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../Pages/Navbar/Navbar'
 import { Cast, Credit } from '../data/types/types'
+import ActorBox from './ActorBox'
 
 const partial_url = "https://image.tmdb.org/t/p/original/"
 
@@ -32,6 +33,7 @@ const MovieInfo = () => {
     }
     useEffect(() => {
         fetchMovieTrailer()
+        fetchCredits()
     }, [])
 
 
@@ -49,7 +51,7 @@ const MovieInfo = () => {
           <div className='ml-10 text-white'>
             <p className="text-2xl">{movie.item.title}</p>
             <p className='mt-5'>{movie.item.vote_average}</p>
-            <p className='mt-5'>OverView</p>
+            <p className='mt-5'>Overview</p>
             <p >{movie.item.overview}</p>
           </div>
         </div>
@@ -61,6 +63,9 @@ const MovieInfo = () => {
       <div className='mt-10 ml-10'>
         
         <VideoComponent videoKey={videoData?.results[0]?.key}></VideoComponent>
+        <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'100px'}}>{actors?.map((actor) => (
+          <ActorBox actor={actor}></ActorBox>
+        ))}</div>
         </div>
     </div>
   )
