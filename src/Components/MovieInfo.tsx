@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { movieBoxProp } from './Moviebox'
+import Moviebox, { movieBoxProp } from './Moviebox'
 import { TMDBClientContext } from '../App'
 import { MovieTrailer } from '../data/types/MovieListResponse'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../Pages/Navbar/Navbar'
-import { Cast, Credit } from '../data/types/types'
+import { Cast, Credit, SimilarMovie, SimilarMovieResult } from '../data/types/types'
 import ActorBox from './ActorBox'
 
 const partial_url = "https://image.tmdb.org/t/p/original/"
@@ -18,7 +18,7 @@ const MovieInfo = () => {
     const client = useContext(TMDBClientContext)
     const [videoData, setVideoData] = useState<MovieTrailer>()
     const [actors, setActors] = useState<Cast[]>()
-
+    const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>()
     async function fetchMovieTrailer() {
         const video_response: Promise<MovieTrailer> = client.fetchTrailer(movie.item.id);
         
@@ -31,10 +31,22 @@ const MovieInfo = () => {
       const credits : Credit = await cred
       setActors(credits.cast)
     }
+    async function fetchSimilarMovies() {
+      const res : Promise<SimilarMovieResult> = client.fetchSimilarMovie(movie.item.id)
+      const movies : SimilarMovieResult = await res
+      const convertedMovies = movies.results.map(similarMovie => ({
+        ...similarMovie,
+        media_type: 'movie', // Assuming 'movie' as default for conversion
+        backdrop_path: similarMovie.backdrop_path || '', // Ensuring value is not undefined
+        poster_path: similarMovie.poster_path || '', // Ensuring value is not undefined
+      }));
+      setSimilarMovies(convertedMovies)
+    }
     useEffect(() => {
         fetchMovieTrailer()
         fetchCredits()
-    }, [])
+        fetchSimilarMovies()
+    }, [movie])
 
 
   return (
@@ -57,22 +69,34 @@ const MovieInfo = () => {
         </div>
     </div>
 
-      <div>
-
-      </div>
-      <div className='mt-10 ml-10'>
-        
-        
-        
-        <p className='mt-5 ml-[40px]'>Cast</p>
-        <div className='flex overflow-x-auto' style={{width: '1000px', marginLeft:'40px'}}>{actors?.map((actor) => (
+    <div className='flex flex-row mt-10 ml-10'>
+  <div className='flex flex-col'>
+    <div className=''>
+      <p className='mt-5 ml-[40px] mb-5'>Cast</p>
+      <div className='flex overflow-x-auto' style={{width: '1000px', marginLeft:'40px'}}>
+        {actors?.map((actor) => (
           <ActorBox actor={actor}></ActorBox>
-        ))}</div>
-        <p className='mt-5 ml-[40px]'>Media</p>
-        <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'40px'}}>{videoData?.results.map((video) => (
+        ))}
+      </div>
+      <p className='mt-5 ml-[40px]'>Media</p>
+      <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'40px'}}>
+        {videoData?.results.map((video) => (
           <VideoComponent videoKey={video.key}></VideoComponent>
-        ))}</div> 
-        </div>
+        ))}
+      </div> 
+    </div>
+  </div>
+  <div className='ml-10 mt-5' style={{ height: '500px' }}> {/* Adjust the height as needed */}
+    <p>Movies You Might Like</p>
+    <div className='overflow-y-auto h-full'>
+        {similarMovies?.map((similarMovie) => (
+            <SimilarBox key={similarMovie.id} item={similarMovie}></SimilarBox> // Ensure you have a key for list rendering
+        ))}
+    </div>
+</div>
+
+</div>
+
     </div>
   )
 }
@@ -93,5 +117,35 @@ function VideoComponent({videoKey} : video) {
       </iframe>
     );
   }
+  interface similarProp {
+    item : SimilarMovie
+  }
+  const SimilarBox = ({item} : similarProp) => {
+    const partial_url = "https://image.tmdb.org/t/p/original/"
+   
+    const [loaded, setLoaded] = useState(false)
 
+    return (
+        <div className="relative group">
+        <Link to={'/info'} state={{ item }}>
+            <div className="relative">
+                <img
+                    onLoad={() => { setLoaded(true) }}
+                    className="w-full h-full rounded-md animate-in"
+                    src={partial_url + item.poster_path}
+                    alt="Movie Poster"
+                />
+                <div className="rounded-md absolute bottom-0 left-0 bg-gradient-to-t from-black to-transparent w-full h-4/6"/>
+                <div className="rounded-md absolute bottom-0 left-0 h-full w-full hover:bg-gradient-to-t from-slate-900 to-transparent bg-transparent"/>
+                {loaded && (
+                    <text className="rounded-md line-clamp-2 absolute bottom-0 left-0 m-2 group-hover:animate-bounce">
+                        {item.title}
+                    </text>
+                )}
+            </div>
+        </Link>
+    </div>
+    
+    )
+}
 export default MovieInfo
