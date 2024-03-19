@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo, useState} from 'react'
+import React, {useContext, useEffect, useMemo, useRef, useState} from 'react'
 import genreData from './genres.json'
 import ratingData from './ratings.json'
 import {useInfiniteQuery} from '@tanstack/react-query';
@@ -15,6 +15,8 @@ const MovieboxScroll = () => {
 
     const [genreIds, setGenreIds] = useState<number[]>([])
     const client = useContext(TMDBClientContext)
+
+    const movieListRef = useRef(null);
 
     const handleFilterButtons = (filter : number) => {
         setGenreIds((prevFilters : number[]) =>

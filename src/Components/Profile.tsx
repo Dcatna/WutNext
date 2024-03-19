@@ -33,7 +33,6 @@ const Profile = () => {
   const [currScreen, setCurrScreen] = useState<Screens>("PROFILE")
   return (
     <div className='overflow-x-hidden'>
-      <Navbar></Navbar>
       <div className="bg-white shadow-lg rounded-lg p-4 max-w-sm mx-auto mt-10">
         <div className="flex justify-center">
           <img className="rounded-full h-24 w-24 border-2 border-gray-300" src={user_image} alt="profile picture" />

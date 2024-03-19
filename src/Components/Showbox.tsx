@@ -11,7 +11,7 @@ const Showbox = ({item} : showBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/"
     return (
         
-        <Link to={'/info'} state={{item}}>
+        <Link to={'/showinfo'} state={{item}}>
             <div className="group relative">
                 <img
                     className="w-full h-full rounded-md animate-in"

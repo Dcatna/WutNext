@@ -23,6 +23,9 @@ const Navbar = (props: Props) => {
             <Button asChild variant="ghost">
                 <Link to="/">Home</Link>
             </Button>
+            <Button asChild variant="ghost">
+                <Link to="/browse">Browse</Link>
+            </Button>
             <Button asChild variant="ghost" className="rounded-md">
                 <Link to="/recommended">Recommended</Link>
             </Button>

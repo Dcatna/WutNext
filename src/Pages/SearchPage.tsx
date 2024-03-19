@@ -66,7 +66,6 @@ const SearchPage = () => {
   return (
     <body className='overflow-x-hidden'>
     <div className="flex flex-col items-center">
-    <Navbar></Navbar>
     <div className="my-4 w-full max-w-md mx-auto">
         <input
             type="text"

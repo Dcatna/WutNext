@@ -112,7 +112,6 @@ const RecommendedScreen = () => {
   return (
     <div className="flex flex-col h-full w-full pe-12">
       <div>
-      <Navbar></Navbar>
       </div>
         <div className="flex-grow grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
         {passItems.map((movie: MovieListResult) => (

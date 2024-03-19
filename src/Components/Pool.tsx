@@ -6,7 +6,7 @@ type Props = {}
 const Pool = (props: Props) => {
   return (
     <div>
-      <Navbar></Navbar>
+
       <div>
         POOL
       </div>

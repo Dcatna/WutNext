@@ -11,6 +11,8 @@ import { useSubscription } from "./lib/auth";
 import { Session } from "@supabase/supabase-js";
 import TMDBClient from "./data/TMDBClient";
 import TMDBCClient from "./data/TMDBClient";
+import Navbar from './Pages/Navbar/Navbar';
+import UserLibrary from './Pages/UserLibrary';
 
 const tmdbClient = new TMDBClient()
 const queryClient = new QueryClient()
@@ -26,7 +28,10 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <TMDBClientContext.Provider value={tmdbClient}>
               <QueryClientProvider client={queryClient}>
-                  <Outlet/>
+                <div className='overflow-x-hidden'>
+                <Navbar></Navbar>
+                <Outlet/>
+                </div>
               </QueryClientProvider>
             </TMDBClientContext.Provider>
         </CurrentUserContext.Provider>

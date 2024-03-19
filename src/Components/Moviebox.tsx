@@ -15,26 +15,32 @@ const Moviebox = ({item} : movieBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/"
     const client = useContext(CurrentUserContext)
     const [loaded, setLoaded] = useState(false)
-
     async function handleFavorites(event: React.MouseEvent, item: MovieListResult) {
         event.preventDefault(); // Prevent link navigation
         event.stopPropagation();
-        console.log(item)
-        const {data, error} = await supabase.from("favoritemovies").insert([{
-            id: item.id, 
-            user_id: client?.user.id, 
-            poster_path: item.poster_path,
-            title: item.title,
-            overview: item.overview,
-            vote_average: item.vote_average}])
-
-        if(error) {
-            console.log(error, "hi")
+        const {data, error} = await supabase.from("favoritemovies").select("*").eq("id", item.id)
+        console.log(data)
+        if(data?.length == 0) {
+            const {data, error} = await supabase.from("favoritemovies").insert([{
+                id: item.id, 
+                user_id: client?.user.id, 
+                poster_path: item.poster_path,
+                title: item.title,
+                overview: item.overview,
+                vote_average: item.vote_average}])
+    
+            if(error) {
+                console.log(error, "hi")
+            }
+            else{
+                console.log(data)
+            }
+            console.log('HELLOOOO')
         }
         else{
-            console.log(data)
+            console.log("MOVIE IS ALREADY FAVORITED")
         }
-        console.log('HELLOOOO')
+        
     }
 
     return (

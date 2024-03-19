@@ -8,31 +8,26 @@ import { faBorderAll,faGripLines, faArrowLeft} from '@fortawesome/free-solid-svg
 import Navbar from '../Pages/Navbar/Navbar'
 import { Cast, Credit, SimilarMovie, SimilarMovieResult } from '../data/types/types'
 import ActorBox from './ActorBox'
+import { showBoxProp } from './Showbox'
 
 const partial_url = "https://image.tmdb.org/t/p/original/"
 
-const MovieInfo = () => {
+const Showinfo = () => {
 
     const location = useLocation()
-    const movie : movieBoxProp = location.state
+    const show : showBoxProp = location.state
     const client = useContext(TMDBClientContext)
-    const [videoData, setVideoData] = useState<MovieTrailer>()
+   // const [videoData, setVideoData] = useState<MovieTrailer>()
     const [actors, setActors] = useState<Cast[]>()
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>()
-    async function fetchMovieTrailer() {
-        const video_response: Promise<MovieTrailer> = client.fetchTrailer(movie.item.id);
-        
-        const trailer: MovieTrailer = await video_response
-        
-        setVideoData(trailer)
-    }   
+ 
     async function fetchCredits() {
-      const cred : Promise<Credit> = client.fetchCreditList(movie.item.id)
+      const cred : Promise<Credit> = client.fetchShowCreditList(show.item.id)
       const credits : Credit = await cred
       setActors(credits.cast)
     }
     async function fetchSimilarMovies() {
-      const res : Promise<SimilarMovieResult> = client.fetchSimilarMovie(movie.item.id)
+      const res : Promise<SimilarMovieResult> = client.fetchSimilarShow(show.item.id)
       const movies : SimilarMovieResult = await res
       const convertedMovies = movies.results.map(similarMovie => ({
         ...similarMovie,
@@ -43,10 +38,10 @@ const MovieInfo = () => {
       setSimilarMovies(convertedMovies)
     }
     useEffect(() => {
-        fetchMovieTrailer()
+
         fetchCredits()
         fetchSimilarMovies()
-    }, [movie])
+    }, [show])
 
 
   return (
@@ -55,15 +50,15 @@ const MovieInfo = () => {
 
     </div>
     <div className='relative mt-10 ml-10 flex' style={{ height: '500px' }}>
-      <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.item.poster_path})` }}></div>
+      <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${show.item.poster_path})` }}></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10"></div>
         <div className='z-20 flex items-center p-10'>
-          <img className="h-96 w-auto object-cover" src={partial_url + movie.item.poster_path} alt="" />
+          <img className="h-96 w-auto object-cover" src={partial_url + show.item.poster_path} alt="" />
           <div className='ml-10 text-white'>
-            <p className="text-2xl">{movie.item.title}</p>
-            <p className='mt-5'>{movie.item.vote_average}</p>
+            <p className="text-2xl">{show.item.name}</p>
+            <p className='mt-5'>{show.item.vote_average}</p>
             <p className='mt-5'>Overview</p>
-            <p >{movie.item.overview}</p>
+            <p >{show.item.overview}</p>
           </div>
         </div>
     </div>
@@ -77,16 +72,12 @@ const MovieInfo = () => {
           <ActorBox actor={actor}></ActorBox>
         ))}
       </div>
-      <p className='mt-5 ml-[40px]'>Media</p>
-      <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'40px'}}>
-        {videoData?.results.map((video) => (
-          <VideoComponent videoKey={video.key}></VideoComponent>
-        ))}
-      </div> 
+      
+
     </div>
   </div>
   <div className='ml-10 mt-5' style={{ height: '500px' }}> {/* Adjust the height as needed */}
-    <p>Movies You Might Like</p>
+    <p>Shows You Might Like</p>
     <div className='overflow-y-auto h-full'>
         {similarMovies?.map((similarMovie) => (
             <SimilarBox key={similarMovie.id} item={similarMovie}></SimilarBox> // Ensure you have a key for list rendering
@@ -102,20 +93,7 @@ const MovieInfo = () => {
 interface video {
     videoKey : string | undefined
 }
-function VideoComponent({videoKey} : video) {
-    const embedUrl = `https://www.youtube.com/embed/${videoKey}`;
-  
-    return (
-      <iframe 
-        width="560" 
-        height="315" 
-        src={embedUrl} 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowFullScreen
-        className='mx-5'>
-      </iframe>
-    );
-  }
+
   interface similarProp {
     item : SimilarMovie
   }
@@ -147,4 +125,4 @@ function VideoComponent({videoKey} : video) {
     
     )
 }
-export default MovieInfo
+export default Showinfo

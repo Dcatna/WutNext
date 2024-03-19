@@ -10,6 +10,8 @@ import SearchPage from "../Pages/SearchPage";
 import Profile from "../Components/Profile";
 import Pool from "../Components/Pool";
 import FavoritesList from "../Components/FavoritesList";
+import Browse from "../Pages/Browse";
+import Showinfo from "../Components/Showinfo";
 
 export const router = createBrowserRouter([
     {
@@ -17,11 +19,13 @@ export const router = createBrowserRouter([
         element: <App />,
         children: [
             {path:"/", element:<HomePage />},
+            {path:"/browse", element:<Browse />},
             {path:"/recommended", element: <ProtectedRoute><RecommendedScreen/></ProtectedRoute>},
             {path:"/search", element: <SearchPage/>},
             {path:"/profile", element:<ProtectedRoute><Profile/></ProtectedRoute> },
             {path:"/pool", element:<ProtectedRoute><Pool/></ProtectedRoute> },
             {path:"/info", element: <MovieInfo/>},
+            {path:"/showinfo", element: <Showinfo/>},
         ]
     }, 
     {path:"/signin", element:<Loginbox />},

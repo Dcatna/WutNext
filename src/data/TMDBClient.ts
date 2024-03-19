@@ -94,6 +94,31 @@ class TMDBCClient {
 
         return await res.json() as Credit
     }
+    async fetchShowCreditList(
+        show_id: number,
+        //type: ResourceType,
+        language: string | undefined = "en-US",
+    ): Promise<Credit> {
+
+        // Obtain a reference to the AbortSignal
+        const signal = this.controller.signal;
+
+        const url = buildUrl(
+            `${this.BASE_URL}/tv/${show_id}}/credits`,
+            [
+                this.apiKeyParam,
+                { name: "language", value: language },
+
+            ],
+        )
+        const res = await this.fetchWithTimeout(url, signal);
+        console.log(url)
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await res.json() as Credit
+    }
     async fetchRecommendedList(
         page: number,
         type: ResourceType,
@@ -238,6 +263,31 @@ class TMDBCClient {
 
         const url = buildUrl(
             `${this.BASE_URL}/movie/${move_id}/${type}`,
+            [
+                this.apiKeyParam,
+                { name: "language", value: language },
+            ]
+        )
+        const res = await this.fetchWithTimeout(url, signal);
+        console.log(url)
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        return await res.json() as SimilarMovieResult
+    }
+    async fetchSimilarShow(
+        show_id : number,
+        type : string | undefined = "similar",
+        language : string | undefined = "en-US"
+
+    ): Promise<SimilarMovieResult> {
+
+        // Obtain a reference to the AbortSignal
+        const signal = this.controller.signal;
+
+        const url = buildUrl(
+            `${this.BASE_URL}/tv/${show_id}/${type}`,
             [
                 this.apiKeyParam,
                 { name: "language", value: language },
