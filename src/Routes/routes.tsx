@@ -18,8 +18,8 @@ export const router = createBrowserRouter([
         path: "/",
         element: <App />,
         children: [
-            {path:"/", element:<HomePage />},
-            {path:"/browse", element:<Browse />},
+            {path:"/", element:<Browse />},
+            {path:"/home", element:<HomePage />},
             {path:"/recommended", element: <ProtectedRoute><RecommendedScreen/></ProtectedRoute>},
             {path:"/search", element: <SearchPage/>},
             {path:"/profile", element:<ProtectedRoute><Profile/></ProtectedRoute> },

@@ -69,23 +69,23 @@ const MovieInfo = () => {
     </div>
 
     <div className='flex flex-row mt-10 ml-10'>
-  <div className='flex flex-col'>
-    <div className=''>
+  <div className='flex flex-col flex-grow'>
+    <div className='w-3/4'>
       <p className='mt-5 ml-[40px] mb-5'>Cast</p>
-      <div className='flex overflow-x-auto' style={{width: '1000px', marginLeft:'40px'}}>
+      <div className='flex overflow-x-auto' style={{width: '1500px', marginLeft:'40px'}}>
         {actors?.map((actor) => (
           <ActorBox actor={actor}></ActorBox>
         ))}
       </div>
       <p className='mt-5 ml-[40px]'>Media</p>
-      <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'40px'}}>
+      <div className='flex overflow-x-auto ' style={{width: '1500px', marginLeft:'40px'}}>
         {videoData?.results.map((video) => (
           <VideoComponent videoKey={video.key}></VideoComponent>
         ))}
       </div> 
     </div>
   </div>
-  <div className='ml-10 mt-5' style={{ height: '500px' }}> {/* Adjust the height as needed */}
+  <div className='mt-5 w-1/4 ml-5' style={{ height: '500px' }}> {/* Adjust the height as needed */}
     <p>Movies You Might Like</p>
     <div className='overflow-y-auto h-full'>
         {similarMovies?.map((similarMovie) => (
