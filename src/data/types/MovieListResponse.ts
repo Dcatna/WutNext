@@ -65,6 +65,7 @@ export interface ShowListResult {
   }
 
 export type MovieListType = "popular" | "top_rated" | "upcoming" | "now_playing" | "discover"
+export type ShowListType = "on_the_air" | "popular" | "top_rated" | "airing_today"
 export type ResourceType =  "movie" | "tv"
 export type SortType =
     "popularity.desc"

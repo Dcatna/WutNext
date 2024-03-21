@@ -3,9 +3,10 @@ import { Button } from '../Components/Button'
 import Popup from './Popup'
 import { CurrentUserContext } from '../App'
 import { supabase } from '../lib/supabaseClient'
-import { UUID } from 'crypto'
-import HorizontalMovieScroll from './HorizontalMovieScroll'
 
+import HorizontalMovieScroll from './HorizontalMovieScroll'
+//import {ScrollArea} from ""
+import "./rand.css"
 type Props = {}
 interface userLists{
     list_name : string,
@@ -29,7 +30,7 @@ const Browse = (props: Props) => {
   return (
     <div className='flex h-screen overflow-hidden mt-5'>
         <div className='flex flex-grow'>
-            <div className='w-1/4 h-screen overflow-y-auto bg-gray-500'>
+            <div className='w-1/4 h-screen overflow-y-auto bg-gray-500 '>
                 <Popup></Popup>
                 <div className=''>
                 {userLists?.map((lst: userLists) => (
@@ -37,9 +38,41 @@ const Browse = (props: Props) => {
                 ))}
                 </div>
             </div>
-            <div className='w-3/4 h-screen overflow-y-auto ml-2'>
-                movies shows
-                <HorizontalMovieScroll movieType={'popular'} ></HorizontalMovieScroll>
+            <div className='w-3/4 h-screen ml-2'>
+                <p className='text-bold'>Popular Movies</p>
+                <div className='overflow-x-auto'>
+                    <HorizontalMovieScroll movieType={'popular'} showType={undefined} movieOrShow ={"movie"}></HorizontalMovieScroll>
+                </div>
+                <div className='mt-2'>
+                    <p>Top Rated Movies</p>
+                    <div className='overflow-x-auto'>
+                        <HorizontalMovieScroll movieType={'top_rated'} showType={undefined} movieOrShow ={"movie"}></HorizontalMovieScroll>
+                    </div>
+                </div>
+                <div className='mt-2'>
+                    <p>Upcoming Movies</p>
+                    <div className='overflow-x-auto'>
+                        <HorizontalMovieScroll movieType={'upcoming'} showType={undefined} movieOrShow ={"movie"}></HorizontalMovieScroll>
+                    </div>
+                </div>
+                <div className='mt-2'>
+                    <p>Popular Shows</p>
+                    <div className='overflow-x-auto'>
+                        <HorizontalMovieScroll movieType={undefined} showType={"popular"} movieOrShow ={"tv"}></HorizontalMovieScroll>
+                    </div>
+                </div>
+                <div className='mt-2'>
+                    <p>Top Rated Shows</p>
+                    <div className='overflow-x-auto'>
+                        <HorizontalMovieScroll movieType={undefined} showType={"top_rated"} movieOrShow ={"tv"}></HorizontalMovieScroll>
+                    </div>
+                </div>
+                <div className='mt-2'>
+                    <p>Shows Airing Today</p>
+                    <div className='overflow-x-auto'>
+                        <HorizontalMovieScroll movieType={undefined} showType={"airing_today"} movieOrShow ={"tv"}></HorizontalMovieScroll>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

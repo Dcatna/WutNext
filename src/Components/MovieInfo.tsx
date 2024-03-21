@@ -50,7 +50,7 @@ const MovieInfo = () => {
 
 
   return (
-    <div className='overflow-x-hidden'>
+    <div className='overflow-x-hidden overflow-y-hidden'>
     <div className="flex items-center justify-between">
 
     </div>
@@ -85,7 +85,7 @@ const MovieInfo = () => {
       </div> 
     </div>
   </div>
-  <div className='mt-5 w-1/4 ml-5' style={{ height: '500px' }}> {/* Adjust the height as needed */}
+  <div className='mt-5 w-1/4 ml-5 mr-2' style={{ height: '500px' }}> {/* Adjust the height as needed */}
     <p>Movies You Might Like</p>
     <div className='overflow-y-auto h-full'>
         {similarMovies?.map((similarMovie) => (

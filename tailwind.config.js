@@ -1,12 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-
-const { fontFamily } = require("tailwindcss/defaultTheme")
-
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
+  prefix: "",
   theme: {
     container: {
       center: true,
@@ -14,9 +15,6 @@ module.exports = {
       screens: {
         "2xl": "1400px",
       },
-    },
-    fontFamily: {
-      sans: ["var(--font-sans)", ...fontFamily.sans],
     },
     extend: {
       colors: {
@@ -55,12 +53,9 @@ module.exports = {
         },
       },
       borderRadius: {
-        lg: `var(--radius)`,
-        md: `calc(var(--radius) - 2px)`,
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-      },
-      fontFamily: {
-        sans: ["var(--font-sans)"],
       },
       keyframes: {
         "accordion-down": {
@@ -77,16 +72,6 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
-    borderWidth: {
-      DEFAULT: '1px',
-      '0': '0',
-      '2': '2px',
-      '3': '3px',
-      '4': '4px',
-      '6': '6px',
-      '8': '8px',
-    }
-    
   },
   plugins: [require("tailwindcss-animate")],
 }

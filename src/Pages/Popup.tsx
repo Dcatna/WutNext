@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { supabase } from '../lib/supabaseClient';
@@ -18,7 +18,6 @@ const Pop = () => {
             console.error(error);
         } else {
             console.log('Inserted:', data);
-            // Optional: Reset the form or close the popup here
             setName(''); // Reset name field
         }
     };

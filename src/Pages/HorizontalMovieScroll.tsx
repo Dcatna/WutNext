@@ -1,8 +1,9 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import React, { useEffect, useMemo, useState } from 'react'
-import Moviebox from '../Components/Moviebox'
-import { MovieListResult, MovieListType } from '../data/types/MovieListResponse'
+import Moviebox, { movieBoxProp } from '../Components/Moviebox'
+import { MovieListResponse, MovieListResult, MovieListType, ShowListResponse, ShowListType } from '../data/types/MovieListResponse'
+import { Link } from 'react-router-dom'
 
 const itemsIndex = (items : MovieListResult[], currItem : MovieListResult) =>{
     for(let i = 0; i<items.length; i++) {
@@ -13,101 +14,70 @@ const itemsIndex = (items : MovieListResult[], currItem : MovieListResult) =>{
     return -1
 }
 interface HoriScrollType {
-    movieType : MovieListType
+    movieType : MovieListType | undefined,
+    showType : ShowListType | undefined,
+    movieOrShow : movieShow
 }
+type movieShow = "movie" | "tv"
+
 interface FetchMoviesParams {
     pageParam: number;
   }
-const HorizontalMovieScroll = ({movieType} : HoriScrollType) => {
+const HorizontalMovieScroll = ({movieType, showType, movieOrShow} : HoriScrollType) => {
    //const [item, setItems] = useState<Result[]> = (])
-    
-   const [animationParent] = useAutoAnimate()
-  
+   //const [animationParent] = useAutoAnimate()
+   const [arr, setArr] = useState<MovieListResult[]>([])
    //const [page, setPage] = useState(1);
 
-   const fetchMovies = async ({pageParam} : FetchMoviesParams) => {
+   async function fetchMovies(){
        const apiKey = '11e1be5dc8a3cf947ce265da83199bce';
        
-       const res = await fetch(`https://api.themoviedb.org/3//movie/${movieType}?api_key=${apiKey}&page=${pageParam}`);
+       const res = await fetch(`https://api.themoviedb.org/3/${movieOrShow}/${movieType ? movieType : showType}?api_key=${apiKey}&page=1`)
        if (!res.ok) {
          throw new Error('Network response was not ok');
+       }else{
+        const movies : MovieListResponse = await res.json()
+        console.log(movies)
+        setArr(movies.results)
        }
-       return res.json()
+       
    }
-
-   const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery({
-       queryKey: [`${movieType}Movies`],
-       queryFn: fetchMovies,
-       initialPageParam: 1,
-       getNextPageParam: (lastPage) => {
-           if (lastPage.page < lastPage.total_pages) {
-               return lastPage.page + 1; // Return the next page number
-           } else {
-               return undefined; // No more pages left
-           }
-       },
-     });
-
-   const items = useMemo(() => {
-       return data?.pages.flatMap((page) =>{
-           return page.results
-       })??[]    //returns empty list if data is null ??[]
-   }, [data])
-
-   const [arr, setArr] = useState<MovieListResult[]>([])
 
    useEffect(() => {
-    const newItems = items.slice(0, 8).filter(item => !arr.find(arrItem => arrItem.id === item.id));
-    if (newItems.length > 0) {
-        setArr([...arr, ...newItems]);
-    }
-}, [items]);
-
-   //if (isFetching && isFetchingNextPage) return <span>Loading...</span>;    
-   console.log(arr)
-   const onLeftButtonClick = () => {
-       const leftMost = itemsIndex(items, arr[0])
-       if (leftMost !== -1 && items[leftMost - 1]) {
-           setArr((prev) => [items[leftMost - 1], prev[0], prev[1], prev[2], prev[3], prev[4], prev[5], prev[6]])
-       }
-   }
-
-   const onRightButtonClick = () => {
-       const last = itemsIndex(items, arr[7])
-       if(items[last+7] === undefined){
-           fetchNextPage()
-       }
-       //console.log(last !== -1)
-       if (last !== -1 ) {
-           if(items[last + 1]){
-               setArr((prev) => [prev[1], prev[2], prev[3], prev[4], prev[5], prev[6], prev[7], items[last + 1]])
-           }
-       }
- 
-   }
+    fetchMovies()
+   }, [])
 
  return (
-   <div className='main-container'>
-       <ul ref={animationParent} style={{ display: "flex", padding: 0, listStyle: "none",}}>
-           <button className='slider-button-left' onClick={()=>{onLeftButtonClick()}} style={{
-               
-           }}>
-               LEFT
-           </button>
+   <div className='flex overflow-x-auto w-[1500px]'> 
        {arr.map((item: MovieListResult) => (
-           <li key={item.id} style={{
-               margin:'5px'
-           }}>
-                   <Moviebox item = {item}/>
-               </li>
-               ))}
-           <button className='slider-button-right' onClick={() => {onRightButtonClick()}} style={{
-               marginLeft:'50px',
-               width:'100%'
-           }}>RIGHT</button>
-       </ul>
+         <MovieItems item = {item}/>))}
+           
    </div>
  )
 }
+const MovieItems = ({item} : movieBoxProp) => {
+    const partial_url = "https://image.tmdb.org/t/p/original/";
+    const [loaded, setLoaded] = useState(false);
+
+    return (
+        <Link to={'/info'} state={{ item }} className="block w-[170px] h-[180px] relative m-2">
+            <img
+                onLoad={() => setLoaded(true)}
+                className="absolute top-0 left-0 w-full h-full rounded-md object-cover"
+                src={`${partial_url}${item.poster_path}`}
+                alt="Movie Poster"
+            />
+            <div className="absolute bottom-0 left-0 w-full h-4/6 bg-gradient-to-t from-black to-transparent rounded-md"/>
+            <div className="absolute bottom-0 left-0 w-full h-full hover:bg-gradient-to-t from-slate-900 to-transparent bg-transparent rounded-md"/>
+            {loaded && (
+                <text className="absolute bottom-0 left-0 m-2 text-white text-xs line-clamp-2">
+                    {item.title}
+                </text>
+            )}
+        </Link>
+    )
+}
+
+
 
 export default HorizontalMovieScroll

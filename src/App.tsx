@@ -29,7 +29,9 @@ function App() {
             <TMDBClientContext.Provider value={tmdbClient}>
               <QueryClientProvider client={queryClient}>
                 <div className='overflow-x-hidden'>
+
                 <Navbar></Navbar>
+                
                 <Outlet/>
                 </div>
               </QueryClientProvider>
