@@ -8,3 +8,8 @@
     display: none;  /* Safari and Chrome */
   }
   
+/*  html, body {
+    height: 100%;
+    overflow: hidden; 
+  }
+  */

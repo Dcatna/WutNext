@@ -25,6 +25,7 @@ interface FetchMoviesParams {
   }
 const HorizontalMovieScroll = ({movieType, showType, movieOrShow} : HoriScrollType) => {
    //const [item, setItems] = useState<Result[]> = (])
+
    //const [animationParent] = useAutoAnimate()
    const [arr, setArr] = useState<MovieListResult[]>([])
    //const [page, setPage] = useState(1);
@@ -48,9 +49,12 @@ const HorizontalMovieScroll = ({movieType, showType, movieOrShow} : HoriScrollTy
    }, [])
 
  return (
-   <div className='flex overflow-x-auto w-[1500px]'> 
+   <div className='flex flex-row w-full overflow-x-auto'> 
        {arr.map((item: MovieListResult) => (
-         <MovieItems item = {item}/>))}
+        <div className='min-w-[200px] px-2'>
+            <MovieItems item = {item}/>
+         </div>
+         ))}
            
    </div>
  )
@@ -60,10 +64,10 @@ const MovieItems = ({item} : movieBoxProp) => {
     const [loaded, setLoaded] = useState(false);
 
     return (
-        <Link to={'/info'} state={{ item }} className="block w-[170px] h-[180px] relative m-2">
+        <Link to={'/info'} state={{ item }} className="block w-full relative m-2 aspect-[3/4]">
             <img
                 onLoad={() => setLoaded(true)}
-                className="absolute top-0 left-0 w-full h-full rounded-md object-cover"
+                className="absolute top-0 left-0 w-full h-full rounded-md object-cover "
                 src={`${partial_url}${item.poster_path}`}
                 alt="Movie Poster"
             />

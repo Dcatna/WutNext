@@ -11,8 +11,9 @@ const Pop = () => {
 
     const handleSubmit = async (event : React.FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Prevent the default form submission behavior
+        console.log(client?.user.id)
         const { data, error } = await supabase.from("userlist").insert([
-            { 'list_name': name,
+            { 'name': name,
               'user_id' :  client?.user.id}]);
         if (error) {
             console.error(error);

@@ -7,17 +7,20 @@ import { supabase } from '../lib/supabaseClient'
 import HorizontalMovieScroll from './HorizontalMovieScroll'
 //import {ScrollArea} from ""
 import "./rand.css"
-type Props = {}
-interface userLists{
-    list_name : string,
+import { Link } from 'react-router-dom'
+
+export interface userLists{
+    name : string,
     list_id : string,
 }
-const Browse = (props: Props) => {
+const Browse = () => {
     const [userLists, setUserLists] = useState<userLists[]>()
     const client = useContext(CurrentUserContext)
     useEffect(() => {
+
         async function getLists(){
-            const {data, error} = await supabase.from("userlist").select("list_name, list_id")
+            const {data, error} = await supabase.from("userlist").select("name, list_id")
+            console.log(data, "lsits")
             if(error){
                 console.log(error)
             }
@@ -28,17 +31,17 @@ const Browse = (props: Props) => {
         getLists()
     }, [])
   return (
-    <div className='flex h-screen overflow-hidden mt-5'>
-        <div className='flex flex-grow'>
-            <div className='w-1/4 h-screen overflow-y-auto bg-gray-500 '>
+    <div className='flex mt-5 overflow-y-hidden'>
+        <div className='flex flex-grow overflow-y-auto'>
+            <div className='w-1/4 sticky bg-slate-900'>
                 <Popup></Popup>
                 <div className=''>
                 {userLists?.map((lst: userLists) => (
-                    <div className='text-black' key={lst.list_id}>{lst.list_name}</div>
+                    <Lists name={lst.name} list_id={lst.list_id}></Lists>
                 ))}
                 </div>
             </div>
-            <div className='w-3/4 h-screen ml-2'>
+            <div className='w-3/4  ml-2'>
                 <p className='text-bold'>Popular Movies</p>
                 <div className='overflow-x-auto'>
                     <HorizontalMovieScroll movieType={'popular'} showType={undefined} movieOrShow ={"movie"}></HorizontalMovieScroll>
@@ -79,9 +82,13 @@ const Browse = (props: Props) => {
   )
 }
 
-const Lists = () => {
+const Lists = (listItemName : userLists) => {
     return (
-       <div></div> 
+       <Link to={''}>
+            <div className='h-20 w-full rounded-md border-black border text-center justify-center items-center flex'>
+                {listItemName.name}
+            </div> 
+       </Link>
     )
 }
 export default Browse

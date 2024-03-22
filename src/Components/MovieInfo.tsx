@@ -1,24 +1,30 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Moviebox, { movieBoxProp } from './Moviebox'
-import { TMDBClientContext } from '../App'
+import { CurrentUserContext, TMDBClientContext } from '../App'
 import { MovieTrailer } from '../data/types/MovieListResponse'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../Pages/Navbar/Navbar'
 import { Cast, Credit, SimilarMovie, SimilarMovieResult } from '../data/types/types'
 import ActorBox from './ActorBox'
+import UserLists from './ProfileNav/UserLists'
+import { supabase } from '../lib/supabaseClient'
 
 const partial_url = "https://image.tmdb.org/t/p/original/"
-
+export interface userLists{
+  name : string,
+  list_id : string,
+}
 const MovieInfo = () => {
-
+    const client2 = useContext(CurrentUserContext)
     const location = useLocation()
     const movie : movieBoxProp = location.state
     const client = useContext(TMDBClientContext)
     const [videoData, setVideoData] = useState<MovieTrailer>()
     const [actors, setActors] = useState<Cast[]>()
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>()
+    const [userLists, setUserLists] = useState<userLists[]>([])
     async function fetchMovieTrailer() {
         const video_response: Promise<MovieTrailer> = client.fetchTrailer(movie.item.id);
         
@@ -42,10 +48,24 @@ const MovieInfo = () => {
       }));
       setSimilarMovies(convertedMovies)
     }
+    async function getLists(){
+      const {data, error} = await supabase.from("userlist").select("name, list_id")
+      console.log(data, "lsits")
+      if(error){
+          console.log(error)
+      }
+      else{
+          setUserLists(data as userLists[])
+      }
+  }
+    useEffect(() => {
+      getLists()
+    }, [])
     useEffect(() => {
         fetchMovieTrailer()
         fetchCredits()
         fetchSimilarMovies()
+        
     }, [movie])
 
 
