@@ -10,12 +10,10 @@ import { Cast, Credit, SimilarMovie, SimilarMovieResult } from '../data/types/ty
 import ActorBox from './ActorBox'
 import UserLists from './ProfileNav/UserLists'
 import { supabase } from '../lib/supabaseClient'
+import MovieBoxPopup from './MovieListPopup'
 
 const partial_url = "https://image.tmdb.org/t/p/original/"
-export interface userLists{
-  name : string,
-  list_id : string,
-}
+
 const MovieInfo = () => {
     const client2 = useContext(CurrentUserContext)
     const location = useLocation()
@@ -24,7 +22,7 @@ const MovieInfo = () => {
     const [videoData, setVideoData] = useState<MovieTrailer>()
     const [actors, setActors] = useState<Cast[]>()
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>()
-    const [userLists, setUserLists] = useState<userLists[]>([])
+
     async function fetchMovieTrailer() {
         const video_response: Promise<MovieTrailer> = client.fetchTrailer(movie.item.id);
         
@@ -48,19 +46,8 @@ const MovieInfo = () => {
       }));
       setSimilarMovies(convertedMovies)
     }
-    async function getLists(){
-      const {data, error} = await supabase.from("userlist").select("name, list_id")
-      console.log(data, "lsits")
-      if(error){
-          console.log(error)
-      }
-      else{
-          setUserLists(data as userLists[])
-      }
-  }
-    useEffect(() => {
-      getLists()
-    }, [])
+    
+   
     useEffect(() => {
         fetchMovieTrailer()
         fetchCredits()
@@ -71,21 +58,21 @@ const MovieInfo = () => {
 
   return (
     <div className='overflow-x-hidden overflow-y-hidden'>
-    <div className="flex items-center justify-between">
-
-    </div>
-    <div className='relative mt-10 ml-10 flex' style={{ height: '500px' }}>
-      <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.item.poster_path})` }}></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10"></div>
-        <div className='z-20 flex items-center p-10'>
-          <img className="h-96 w-auto object-cover" src={partial_url + movie.item.poster_path} alt="" />
-          <div className='ml-10 text-white'>
-            <p className="text-2xl">{movie.item.title}</p>
-            <p className='mt-5'>{movie.item.vote_average}</p>
-            <p className='mt-5'>Overview</p>
-            <p >{movie.item.overview}</p>
+      <div className='fixed right-4 top-4 z-50'>
+        <MovieBoxPopup movie={movie}/>
+      </div>
+      <div className='relative mt-10 ml-10 flex' style={{ height: '500px' }}>
+        <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.item.poster_path})` }}></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10"></div>
+          <div className='z-20 flex items-center p-10'>
+            <img className="h-96 w-auto object-cover" src={partial_url + movie.item.poster_path} alt="" />
+            <div className='ml-10 text-white'>
+              <p className="text-2xl">{movie.item.title}</p>
+              <p className='mt-5'>{movie.item.vote_average}</p>
+              <p className='mt-5'>Overview</p>
+              <p >{movie.item.overview}</p>
+            </div>
           </div>
-        </div>
     </div>
 
     <div className='flex flex-row mt-10 ml-10'>

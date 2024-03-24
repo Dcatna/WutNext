@@ -37,7 +37,7 @@ const Browse = () => {
                 <Popup></Popup>
                 <div className=''>
                 {userLists?.map((lst: userLists) => (
-                    <Lists name={lst.name} list_id={lst.list_id}></Lists>
+                        <Lists name={lst.name} list_id={lst.list_id}></Lists>
                 ))}
                 </div>
             </div>
@@ -82,11 +82,11 @@ const Browse = () => {
   )
 }
 
-const Lists = (listItemName : userLists) => {
+const Lists = (listItem: userLists) => {
     return (
-       <Link to={''}>
+       <Link to={'/listitems'} state={listItem}>
             <div className='h-20 w-full rounded-md border-black border text-center justify-center items-center flex'>
-                {listItemName.name}
+                {listItem.name}
             </div> 
        </Link>
     )

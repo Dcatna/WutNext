@@ -5,14 +5,6 @@ import Moviebox, { movieBoxProp } from '../Components/Moviebox'
 import { MovieListResponse, MovieListResult, MovieListType, ShowListResponse, ShowListType } from '../data/types/MovieListResponse'
 import { Link } from 'react-router-dom'
 
-const itemsIndex = (items : MovieListResult[], currItem : MovieListResult) =>{
-    for(let i = 0; i<items.length; i++) {
-        if(items[i].title === currItem.title){
-            return i
-        }
-    }
-    return -1
-}
 interface HoriScrollType {
     movieType : MovieListType | undefined,
     showType : ShowListType | undefined,
