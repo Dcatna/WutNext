@@ -24,7 +24,7 @@ const MovieInfo = () => {
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>()
 
     async function fetchMovieTrailer() {
-        const video_response: Promise<MovieTrailer> = client.fetchTrailer(movie.item.id);
+        const video_response: Promise<MovieTrailer> = client.fetchMovieTrailer(movie.item.id);
         
         const trailer: MovieTrailer = await video_response
         

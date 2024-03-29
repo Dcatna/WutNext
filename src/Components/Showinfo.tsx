@@ -18,10 +18,16 @@ const Showinfo = () => {
     const location = useLocation()
     const show : showBoxProp = location.state
     const client = useContext(TMDBClientContext)
-   // const [videoData, setVideoData] = useState<MovieTrailer>()
+    const [videoData, setVideoData] = useState<MovieTrailer>()
     const [actors, setActors] = useState<Cast[]>()
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>()
- 
+    async function fetchShowTrailer() {
+      const video_response: Promise<MovieTrailer> = client.fetchShowTrailer(show.item.id);
+      
+      const trailer: MovieTrailer = await video_response
+      console.log(trailer, "Tialer")
+      setVideoData(trailer)
+  }   
     async function fetchCredits() {
       const cred : Promise<Credit> = client.fetchShowCreditList(show.item.id)
       const credits : Credit = await cred
@@ -42,6 +48,7 @@ const Showinfo = () => {
 
         fetchCredits()
         fetchSimilarMovies()
+        fetchShowTrailer()
     }, [show])
 
 
@@ -73,7 +80,12 @@ const Showinfo = () => {
           <ActorBox actor={actor}></ActorBox>
         ))}
       </div>
-      
+      <p className='mt-5 ml-[40px]'>Media</p>
+      <div className='flex overflow-x-auto ' style={{width: '1500px', marginLeft:'40px'}}>
+        {videoData?.results.map((video) => (
+          <VideoComponent videoKey={video.key}></VideoComponent>
+        ))}
+      </div> 
 
     </div>
   </div>
@@ -125,5 +137,22 @@ interface video {
     </div>
     
     )
+}
+interface video {
+  videoKey : string | undefined
+}
+function VideoComponent({videoKey} : video) {
+  const embedUrl = `https://www.youtube.com/embed/${videoKey}`;
+
+  return (
+    <iframe 
+      width="560" 
+      height="315" 
+      src={embedUrl} 
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      allowFullScreen
+      className='mx-5'>
+    </iframe>
+  );
 }
 export default Showinfo
