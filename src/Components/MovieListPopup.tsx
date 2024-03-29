@@ -5,14 +5,16 @@ import { supabase } from '../lib/supabaseClient';
 import { Button } from '../Components/Button';
 import { CurrentUserContext } from '../App';
 import { movieBoxProp } from './Moviebox';
+import { showBoxProp } from './Showbox';
 export interface userLists{
     name : string,
     list_id : string,
   }
 interface MoviePop {
-    movie : movieBoxProp
+    movie : movieBoxProp | undefined,
+    show : showBoxProp | undefined
 }
-const MovieBoxPopup = ({movie} : MoviePop) => {
+const MovieBoxPopup = ({movie, show} : MoviePop) => {
     const [name, setName] = useState("");
     const client = useContext(CurrentUserContext)
     const [userLists, setUserLists] = useState<userLists[]>([])
@@ -31,15 +33,29 @@ const MovieBoxPopup = ({movie} : MoviePop) => {
       }, [])
     
       async function handleOnClick(list_id : string){
-        const {data, error} = await supabase.from("listitem").insert({
-            "list_id" : list_id,
-            "movie_id" : movie.item.id,
-            "show_id" : -1,
-            "user_id" : client?.user.id
-        })
-        if(error) {
-            console.log(error)
+        if(show == undefined){
+            const {data, error} = await supabase.from("listitem").insert({
+                "list_id" : list_id,
+                "movie_id" : movie!!.item.id,
+                "show_id" : -1,
+                "user_id" : client?.user.id
+            })
+            if(error) {
+                console.log(error)
+            }
         }
+        else{
+            const {data, error} = await supabase.from("listitem").insert({
+                "list_id" : list_id,
+                "movie_id" : -1,
+                "show_id" : show.item.id,
+                "user_id" : client?.user.id
+            })
+            if(error) {
+                console.log(error)
+            }
+        }
+        
       }
 
     return (

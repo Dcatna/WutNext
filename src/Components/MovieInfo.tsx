@@ -59,7 +59,7 @@ const MovieInfo = () => {
   return (
     <div className='overflow-x-hidden overflow-y-hidden'>
       <div className='fixed right-4 top-4 z-50'>
-        <MovieBoxPopup movie={movie}/>
+        <MovieBoxPopup movie={movie} show={undefined}/>
       </div>
       <div className='relative mt-10 ml-10 flex' style={{ height: '500px' }}>
         <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.item.poster_path})` }}></div>

@@ -9,6 +9,7 @@ import Navbar from '../Pages/Navbar/Navbar'
 import { Cast, Credit, SimilarMovie, SimilarMovieResult } from '../data/types/types'
 import ActorBox from './ActorBox'
 import { showBoxProp } from './Showbox'
+import MovieBoxPopup from './MovieListPopup'
 
 const partial_url = "https://image.tmdb.org/t/p/original/"
 
@@ -46,9 +47,9 @@ const Showinfo = () => {
 
   return (
     <div className='overflow-x-hidden overflow-y-hidden'>
-    <div className="flex items-center justify-between">
-
-    </div>
+    <div className='fixed right-4 top-4 z-50'>
+        <MovieBoxPopup movie={undefined} show={show}/>
+      </div>
     <div className='relative mt-10 ml-10 flex' style={{ height: '500px' }}>
       <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${show.item.poster_path})` }}></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10"></div>

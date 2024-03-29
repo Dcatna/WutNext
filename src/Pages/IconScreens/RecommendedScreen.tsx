@@ -8,11 +8,6 @@ import { supabase } from '../../lib/supabaseClient'
 import { favs } from '../../Components/Profile'
 
 const RecommendedScreen = () => {
-  
-  let firstind = 0
-  let secondind = 2 
-  let realPage = 1
-
   const client = useContext(TMDBClientContext)
   const [recGenres, setRecGenres] = useState<number[]>([])
   const [recActors, setRecActors] = useState<string[]>([])
@@ -48,6 +43,7 @@ const RecommendedScreen = () => {
   }, [])
 
   useEffect(() => {
+    console.log("hi")
     async function getFavs(){
       try{
         const {data, error} = await supabase.from("favoritemovies").select("*")
