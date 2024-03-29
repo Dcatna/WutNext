@@ -90,12 +90,12 @@ const ListItems = (props: Props) => {
         </div>
         <div className='w-full grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4'>
             {movies.map((movie : MovieListResult) => (
-                <div className='w-[200px]'>
+                <div className=''>
                     <Moviebox item={movie}></Moviebox>
                 </div>
             ))}
             {shows.map((show : ShowListResult) => (
-                <div className='w-[200px]'>
+                <div className=''>
                     <Showbox item={show}></Showbox>
                 </div>
             ))}
