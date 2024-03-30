@@ -9,19 +9,22 @@ import { Skeleton } from '../Components/Skeleton'
 interface pageParm {
     pageParam : number
 }
+type Screen = "movie" | "tv"
 const SearchPage = () => {
     const [currSearch, setCurrSearch] = useState<string>("")
 
     const [searching, setSearching] = useState<boolean>(false)
     const client = useContext(TMDBClientContext)
-    
+    const [searchState, setSearchState] = useState<Screen>("movie")
+    const [query, setQuery] = useState<string>('')
+
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
-        queryKey: ['trendingMovies', currSearch],
+        queryKey: [query, currSearch, searchState],
         queryFn: async ({pageParam}) => {
             if (currSearch !== "") {
-                return client.fetchSearchList(pageParam, "movie", currSearch);
+                return client.fetchSearchList(pageParam, searchState, currSearch);
             } else {
-                return client.fetchMovieList(pageParam, "movie", []);
+                return client.fetchMovieList(pageParam, searchState, []);
             }
         },
         initialPageParam: 1,
@@ -32,7 +35,7 @@ const SearchPage = () => {
                 return undefined;
             }
         },
-    });
+    })
 
     useEffect(() => {
         const handleScroll = () => {
@@ -67,11 +70,16 @@ const SearchPage = () => {
     <body className='overflow-x-hidden'>
     <div className="flex flex-col items-center">
     <div className="my-4 w-full max-w-md mx-auto">
+    <div className='flex justify-center items-center space-x-4 py-2 cursor-pointer'>
+          <div onClick={() => setSearchState("movie")} className=''>Movies</div>
+          <div> | </div>
+          <div onClick={() => setSearchState("tv")}>Shows</div>
+      </div>
         <input
             type="text"
             onChange={(letter) => setCurrSearch(letter.target.value)}
             className="w-full p-2 border border-gray-300 rounded-lg text-black"
-            placeholder="Search movies..."
+            placeholder={searchState=="movie" ? "Search movies..." : "Search shows..."}
         />
     </div>
         <ItemsGrid items={items} searching={searching} />

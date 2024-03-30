@@ -58,7 +58,7 @@ const MovieInfo = () => {
 
   return (
     <div className='overflow-x-hidden overflow-y-hidden'>
-      <div className='fixed right-4 top-4 z-50'>
+      <div className='ml-9 right-4 top-4 z-50'>
         <MovieBoxPopup movie={movie} show={undefined}/>
       </div>
       <div className='relative mt-10 ml-10 flex' style={{ height: '500px' }}>
@@ -74,7 +74,6 @@ const MovieInfo = () => {
             </div>
           </div>
     </div>
-
     <div className='flex flex-row mt-10 ml-10'>
   <div className='flex flex-col flex-grow'>
     <div className='w-3/4'>
@@ -84,7 +83,7 @@ const MovieInfo = () => {
           <ActorBox actor={actor}></ActorBox>
         ))}
       </div>
-      <p className='mt-5 ml-[40px]'>Media</p>
+      <p className='mt-5 ml-[40px] mb-5'>Media</p>
       <div className='flex overflow-x-auto ' style={{width: '1500px', marginLeft:'40px'}}>
         {videoData?.results.map((video) => (
           <VideoComponent videoKey={video.key}></VideoComponent>
@@ -92,18 +91,16 @@ const MovieInfo = () => {
       </div> 
     </div>
   </div>
-  <div className='mt-5 w-1/4 ml-5 mr-2' style={{ height: '500px' }}> {/* Adjust the height as needed */}
+  <div className='mt-5 w-1/4 ml-5 mr-2' style={{ height: '500px' }}> 
     <p>Movies You Might Like</p>
     <div className='overflow-y-auto h-full'>
         {similarMovies?.map((similarMovie) => (
-            <SimilarBox key={similarMovie.id} item={similarMovie}></SimilarBox> // Ensure you have a key for list rendering
+            <SimilarBox key={similarMovie.id} item={similarMovie}></SimilarBox> 
         ))}
     </div>
+  </div>
 </div>
-
 </div>
-
-    </div>
   )
 }
 interface video {

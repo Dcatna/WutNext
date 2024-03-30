@@ -59,17 +59,23 @@ const MovieBoxPopup = ({movie, show} : MoviePop) => {
       }
 
     return (
-        <Popup modal nested trigger={<Button className='w-[200px] h-[50px] rounded-md bg-blue-500'>Add To List!</Button>}>
-            <div className='flex justify-center items-center'>
-                <div className='p-10 bg-white rounded-md shadow-md w-[200px] min-w-sm'>
-                    {userLists.map(list => (
-                        <div onClick={() => handleOnClick(list.list_id)} className='px-2 py-1 my-2 text-black items-center justify-center border border-md border-black cursor-pointer hover:bg-gray-200'>
-                            {list.name}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </Popup>
+        <Popup contentStyle={{ width: "400px" }} modal nested trigger={<Button className='w-[200px] h-[50px] rounded-md bg-blue-500'>Add To List!</Button>}>
+    <div className='flex justify-center items-center flex-col bg-slate-900 '>
+        <p className=' '>Your Lists</p>
+        <div className='p-6 rounded-md shadow-md min-w-sm bg-slate-900'>
+            {userLists.length > 0 ? (
+                userLists.map(list => (
+                    <div key={list.list_id} onClick={() => handleOnClick(list.list_id)} className='bg-indigo-300 px-2 py-1 my-2 text-black items-center justify-center border border-md border-black cursor-pointer hover:bg-gray-200'>
+                        {list.name}
+                    </div>
+                ))
+            ) : (
+                <p>No lists found.</p>
+            )}
+        </div>
+    </div>
+</Popup>
+
     );
 };
 

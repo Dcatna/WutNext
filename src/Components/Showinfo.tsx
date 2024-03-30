@@ -33,7 +33,7 @@ const Showinfo = () => {
       const credits : Credit = await cred
       setActors(credits.cast)
     }
-    async function fetchSimilarMovies() {
+    async function fetchSimilarShows() {
       const res : Promise<SimilarMovieResult> = client.fetchSimilarShow(show.item.id)
       const movies : SimilarMovieResult = await res
       const convertedMovies = movies.results.map(similarMovie => ({
@@ -47,7 +47,7 @@ const Showinfo = () => {
     useEffect(() => {
 
         fetchCredits()
-        fetchSimilarMovies()
+        fetchSimilarShows()
         fetchShowTrailer()
     }, [show])
 
