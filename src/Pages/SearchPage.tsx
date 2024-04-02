@@ -2,27 +2,36 @@ import React, { useContext, useEffect, useMemo, useState } from 'react'
 import TMDBCClient from '../data/TMDBClient'
 import { TMDBClientContext } from '../App'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { MovieListResult } from '../data/types/MovieListResponse'
+import { MovieListResult, ShowListResult } from '../data/types/MovieListResponse'
 import Moviebox from '../Components/Moviebox'
 import Navbar from './Navbar/Navbar'
 import { Skeleton } from '../Components/Skeleton'
+import Showbox from '../Components/Showbox'
 interface pageParm {
     pageParam : number
 }
 type Screen = "movie" | "tv"
+type SearchResult = MovieListResult | ShowListResult;
+
 const SearchPage = () => {
     const [currSearch, setCurrSearch] = useState<string>("")
-
+    const [searchState, setSearchState] = useState<Screen>("movie")
     const [searching, setSearching] = useState<boolean>(false)
     const client = useContext(TMDBClientContext)
-    const [searchState, setSearchState] = useState<Screen>("movie")
+    
     const [query, setQuery] = useState<string>('')
 
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
         queryKey: [query, currSearch, searchState],
         queryFn: async ({pageParam}) => {
             if (currSearch !== "") {
-                return client.fetchSearchList(pageParam, searchState, currSearch);
+                if(searchState == "movie") {
+                    return client.fetchMovieSearchList(pageParam, searchState, currSearch)
+                }
+                else{
+                    return client.fetchShowSearchList(pageParam, searchState, currSearch);
+                }
+                
             } else {
                 return client.fetchMovieList(pageParam, searchState, []);
             }
@@ -50,9 +59,9 @@ const SearchPage = () => {
 
     }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
-    const items = useMemo(() => {
+    const items : SearchResult[] = useMemo(() => {
         console.log(currSearch)
-        return data?.pages.flatMap((page) => page.results) ?? []
+        return data?.pages.flatMap((page) => page.results as SearchResult[]) ?? []
 
     }, [data, currSearch])
 
@@ -83,17 +92,18 @@ const SearchPage = () => {
         />
     </div>
         <ItemsGrid items={items} searching={searching} />
+        
 </div>
 </body>
   )
 }
 
 type ItemProps  = {
-    items: MovieListResult[]
+    items : SearchResult[]
     searching: boolean
 }
 
-const ItemsGrid = ({items, searching}: ItemProps) => {
+const ItemsGrid = ({items,searching}: ItemProps) => {
     if (searching) {
         return  (
             <div className="w-full px-4 md:px-0">
@@ -101,7 +111,7 @@ const ItemsGrid = ({items, searching}: ItemProps) => {
                     {Array.from(Array(40).keys()).map((idx) => {
                         return (
                             <div className="flex flex-col space-y-3 p-6" key={idx}>
-                            <Skeleton className="h-[300px] w-[220px] rounded-xl"/>
+                                <Skeleton className="h-[300px] w-[220px] rounded-xl"/>
                             <div className="space-y-2">
                                 <Skeleton className="h-3 w-9/12"/>
                             </div>
@@ -115,10 +125,18 @@ const ItemsGrid = ({items, searching}: ItemProps) => {
         return (
             <div className="w-full px-4 md:px-0 p-12">
                 <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 p-6">
-                {items.map((item: MovieListResult) => (
-                        <div key={item.id ? item.id : 1}>
-                            <Moviebox item={item}></Moviebox>
-                        </div>
+
+                {items.map((item) => (
+                        'original_title' in item ? (
+                            <div key={item.id}>
+                                <Moviebox item={item}></Moviebox>
+                            </div>
+                        ) : (
+
+                            <div key={item.id}>
+                                <Showbox item={item}></Showbox>
+                            </div>
+                        )
                     ))}
                 </div>
             </div>

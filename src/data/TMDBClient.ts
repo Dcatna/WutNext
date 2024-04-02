@@ -195,7 +195,7 @@ class TMDBCClient {
         return await res.json() as ShowListResponse
     }
 
-    async fetchSearchList(
+    async fetchMovieSearchList(
         page: number,
         type: ResourceType,
         query: string | undefined = "",
@@ -222,6 +222,34 @@ class TMDBCClient {
         }
 
         return await res.json() as MovieListResponse
+    }
+    async fetchShowSearchList(
+        page: number,
+        type: ResourceType,
+        query: string | undefined = "",
+        language: string | undefined = "en-US"
+        
+    ): Promise<ShowListResponse> {
+
+        // Obtain a reference to the AbortSignal
+        const signal = this.controller.signal;
+
+        const url = buildUrl(
+            `${this.BASE_URL}/search/${type}`,
+            [
+                this.apiKeyParam,
+                { name: "page", value: page },
+                { name: "language", value: language },
+                { name: "query", value: query}
+            ],
+        )
+        const res = await this.fetchWithTimeout(url, signal);
+        console.log(url)
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await res.json() as ShowListResponse
     }
 
     //url for trailers = 'https://api.themoviedb.org/3/movie/movie_id/videos?language=en-US'
