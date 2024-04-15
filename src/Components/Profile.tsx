@@ -18,12 +18,14 @@ import UserActivity from './ProfileNav/UserActivity'
 import UserLists from './ProfileNav/UserLists'
 
 export interface favs {
-  id: number
+  _id: number
+  user_id : number
   poster_path: string
   title: string
   overview: string
   vote_average: number
-
+  movie_id : number
+  show_id : number
 }
 
 type Screens = "MOVIE" | "SHOW" | "PROFILE" | "ACTIVITY" | "PREFERENCES" | "SETTINGS" | "LISTS"
@@ -31,6 +33,7 @@ type Screens = "MOVIE" | "SHOW" | "PROFILE" | "ACTIVITY" | "PREFERENCES" | "SETT
 const Profile = () => {
   const currentUserSession = useContext(CurrentUserContext) 
   const [currScreen, setCurrScreen] = useState<Screens>("PROFILE")
+  console.log(currentUserSession?.user.id)
   return (
     <div className='overflow-x-hidden'>
       <div className="bg-white shadow-lg rounded-lg p-4 max-w-sm mx-auto mt-10">

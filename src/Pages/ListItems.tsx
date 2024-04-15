@@ -11,7 +11,8 @@ interface ListTypes{
     list_id : string,
     movie_id : number,
     show_id : number,
-    user_id : string
+    user_id : string,
+    poster_path : string
 }
 
 const ListItems = (props: Props) => {
@@ -45,7 +46,6 @@ const ListItems = (props: Props) => {
           media_type: 'movie', // Assuming the type.
           genre_ids: movieDetails.genres.map(genre => genre.id), // Convert genres to IDs.
         };
-    
         setMovies(movies => [...movies, movieResult]);
       }
       async function fetchShowByID(show_id: number) {
@@ -55,7 +55,7 @@ const ListItems = (props: Props) => {
             throw new Error('Network response was not ok');
         }
         const showDetails: ShowDetails = await res.json();
-    
+        
         // Convert ShowDetails to ShowListResult
         const showResult: ShowListResult = {
             adult: showDetails.adult,

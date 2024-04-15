@@ -99,7 +99,7 @@ const RecommendedScreen = () => {
 
   console.log(favMovies)
   console.log(itemsRec)
-  let passItems = itemsRec.filter(movie => !favMovies.some(favMovie => favMovie.id === movie.id))
+  let passItems = itemsRec.filter(movie => !favMovies.some(favMovie => favMovie.movie_id === movie.id))
   if(passItems.length < 10) {
     fetchNextPage()
   }

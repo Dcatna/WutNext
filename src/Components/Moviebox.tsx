@@ -18,16 +18,19 @@ const Moviebox = ({item} : movieBoxProp) => {
     async function handleFavorites(event: React.MouseEvent, item: MovieListResult) {
         event.preventDefault(); // Prevent link navigation
         event.stopPropagation();
-        const {data, error} = await supabase.from("favoritemovies").select("*").eq("id", item.id)
+        const {data, error} = await supabase.from("favoritemovies").select("*").eq("movie_id", item.id)
         console.log(data)
         if(data?.length == 0) {
             const {data, error} = await supabase.from("favoritemovies").insert([{
-                id: item.id, 
+                movie_id: item.id,
+                show_id : -1, 
                 user_id: client?.user.id, 
                 poster_path: item.poster_path,
                 title: item.title,
                 overview: item.overview,
-                vote_average: item.vote_average}])
+                vote_average: item.vote_average
+                
+                }])
     
             if(error) {
                 console.log(error, "hi")
