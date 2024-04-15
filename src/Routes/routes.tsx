@@ -13,7 +13,7 @@ import FavoritesList from "../Components/FavoritesList";
 import Browse from "../Pages/Browse";
 import Showinfo from "../Components/Showinfo";
 import ListItems from "../Pages/ListItems";
-
+import WatchItem from "../Components/WatchItem"
 export const router = createBrowserRouter([
     {
         path: "/",
@@ -27,7 +27,8 @@ export const router = createBrowserRouter([
             {path:"/pool", element:<ProtectedRoute><Pool/></ProtectedRoute> },
             {path:"/info", element: <MovieInfo/>},
             {path:"/showinfo", element: <Showinfo/>},
-            {path:"/listitems", element: <ListItems/>}
+            {path:"/listitems", element: <ListItems/>},
+            {path:"WatchItem", element: <WatchItem></WatchItem>},
         ]
     }, 
     {path:"/signin", element:<Loginbox />},

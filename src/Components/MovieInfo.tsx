@@ -3,14 +3,14 @@ import { Link, useLocation } from 'react-router-dom'
 import Moviebox, { movieBoxProp } from './Moviebox'
 import { CurrentUserContext, TMDBClientContext } from '../App'
 import { MovieTrailer } from '../data/types/MovieListResponse'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBorderAll,faGripLines, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../Pages/Navbar/Navbar'
 import { Cast, Credit, SimilarMovie, SimilarMovieResult } from '../data/types/types'
 import ActorBox from './ActorBox'
 import UserLists from './ProfileNav/UserLists'
 import { supabase } from '../lib/supabaseClient'
 import MovieBoxPopup from './MovieListPopup'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlay} from '@fortawesome/free-solid-svg-icons'
 
 const partial_url = "https://image.tmdb.org/t/p/original/"
 
@@ -71,6 +71,10 @@ const MovieInfo = () => {
               <p className='mt-5'>{movie.item.vote_average}</p>
               <p className='mt-5'>Overview</p>
               <p >{movie.item.overview}</p>
+              <Link to= "/WatchItem" state = {movie} className='flex'>
+                <p>Watch Movie</p>
+                <FontAwesomeIcon icon={faPlay} />
+              </Link>
             </div>
           </div>
     </div>
