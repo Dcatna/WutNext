@@ -19,7 +19,7 @@ const Browse = () => {
     useEffect(() => {
 
         async function getLists(){
-            const {data, error} = await supabase.from("userlist").select("name, list_id")
+            const {data, error} = await supabase.from("userlist").select("name, list_id").eq("user_id", client?.user.id)
             console.log(data, "lsits")
             if(error){
                 console.log(error)
@@ -29,7 +29,7 @@ const Browse = () => {
             }
         }
         getLists()
-    }, [])
+    }, [client])
   return (
     <div className='flex mt-5 overflow-y-hidden'>
         <div className='flex flex-grow overflow-y-auto'>

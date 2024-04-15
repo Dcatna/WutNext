@@ -19,7 +19,7 @@ const MovieBoxPopup = ({movie, show} : MoviePop) => {
     const client = useContext(CurrentUserContext)
     const [userLists, setUserLists] = useState<userLists[]>([])
     async function getLists(){
-      const {data, error} = await supabase.from("userlist").select("name, list_id")
+      const {data, error} = await supabase.from("userlist").select("name, list_id").eq("user_id", client?.user.id)
       console.log(data, "lsits")
       if(error){
           console.log(error)
@@ -30,7 +30,7 @@ const MovieBoxPopup = ({movie, show} : MoviePop) => {
     }
     useEffect(() => {
         getLists()
-      }, [])
+      }, [client])
     
       async function handleOnClick(list_id : string){
         if(show == undefined){
