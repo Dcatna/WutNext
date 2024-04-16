@@ -3,7 +3,7 @@ import { Button } from '../Components/Button'
 import Popup from './Popup'
 import { CurrentUserContext } from '../App'
 import { supabase } from '../lib/supabaseClient'
-
+import movieicon from "./movieicon.png"
 import HorizontalMovieScroll from './HorizontalMovieScroll'
 //import {ScrollArea} from ""
 import "./rand.css"
@@ -121,14 +121,14 @@ const Browse = () => {
 
 const Lists = ({item} : PL) => {
     const posters = useMemo<string[]>(() => {
-        if(item.ids?.length != 4){
-            if(item.ids?.length == 0) {
-                return []
-            } 
-            else{
-               return item.ids?.slice(0,0) ?? []
-            }
+        if(!item.ids){
+            return []
         }
+        if(item.ids.length < 4){
+               const posterData = item.ids!![0].split(",")
+               return [posterData[2]]
+        }
+        
         else{
             return (item.ids?.map(poster => {
                 const posterData = poster.split(",")
@@ -140,18 +140,21 @@ const Lists = ({item} : PL) => {
     console.log(posters, "Posters")
     return (
        <Link to={'/listitems'} state={item}>
-            <div className='h-20 w-full rounded-md border-black border text-center justify-center items-center flex'>
-                {posters.length != 0 ?
-                <div className='grid grid-cols-2 '>
-
-                    <img src={`https://image.tmdb.org/t/p/original//${posters[0]}`} alt="" />
-                    <img src={`https://image.tmdb.org/t/p/original//${posters[1]}`} alt="" />
-                    <img src={`https://image.tmdb.org/t/p/original//${posters[2]}`} alt="" />
-                    <img src={`https://image.tmdb.org/t/p/original//${posters[3]}`} alt="" />
+            <div className='h-24 w-full rounded-md border-black border text-center  flex flex-relative'>   
+                {posters.length == 1 ? 
+                    <div className='w-[65px] h-[50px] grid grid-cols '>
+                        <img src={`https://image.tmdb.org/t/p/original//${posters[0]}`} alt="" className='w-full h-full object-cover'/>
+                    </div>
+                     : posters.length > 1 ?
+                <div className='grid grid-cols-2 w-[65px] h-[15px]'>
+                {posters.map((post, ind) => (
+                     <div className='w-full pb-full relative'>
+                        <img src={`https://image.tmdb.org/t/p/original//${post}`} alt="" className='w-full h-full object-cover'/>
+                    </div>
+                ))} </div> : <img src={movieicon}></img>}   
+                <div className='items-center flex'>  
+                    {item.name}
                 </div>
-                 : posters.length == 1 ? <img src={`https://image.tmdb.org/t/p/original//${posters[0]}`} alt="" /> : 
-                 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />}      
-                {item.name}
             </div> 
        </Link>
     )
