@@ -58,7 +58,7 @@ const MovieInfo = () => {
 
   return (
     <div className='overflow-x-hidden overflow-y-hidden'>
-      <div className='ml-9 right-4 top-4 z-50'>
+      <div className='fixed right-4 top-4 z-50'>
         <MovieBoxPopup movie={movie} show={undefined}/>
       </div>
       <div className='relative mt-10 ml-10 flex' style={{ height: '500px' }}>

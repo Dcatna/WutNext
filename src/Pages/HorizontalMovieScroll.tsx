@@ -67,7 +67,6 @@ const HorizontalMovieScroll = ({movieType, showType, movieOrShow} : HoriScrollTy
 const ShowItems = ({item} : showBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/";
     const [loaded, setLoaded] = useState(false);
-    console.log(item, "SHOWSSS")
     return (
         <Link to={'/showinfo'} state={{ item }} className="block w-full relative m-2 aspect-[3/4]">
             <img
@@ -89,7 +88,6 @@ const ShowItems = ({item} : showBoxProp) => {
 const MovieItems = ({item} : movieBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/";
     const [loaded, setLoaded] = useState(false);
-    console.log(item, "MOVIEE")
     return (
         <Link to={'/info'} state={{ item }} className="block w-full relative m-2 aspect-[3/4]">
             <img

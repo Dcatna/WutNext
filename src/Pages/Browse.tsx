@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Button } from '../Components/Button'
 import Popup from './Popup'
 import { CurrentUserContext } from '../App'
@@ -13,9 +13,28 @@ export interface userLists{
     name : string,
     list_id : string,
 }
+interface PosterLists {
+    createdAt: string;
+    description: string;
+    listId: string;
+    name: string;
+    public: boolean;
+    updatedAt: string;
+    userId: string;
+    username: string;
+    profileImagePath: string | null;
+    ids: string[] | null;
+    total: number | null;
+}
+interface PL {
+    item : PosterLists
+}
 const Browse = () => {
     const [userLists, setUserLists] = useState<userLists[]>()
+    const [posterPaths, setPosterPaths] = useState<PosterLists[]>()
+
     const client = useContext(CurrentUserContext)
+
     useEffect(() => {
 
         async function getLists(){
@@ -28,16 +47,34 @@ const Browse = () => {
                 setUserLists(data as userLists[])
             }
         }
+        async function getListPictures() {
+            const {data, error} = await supabase.rpc("select_lists_with_poster_items_for_user_id", { uid: client?.user.id,  lim: 9999, off: 0})
+            if(error) {
+                console.log("EHLLOOO")
+                console.log(error)
+            }
+            else {
+                const res = data as PosterLists[]
+                console.log(res, "PICTURES")
+                setPosterPaths(res)
+                
+            }
+        }
+
         getLists()
+        getListPictures()
+        
     }, [client])
+    //console.log(posterPaths, "PICS")
   return (
+    
     <div className='flex mt-5 overflow-y-hidden'>
         <div className='flex flex-grow overflow-y-auto'>
             <div className='w-1/4 sticky bg-slate-900'>
                 <Popup></Popup>
                 <div className=''>
-                {userLists?.map((lst: userLists) => (
-                        <Lists name={lst.name} list_id={lst.list_id}></Lists>
+                {posterPaths?.map((lst: PosterLists) => (
+                        <Lists item={lst} ></Lists>
                 ))}
                 </div>
             </div>
@@ -82,11 +119,39 @@ const Browse = () => {
   )
 }
 
-const Lists = (listItem: userLists) => {
+const Lists = ({item} : PL) => {
+    const posters = useMemo<string[]>(() => {
+        if(item.ids?.length != 4){
+            if(item.ids?.length == 0) {
+                return []
+            } 
+            else{
+               return item.ids?.slice(0,0) ?? []
+            }
+        }
+        else{
+            return (item.ids?.map(poster => {
+                const posterData = poster.split(",")
+                return posterData[2] ?? ""
+            }) ?? []) 
+        }
+    }, [item.ids])
+
+    console.log(posters, "Posters")
     return (
-       <Link to={'/listitems'} state={listItem}>
+       <Link to={'/listitems'} state={item}>
             <div className='h-20 w-full rounded-md border-black border text-center justify-center items-center flex'>
-                {listItem.name}
+                {posters.length != 0 ?
+                <div className='grid grid-cols-2 '>
+
+                    <img src={`https://image.tmdb.org/t/p/original//${posters[0]}`} alt="" />
+                    <img src={`https://image.tmdb.org/t/p/original//${posters[1]}`} alt="" />
+                    <img src={`https://image.tmdb.org/t/p/original//${posters[2]}`} alt="" />
+                    <img src={`https://image.tmdb.org/t/p/original//${posters[3]}`} alt="" />
+                </div>
+                 : posters.length == 1 ? <img src={`https://image.tmdb.org/t/p/original//${posters[0]}`} alt="" /> : 
+                 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />}      
+                {item.name}
             </div> 
        </Link>
     )
