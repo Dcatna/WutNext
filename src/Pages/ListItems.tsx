@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { userLists } from './Browse'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { UserList } from './Browse'
 import { supabase } from '../lib/supabaseClient'
 import { MovieListResponse, MovieListResult, ShowListResult } from '../data/types/MovieListResponse'
 import { MovieDetails, ShowDetails } from '../data/types/types'
 import Moviebox from '../Components/Moviebox'
 import Showbox from '../Components/Showbox'
+import { Button } from '../Components/Button'
+
 type Props = {}
 interface ListTypes{
     list_id : string,
@@ -17,7 +19,8 @@ interface ListTypes{
 
 const ListItems = (props: Props) => {
     const location = useLocation()
-    const lst : userLists = location.state
+    const lst : UserList = location.state
+    const nav = useNavigate()
     const [movieShows, setMovieShows] = useState<ListTypes[]>([])
     const [movies, setMovies] = useState<MovieListResult[]>([])
     const [shows, setShows] = useState<ShowListResult[]>([])
@@ -80,13 +83,18 @@ const ListItems = (props: Props) => {
     useEffect(() => {
         fetchMoviesShowsFromList()
     }, [])
-    console.log(movies)
+
+    async function deleteList() {
+        const {data, error} = await supabase.from("userlist").delete().match({"list_id" : lst.list_id})
+        nav("/")
+    }
+
   return (
     
     <div>
         <div className='items-center justify-center flex'>
             {lst.name}
-            {lst.list_id}
+            <Button onClick={deleteList} className='ml-2'>Delete List</Button>
         </div>
         <div className='w-full grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4'>
             {movies.map((movie : MovieListResult) => (
