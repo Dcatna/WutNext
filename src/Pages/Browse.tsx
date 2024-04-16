@@ -4,6 +4,7 @@ import Popup from './Popup'
 import { CurrentUserContext } from '../App'
 import { supabase } from '../lib/supabaseClient'
 import movieicon from "./movieicon.png"
+import defualtmovie from "./defaultlist.png"
 import HorizontalMovieScroll from './HorizontalMovieScroll'
 //import {ScrollArea} from ""
 import "./rand.css"
@@ -142,19 +143,23 @@ const Lists = ({item} : PL) => {
        <Link to={'/listitems'} state={item}>
             <div className='h-24 w-full rounded-md border-black border text-center  flex flex-relative'>   
                 {posters.length == 1 ? 
-                    <div className='w-[65px] h-[50px] grid grid-cols '>
+                    <div className='w-[65px] h-[50px] grid grid-cols rounded-md'>
                         <img src={`https://image.tmdb.org/t/p/original//${posters[0]}`} alt="" className='w-full h-full object-cover'/>
                     </div>
                      : posters.length > 1 ?
-                <div className='grid grid-cols-2 w-[65px] h-[15px]'>
+                <div className='grid grid-cols-2 w-[65px] h-[15px] rounded-md'>
                 {posters.map((post, ind) => (
                      <div className='w-full pb-full relative'>
                         <img src={`https://image.tmdb.org/t/p/original//${post}`} alt="" className='w-full h-full object-cover'/>
                     </div>
-                ))} </div> : <img src={movieicon}></img>}   
-                <div className='items-center flex'>  
-                    {item.name}
+                ))} </div> : <div className='w-[65px] h-[100px] grid grid-cols rounded-md'><img src={movieicon} className='w-full h-full object-cover'></img></div>}   
+                <div className='flex items-center ml-1'>
+                    <div className='flex flex-col'>
+                        <p className='text-left'>{item.name}</p>
+                        <p className='text-left'>Created By: {item.username}</p>
+                    </div>  
                 </div>
+
             </div> 
        </Link>
     )
