@@ -21,8 +21,9 @@ const Navbar = (props: Props) => {
                     console.log('Error signing out:', error);
                 } else {
                     console.log('Sign out successful');
-                    window.location.reload();
+                    
                     navigate('/')
+                    window.location.reload();
                 }
             } catch (error) {
                 console.error('Sign out failed:', error);

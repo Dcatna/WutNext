@@ -169,7 +169,7 @@ const ListItems = (props: Props) => {
     }
   return (
     
-    <div className='flex'>
+    <div className='flex mt-5'>
     <div className='w-1/4 sticky top-0 bg-slate-900 h-screen overflow-y-auto'>
         <div onClick={handleClick}>
             <Popup></Popup>
@@ -198,27 +198,20 @@ const ListItems = (props: Props) => {
                     </div>
                 ))} </div>: <div className='w-[180px] grid grid-cols rounded-lg overflow-hidden'><img src={movieicon} className='w-full h-full object-cover aspect-1'></img></div>}
                 </div>
-
-                {/* Text Details */}
                 <div>
                     <p className='text-6xl'>{lst.name}</p>
                     <p>{singlePosterPath?.username} - {movies.length + shows.length} items</p>
                 </div>
             </div>
-
-            {/* Right-aligned content - Delete Button */}
             <Button onClick={deleteList} className='self-start'>Delete List</Button>
         </div>
 
-        {/* Movies and Shows Grid */}
         <div className='grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4'>
-            {/* Movies */}
             {movies.map((movie: MovieListResult, index: number) => (
-                <Moviebox key={index} item={movie}></Moviebox> // Added key prop for list items
+                <Moviebox key={index} item={movie}></Moviebox>
             ))}
-            {/* Shows */}
             {shows.map((show: ShowListResult, index: number) => (
-                <Showbox key={index} item={show}></Showbox> // Added key prop for list items
+                <Showbox key={index} item={show}></Showbox>
             ))}
         </div>
     </div>
