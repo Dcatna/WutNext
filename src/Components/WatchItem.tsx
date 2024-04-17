@@ -9,16 +9,18 @@ const WatchItem = (props: Props) => {
 
   return (
     <div>
-        <div className='items-center justify-center flex'>
+        <div className='items-center justify-center flex mt-10'>
             <p>{movie.item.title}</p>
+            
         </div>
         <div className='flex items-center justify-center flex-col h-screen'>
-            {movie.item.id}
             <iframe 
             src={`https://vidsrc.to/embed/movie/${movie.item.id}`} 
             allowFullScreen
-            width="560" 
-            height="315" ></iframe>
+            width="600" 
+            height="350" 
+            >
+            </iframe>
         </div>
     </div>
   )

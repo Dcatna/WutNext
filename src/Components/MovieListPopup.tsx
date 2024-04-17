@@ -50,7 +50,8 @@ const MovieBoxPopup = ({movie, show} : MoviePop) => {
                 "list_id" : list_id,
                 "movie_id" : -1,
                 "show_id" : show.item.id,
-                "user_id" : client?.user.id
+                "user_id" : client?.user.id,
+                "poster_path" : show.item.poster_path.slice(1, show.item.poster_path.length)
             })
             if(error) {
                 console.log(error)

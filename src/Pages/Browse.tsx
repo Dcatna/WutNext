@@ -9,6 +9,7 @@ import HorizontalMovieScroll from './HorizontalMovieScroll'
 //import {ScrollArea} from ""
 import "./rand.css"
 import { Link } from 'react-router-dom'
+import Lists from './Lists'
 
 export interface UserList {
     list_id: string
@@ -20,10 +21,10 @@ export interface UserList {
     description: string
     subscribers: number
 }
-interface PosterLists {
+export interface PosterLists {
     createdAt: string
     description: string
-    listId: string
+    list_id: string
     name: string
     public: boolean
     updatedAt: string
@@ -33,7 +34,7 @@ interface PosterLists {
     ids: string[] | null
     total: number | null
 }
-interface PL {
+export interface PL {
     item : PosterLists
 }
 const Browse = () => {
@@ -82,7 +83,7 @@ const Browse = () => {
                 <div onClick={handleClick}>
                     <Popup></Popup>
                 </div>
-                <div className=''>
+                <div className='mt-1'>
                 {posterPaths?.map((lst: PosterLists) => (
                         <Lists item={lst} ></Lists>
                 ))}
@@ -129,47 +130,5 @@ const Browse = () => {
   )
 }
 
-const Lists = ({item} : PL) => {
-    const posters = useMemo<string[]>(() => {
-        if(!item.ids){
-            return []
-        }
-        if(item.ids.length < 4){
-               const posterData = item.ids!![0].split(",")
-               return [posterData[2]]
-        }
-        
-        else{
-            return (item.ids?.map(poster => {
-                const posterData = poster.split(",")
-                return posterData[2] ?? ""
-            }) ?? []) 
-        }
-    }, [item.ids])
 
-    return (
-       <Link to={'/listitems'} state={item}>
-            <div className='h-24 w-full rounded-md border-black border text-center  flex flex-relative'>   
-                {posters.length == 1 ? 
-                    <div className='w-[63px] h-[50px] grid grid-cols rounded-md'>
-                        <img src={`https://image.tmdb.org/t/p/original//${posters[0]}`} alt="" className='w-full h-full object-cover'/>
-                    </div>
-                     : posters.length > 1 ?
-                <div className='grid grid-cols-2 w-[63px] h-[15px] rounded-md'>
-                {posters.map((post, ind) => (
-                     <div className='w-full pb-full relative'>
-                        <img src={`https://image.tmdb.org/t/p/original//${post}`} alt="" className='w-full h-full object-cover'/>
-                    </div>
-                ))} </div> : <div className='w-[62px] h-[95px] grid grid-cols rounded-md'><img src={movieicon} className='w-full h-full object-cover'></img></div>}   
-                <div className='flex items-center ml-1'>
-                    <div className='flex flex-col'>
-                        <p className='text-left'>{item.name}</p>
-                        <p className='text-left'>Created By: {item.username}</p>
-                    </div>  
-                </div>
-
-            </div> 
-       </Link>
-    )
-}
 export default Browse

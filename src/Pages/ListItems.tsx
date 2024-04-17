@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { UserList } from './Browse'
+import { PL, PosterLists, UserList } from './Browse'
 import { supabase } from '../lib/supabaseClient'
 import { MovieListResponse, MovieListResult, ShowListResult } from '../data/types/MovieListResponse'
 import { MovieDetails, ShowDetails } from '../data/types/types'
 import Moviebox from '../Components/Moviebox'
 import Showbox from '../Components/Showbox'
 import { Button } from '../Components/Button'
-
+import { CurrentUserContext } from '../App'
+import movieicon from "./movieicon.png"
+import { Filter } from 'lucide-react'
+import Popup from './Popup'
+import Lists from './Lists'
 type Props = {}
 interface ListTypes{
     list_id : string,
@@ -20,10 +24,16 @@ interface ListTypes{
 const ListItems = (props: Props) => {
     const location = useLocation()
     const lst : UserList = location.state
+    const client = useContext(CurrentUserContext)
     const nav = useNavigate()
     const [movieShows, setMovieShows] = useState<ListTypes[]>([])
     const [movies, setMovies] = useState<MovieListResult[]>([])
     const [shows, setShows] = useState<ShowListResult[]>([])
+    const [userLists, setUserLists] = useState<UserList[]>()
+    const [posterPaths, setPosterPaths] = useState<PosterLists[]>()
+    const [refresh, setRefresh] = useState(0)
+
+    const [singlePosterPath, setSinglePosterPath] = useState<PosterLists>()
     async function fetchMoviesShowsFromList(){
         const {data, error } = await supabase.from("listitem").select("*").eq("list_id", lst.list_id)
         if(error) {
@@ -81,36 +91,139 @@ const ListItems = (props: Props) => {
         setShows(shows => [...shows, showResult]);
     }
     useEffect(() => {
+        setMovies([])
+        setShows([])
         fetchMoviesShowsFromList()
-    }, [])
+    }, [lst])
+    useEffect(() => {
 
+        async function getLists(){
+            const {data, error} = await supabase.from("userlist").select("*").eq("user_id", client?.user.id)
+            console.log(data, "lsits")
+            if(error){
+                console.log(error)
+            }
+            else{
+                setUserLists(data as UserList[])
+            }
+        }
+        async function getListPictures() {
+            const {data, error} = await supabase.rpc("select_lists_with_poster_items_for_user_id", { uid: client?.user.id,  lim: 9999, off: 0})
+            if(error) {
+                console.log(error)
+            }
+            else {
+                const res = data as PosterLists[]
+                setPosterPaths(res)
+                
+            }
+        }
+
+        getLists()
+        getListPictures()
+        
+    }, [client, refresh, lst])
+    useEffect(() => {
+        async function getListPictures() {
+            const {data, error} = await supabase.rpc("select_lists_with_poster_items_for_user_id", { uid: client?.user.id,  lim: 9999, off: 0})
+            if(error) {
+                console.log(error, "ERORR")
+            }
+            else {
+                const res = data as PosterLists[]
+                const foundElement = res.find(ll => ll.list_id == lst.list_id)
+                setSinglePosterPath(foundElement)
+            }
+        }
+        getListPictures()
+    }, [client?.access_token, lst])
+        const posters = useMemo<string[]>(() => {
+            if(!singlePosterPath?.ids){
+                return []
+            }
+            if(singlePosterPath?.ids.length < 4){
+                   const posterData = singlePosterPath?.ids!![0].split(",")
+                   return [posterData[2]]
+            }
+            
+            else{
+                return (singlePosterPath?.ids?.map(poster => {
+                    const posterData = poster.split(",")
+                    return posterData[2]
+                }) ?? []) 
+            }
+        }, [singlePosterPath?.ids, lst])
+    
     async function deleteList() {
         const {data, error} = await supabase.from("userlist").delete().match({"list_id" : lst.list_id})
-        nav("/")
+        if(error) {
+            console.log(error)
+        }
+        else{
+            nav("/")
+        }
+        
     }
-
+    function handleClick() {
+        setRefresh(prev => prev+1)
+    }
   return (
     
-    <div>
-        <div className='items-center justify-center flex'>
-            {lst.name}
-            <Button onClick={deleteList} className='ml-2'>Delete List</Button>
+    <div className='flex'>
+    <div className='w-1/4 sticky top-0 bg-slate-900 h-screen overflow-y-auto'>
+        <div onClick={handleClick}>
+            <Popup></Popup>
         </div>
-        <div className='w-full grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4'>
-            {movies.map((movie : MovieListResult) => (
-                <div className=''>
-                    <Moviebox item={movie}></Moviebox>
-                </div>
-            ))}
-            {shows.map((show : ShowListResult) => (
-                <div className=''>
-                    <Showbox item={show}></Showbox>
-                </div>
+        <div className='mt-1'>
+            {posterPaths?.map((lst: PosterLists, index: number) => (
+                <Lists key={index} item={lst} ></Lists> 
             ))}
         </div>
-        
-        
     </div>
+
+    <div className='w-3/4 flex flex-col ml-16 mb-8'>
+        <div className='flex justify-between items-start mb-4 w-full'>
+            <div className='flex space-x-4'>
+                <div className='w-[180px] rounded-lg overflow-hidden'>
+                {posters.length == 1 ? 
+                    <div className='w-[180px] grid grid-cols rounded-lg overflow-hidden'>
+                        <img src={`https://image.tmdb.org/t/p/original//${posters[0]}`} alt="" className='w-full h-full object-cover aspect-1'/>
+                    </div>
+                     : posters.length > 1 ?
+                    
+                <div className='grid grid-cols-2 w-[180px] rounded-lg overflow-hidden'>
+                {posters.map((post, ind) => (
+                     <div className='w-full relative'>
+                        <img src={`https://image.tmdb.org/t/p/original//${post}`} alt="" className='w-full h-full object-cover aspect-1'/>
+                    </div>
+                ))} </div>: <div className='w-[180px] grid grid-cols rounded-lg overflow-hidden'><img src={movieicon} className='w-full h-full object-cover aspect-1'></img></div>}
+                </div>
+
+                {/* Text Details */}
+                <div>
+                    <p className='text-6xl'>{lst.name}</p>
+                    <p>{singlePosterPath?.username} - {movies.length + shows.length} items</p>
+                </div>
+            </div>
+
+            {/* Right-aligned content - Delete Button */}
+            <Button onClick={deleteList} className='self-start'>Delete List</Button>
+        </div>
+
+        {/* Movies and Shows Grid */}
+        <div className='grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4'>
+            {/* Movies */}
+            {movies.map((movie: MovieListResult, index: number) => (
+                <Moviebox key={index} item={movie}></Moviebox> // Added key prop for list items
+            ))}
+            {/* Shows */}
+            {shows.map((show: ShowListResult, index: number) => (
+                <Showbox key={index} item={show}></Showbox> // Added key prop for list items
+            ))}
+        </div>
+    </div>
+</div>
+
   )
 }
 
