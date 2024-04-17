@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom"
 import { PL } from "./Browse"
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import movieicon from "./movieicon.png"
+import { CurrentUserContext } from "../App"
 const Lists = ({item} : PL) => {
+    const client = useContext(CurrentUserContext)
     const posters = useMemo<string[]>(() => {
         if(!item.ids){
             return []

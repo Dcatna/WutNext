@@ -1,20 +1,35 @@
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {Button} from "../../Components/Button";
 import { faBorderAll,faGripLines, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { supabase } from '../../lib/supabaseClient';
+import { CurrentUserContext } from '../../App';
 
 type Props = {}
 
 const Navbar = (props: Props) => {
     let navigate = useNavigate();
-
+    const client = useContext(CurrentUserContext)
     async function signOut() {
-        return supabase.auth.signOut()
+        if(client?.access_token){
+            try {
+                const { error } = await supabase.auth.signOut();
+                
+                if (error) {
+                    console.log('Error signing out:', error);
+                } else {
+                    console.log('Sign out successful');
+                    window.location.reload();
+                    navigate('/')
+                }
+            } catch (error) {
+                console.error('Sign out failed:', error);
+            }
+        }
         
-        
+
     }
 
   return (
