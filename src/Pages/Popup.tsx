@@ -4,6 +4,7 @@ import 'reactjs-popup/dist/index.css';
 import { supabase } from '../lib/supabaseClient';
 import { Button } from '../Components/Button';
 import { CurrentUserContext } from '../App';
+import { Navigate } from 'react-router-dom';
 import "./rand.css"
 const Pop = () => {
     const [name, setName] = useState("");
@@ -25,7 +26,7 @@ const Pop = () => {
 
     return (
         <Popup modal nested contentStyle={{ width: '400px', margin: 'auto' }} trigger={<Button className='w-full h-[50px] rounded-md bg-button-blue'>Create List</Button>}>
-            <div className=''>
+            {client?.access_token ? <div className=''>
                 <div className='flex justify-center items-center'>
                     <div className='p-10 bg-white rounded shadow-md  min-w-sm'>
                         <h1 className='text-xl font-bold text-center mb- text-black'>Create A New List</h1>
@@ -35,7 +36,8 @@ const Pop = () => {
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> : <Navigate to="/signin" replace/>}
+            
         </Popup>
     );
 };
