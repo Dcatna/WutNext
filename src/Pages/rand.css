@@ -13,3 +13,8 @@
     overflow: hidden; 
   }
   */
+.your-custom-popup-class {
+    /* This targets the modal overlay wrapper directly */
+    width: 50% !important; /* Use !important to override any inline styles */
+    margin: auto !important;
+  }

@@ -159,9 +159,7 @@ const ListItems = (props: Props) => {
         if(error) {
             console.log(error)
         }
-        else{
-            nav("/")
-        }
+        nav("/")
         
     }
     function handleClick() {

@@ -21,6 +21,8 @@ module.exports = {
         '3/2': '3 / 2',
       },
       colors: {
+        'button-blue': '#2D5F9D',
+        'custom-bluegray': 'hsl(219, 30%, 12%)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

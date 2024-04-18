@@ -79,7 +79,7 @@ const Browse = () => {
     
     <div className='flex mt-5 overflow-y-hidden'>
         <div className='flex flex-grow overflow-y-auto'>
-            <div className='w-1/4 sticky bg-slate-900'>
+            <div className='w-1/4 sticky bg-custom-bluegray'>
                 <div onClick={handleClick}>
                     <Popup></Popup>
                 </div>
