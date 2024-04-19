@@ -89,11 +89,11 @@ const Showinfo = () => {
 
     </div>
   </div>
-  <div className='ml-10 mt-5 w-1/4' style={{ height: '500px' }}> {/* Adjust the height as needed */}
+  <div className='ml-10 mt-5 w-1/4' style={{ height: '500px' }}> 
     <p>Shows You Might Like</p>
     <div className='overflow-y-auto h-full'>
         {similarMovies?.map((similarMovie) => (
-            <SimilarBox key={similarMovie.id} item={similarMovie}></SimilarBox> // Ensure you have a key for list rendering
+            <SimilarBox key={similarMovie.id} item={similarMovie}></SimilarBox> 
         ))}
     </div>
 </div>

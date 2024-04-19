@@ -12,7 +12,9 @@ import { Link } from 'react-router-dom'
 import Lists from './Lists'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines, faPlus, faGripLinesVertical} from '@fortawesome/free-solid-svg-icons'
-
+import { favs } from '../Components/Profile'
+import defaultList from "./default_favorite_list.jpg"
+import { Divide } from 'lucide-react'
 export interface UserList {
     list_id: string
     user_id: string 
@@ -36,15 +38,14 @@ export interface PosterLists {
     ids: string[] | null
     total: number | null
 }
-export interface PL {
-    item : PosterLists
-}
+
 const Browse = () => {
     const [userLists, setUserLists] = useState<UserList[]>()
     const [posterPaths, setPosterPaths] = useState<PosterLists[]>()
     const [refresh, setRefresh] = useState(0)
     const client = useContext(CurrentUserContext)
-
+    const [favorites, setFavorites] = useState<favs[]>([])
+    
     useEffect(() => {
 
         async function getLists(){
@@ -68,10 +69,18 @@ const Browse = () => {
                 
             }
         }
-
+        async function getFavorites(){
+            const {data, error} = await supabase.from("favoritemovies").select("*")
+            if(error) {
+              console.log(error)
+            }
+            console.log(data as favs[], "favs")
+            setFavorites(data as favs[])
+        
+          }
         getLists()
         getListPictures()
-        
+        getFavorites()
     }, [client, refresh])
     //console.log(posterPaths, "PICS")
     function handleClick() {
@@ -94,6 +103,20 @@ const Browse = () => {
                     </div>
                 </div>
                 <div className='mt-1'>
+                <Link to="/favorites">
+                    <div className='w-full rounded-md hover:bg-black/50 text-center flex flex-relative p-1'> 
+                        <div className='w-[85px] grid grid-cols rounded-lg overflow-hidden'>
+                            <img src={defaultList} alt="" className='w-full h-full object-cover aspect-1'/>
+                        </div>
+                        <div className='flex items-center ml-2'>
+                            <div className='flex flex-col '>
+                                <p className='text-left'>Favorites </p>
+                                <p className='text-left'>Created By: {client?.user.email?.slice(0, client?.user.email?.indexOf("@"))}</p>
+                            </div> 
+                        </div>
+                    </div>
+                </Link> 
+                
                 {posterPaths?.map((lst: PosterLists) => (
                         <Lists item={lst} ></Lists>
                 ))}

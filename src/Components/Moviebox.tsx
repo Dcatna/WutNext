@@ -38,7 +38,6 @@ const Moviebox = ({item} : movieBoxProp) => {
             else{
                 console.log(data)
             }
-            console.log('HELLOOOO')
         }
         else{
             console.log("MOVIE IS ALREADY FAVORITED")

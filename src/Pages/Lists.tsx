@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom"
-import { PL } from "./Browse"
+import { PosterLists } from "./Browse"
 import { useContext, useMemo } from "react"
 import movieicon from "./movieicon.png"
 import { CurrentUserContext } from "../App"
+interface PL {
+    item : PosterLists
+}
 const Lists = ({item} : PL) => {
     const client = useContext(CurrentUserContext)
     const posters = useMemo<string[]>(() => {

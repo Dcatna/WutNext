@@ -1,18 +1,54 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {MovieListResult, ShowListResult} from "../data/types/MovieListResponse";
 import { Link } from 'react-router-dom';
-
+import { supabase } from '../lib/supabaseClient';
+import { CurrentUserContext } from '../App';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBorderAll,faGripLines, faStar, fas} from '@fortawesome/free-solid-svg-icons'
 
 export interface showBoxProp{
     item : ShowListResult
 }
-  
+
 const Showbox = ({item} : showBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/"
+    const client = useContext(CurrentUserContext)
+    async function handleFavorites(event: React.MouseEvent, item: ShowListResult) {
+        event.preventDefault(); // Prevent link navigation
+        event.stopPropagation();
+        const {data, error} = await supabase.from("favoritemovies").select("*").eq("show_id", item.id)
+        console.log(data)
+        if(data?.length == 0) {
+            const {data, error} = await supabase.from("favoritemovies").insert([{
+                movie_id: -1,
+                show_id : item.id, 
+                user_id: client?.user.id, 
+                poster_path: item.poster_path,
+                title: item.name,
+                overview: item.overview,
+                vote_average: item.vote_average  
+                }])
+            if(error) {
+                console.log(error, "hi")
+            }
+            else{
+                console.log(data)
+            }
+        }
+        else{
+            console.log("MOVIE IS ALREADY FAVORITED")
+        }
+        
+    }
     return (
         
         <Link to={'/showinfo'} state={{item}}>
             <div className="group relative">
+            <div className="absolute top-0 right-0 m-2 z-10">
+                <button onClick={(event) => handleFavorites(event, item)}>
+                    <FontAwesomeIcon icon={faStar} />
+                </button>
+            </div>
                 <img
                     className="w-full h-full rounded-md animate-in"
                     src={partial_url + item.poster_path}
