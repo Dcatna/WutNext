@@ -9,9 +9,11 @@ import Showbox from '../Components/Showbox'
 import { Button } from '../Components/Button'
 import { CurrentUserContext } from '../App'
 import movieicon from "./movieicon.png"
-import { Filter } from 'lucide-react'
+import { Divide, Filter } from 'lucide-react'
 import Popup from './Popup'
 import Lists from './Lists'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBorderAll,faGripLines, faPlus, faGripLinesVertical} from '@fortawesome/free-solid-svg-icons'
 type Props = {}
 interface ListTypes{
     list_id : string,
@@ -26,13 +28,14 @@ const ListItems = (props: Props) => {
     const lst : UserList = location.state
     const client = useContext(CurrentUserContext)
     const nav = useNavigate()
-    const [movieShows, setMovieShows] = useState<ListTypes[]>([])
     const [movies, setMovies] = useState<MovieListResult[]>([])
     const [shows, setShows] = useState<ShowListResult[]>([])
     const [userLists, setUserLists] = useState<UserList[]>()
     const [posterPaths, setPosterPaths] = useState<PosterLists[]>()
     const [refresh, setRefresh] = useState(0)
-
+    const [loadingMovies, setLoadingMovies] = useState(true);
+    const [loadingShows, setLoadingShows] = useState(true);
+    const [loadingPicutes, setLoadingPictures] = useState(true)
     const [singlePosterPath, setSinglePosterPath] = useState<PosterLists>()
     async function fetchMoviesShowsFromList(){
         const {data, error } = await supabase.from("listitem").select("*").eq("list_id", lst.list_id)
@@ -60,6 +63,7 @@ const ListItems = (props: Props) => {
           genre_ids: movieDetails.genres.map(genre => genre.id), // Convert genres to IDs.
         };
         setMovies(movies => [...movies, movieResult]);
+        setLoadingMovies(false)
       }
       async function fetchShowByID(show_id: number) {
         const apiKey: string = '11e1be5dc8a3cf947ce265da83199bce';
@@ -86,9 +90,8 @@ const ListItems = (props: Props) => {
             vote_average: showDetails.vote_average,
             vote_count: showDetails.vote_count,
         };
-    
-        // Add the converted show to your state
         setShows(shows => [...shows, showResult]);
+        setLoadingShows(false)
     }
     useEffect(() => {
         setMovies([])
@@ -115,7 +118,7 @@ const ListItems = (props: Props) => {
             else {
                 const res = data as PosterLists[]
                 setPosterPaths(res)
-                
+                setLoadingPictures(false)
             }
         }
 
@@ -166,11 +169,19 @@ const ListItems = (props: Props) => {
         setRefresh(prev => prev+1)
     }
   return (
-    
+
     <div className='flex mt-5'>
     <div className='w-1/4 sticky top-0 bg-slate-900 h-screen overflow-y-auto'>
-        <div onClick={handleClick}>
-            <Popup></Popup>
+        <div>
+            <div className='flex justify-between items-center'>
+                <div className='flex items-center'>
+                    <FontAwesomeIcon className='mt-1 size-6' icon={faGripLinesVertical} />
+                    <p className='ml-1 text-lg'>Your Library</p>
+                </div>
+                <div onClick={handleClick} className='mt-1 hover:bg-slate-800'>
+                        <Popup></Popup>
+                </div>
+            </div>
         </div>
         <div className='mt-1'>
             {posterPaths?.map((lst: PosterLists, index: number) => (
@@ -180,7 +191,7 @@ const ListItems = (props: Props) => {
     </div>
 
     <div className='w-3/4 flex flex-col ml-16 mb-8'>
-        <div className='flex justify-between items-start mb-4 w-full'>
+        {loadingPicutes ? <div>loading</div> : <div className='flex justify-between items-start mb-4 w-full'>
             <div className='flex space-x-4'>
                 <div className='w-[180px] rounded-lg overflow-hidden'>
                 {posters.length == 1 ? 
@@ -199,18 +210,26 @@ const ListItems = (props: Props) => {
                 <div>
                     <p className='text-6xl'>{lst.name}</p>
                     <p>{singlePosterPath?.username} - {movies.length + shows.length} items</p>
+                    <p>{lst.subscribers}</p>
                 </div>
             </div>
             <Button onClick={deleteList} className='self-start'>Delete List</Button>
-        </div>
+        </div>}
+        
 
         <div className='grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4'>
+        {loadingMovies || loadingShows ? (
+        <p>Loading...</p>
+    ) : (
+        <>
             {movies.map((movie: MovieListResult, index: number) => (
                 <Moviebox key={index} item={movie}></Moviebox>
             ))}
             {shows.map((show: ShowListResult, index: number) => (
                 <Showbox key={index} item={show}></Showbox>
             ))}
+        </>
+    )}
         </div>
     </div>
 </div>

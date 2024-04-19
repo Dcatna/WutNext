@@ -10,6 +10,8 @@ import HorizontalMovieScroll from './HorizontalMovieScroll'
 import "./rand.css"
 import { Link } from 'react-router-dom'
 import Lists from './Lists'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBorderAll,faGripLines, faPlus, faGripLinesVertical} from '@fortawesome/free-solid-svg-icons'
 
 export interface UserList {
     list_id: string
@@ -80,8 +82,16 @@ const Browse = () => {
     <div className='flex mt-5 overflow-y-hidden'>
         <div className='flex flex-grow overflow-y-auto'>
             <div className='w-1/4 sticky bg-custom-bluegray'>
-                <div onClick={handleClick}>
-                    <Popup></Popup>
+                <div>
+                    <div className='flex justify-between items-center'>
+                        <div className='flex items-center'>
+                            <FontAwesomeIcon className='mt-1 size-6' icon={faGripLinesVertical} />
+                            <p className='ml-1 text-lg'>Your Library</p>
+                        </div>
+                        <div onClick={handleClick} className='mt-1 hover:bg-slate-800'>
+                            <Popup></Popup>
+                        </div>
+                    </div>
                 </div>
                 <div className='mt-1'>
                 {posterPaths?.map((lst: PosterLists) => (

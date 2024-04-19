@@ -6,6 +6,9 @@ import { Button } from '../Components/Button';
 import { CurrentUserContext } from '../App';
 import { Navigate } from 'react-router-dom';
 import "./rand.css"
+import { Divide } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBorderAll,faGripLines, faPlus} from '@fortawesome/free-solid-svg-icons'
 const Pop = () => {
     const [name, setName] = useState("");
     const client = useContext(CurrentUserContext)
@@ -25,7 +28,7 @@ const Pop = () => {
     };
 
     return (
-        <Popup modal nested contentStyle={{ width: '400px', margin: 'auto' }} trigger={<Button className='w-full h-[50px] rounded-md bg-button-blue'>Create List</Button>}>
+        <Popup modal nested contentStyle={{ width: '400px', margin: 'auto' }} trigger={<div><FontAwesomeIcon className='size-7' icon={faPlus} /></div>}>
             {client?.access_token ? <div className=''>
                 <div className='flex justify-center items-center'>
                     <div className='p-10 bg-white rounded shadow-md  min-w-sm'>
