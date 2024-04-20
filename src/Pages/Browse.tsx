@@ -105,7 +105,7 @@ const Browse = () => {
                 <div className='mt-1'>
                 <Link to="/favorites">
                     <div className='w-full rounded-md hover:bg-black/50 text-center flex flex-relative p-1'> 
-                        <div className='w-[85px] grid grid-cols rounded-lg overflow-hidden'>
+                        <div className='w-[65px] grid grid-cols rounded-lg overflow-hidden'>
                             <img src={defaultList} alt="" className='w-full h-full object-cover aspect-1'/>
                         </div>
                         <div className='flex items-center ml-2'>

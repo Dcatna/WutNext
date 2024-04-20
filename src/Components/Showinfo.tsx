@@ -75,13 +75,13 @@ const Showinfo = () => {
   <div className='flex flex-col flex-grow'>
     <div className='w-3/4'>
       <p className='mt-5 ml-[40px] mb-5'>Cast</p>
-      <div className='flex overflow-x-auto' style={{width: '1500px', marginLeft:'40px'}}>
+      <div className='flex overflow-x-auto' style={{width: '1000px', marginLeft:'40px'}}>
         {actors?.map((actor) => (
           <ActorBox actor={actor}></ActorBox>
         ))}
       </div>
       <p className='mt-5 ml-[40px]'>Media</p>
-      <div className='flex overflow-x-auto ' style={{width: '1500px', marginLeft:'40px'}}>
+      <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'40px'}}>
         {videoData?.results.map((video) => (
           <VideoComponent videoKey={video.key}></VideoComponent>
         ))}

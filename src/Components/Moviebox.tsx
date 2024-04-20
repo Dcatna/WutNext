@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { text } from 'stream/consumers';
 import { supabase } from '../lib/supabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBorderAll,faGripLines, faStar, fas} from '@fortawesome/free-solid-svg-icons'
+import { faBorderAll,faGripLines, faStar, fas, faCircleMinus} from '@fortawesome/free-solid-svg-icons'
 import { CurrentUserContext } from '../App';
 
 export interface movieBoxProp {
@@ -48,11 +48,13 @@ const Moviebox = ({item} : movieBoxProp) => {
     return (
         <div className="relative group">
         {loaded && (
+            
             <div className="absolute top-0 right-0 m-2 z-10">
                 <button onClick={(event) => handleFavorites(event, item)}>
                     <FontAwesomeIcon icon={faStar} />
                 </button>
             </div>
+            
         )}
         <Link to={'/info'} state={{ item }}>
             <div className="relative">

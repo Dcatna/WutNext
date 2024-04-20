@@ -16,7 +16,6 @@ type Props = {}
 
 const Favorites = (props: Props) => {
     const client = useContext(CurrentUserContext)
-    const nav = useNavigate()
     const [movies, setMovies] = useState<MovieListResult[]>([])
     const [shows, setShows] = useState<ShowListResult[]>([])
     const [userLists, setUserLists] = useState<UserList[]>()
@@ -25,7 +24,6 @@ const Favorites = (props: Props) => {
     const [loadingMovies, setLoadingMovies] = useState(true);
     const [loadingShows, setLoadingShows] = useState(true);
     const [loadingPicutes, setLoadingPictures] = useState(true)
-    const [singlePosterPath, setSinglePosterPath] = useState<PosterLists>()
     async function fetchMoviesShowsFromList(){
         const {data, error } = await supabase.from("favoritemovies").select("*").eq("user_id", client?.user.id)
         if(error) {
@@ -131,9 +129,9 @@ const Favorites = (props: Props) => {
             </div>
         </div>
         <Link to="/favorites">
-        <div className='w-full rounded-md hover:bg-black/50 text-center flex flex-relative p-1'> 
+        <div className='w-full rounded-md hover:bg-black/50 text-center flex flex-relative p-1 mt-1'> 
             
-                <div className='w-[85px] grid grid-cols rounded-lg overflow-hidden'>
+                <div className='w-[65px] grid grid-cols rounded-lg overflow-hidden'>
                     <img src={defaultList} alt="" className='w-full h-full object-cover aspect-1'/>
                 </div>
                 <div className='flex items-center ml-2'>
@@ -164,7 +162,7 @@ const Favorites = (props: Props) => {
                 </div>
             </div>
         </div>
-        <div className='grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4 '>
+        <div className='grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-4 gap-4 mr-4'>
                 {movies.map((movie: MovieListResult, index: number) => (
                     <Moviebox key={index} item={movie}></Moviebox>
                 ))}
