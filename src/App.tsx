@@ -13,10 +13,10 @@ import TMDBClient from "./data/TMDBClient";
 import TMDBCClient from "./data/TMDBClient";
 import Navbar from './Pages/Navbar/Navbar';
 import UserLibrary from './Pages/UserLibrary';
+import { supabase } from './lib/supabaseClient';
 
 const tmdbClient = new TMDBClient()
 const queryClient = new QueryClient()
-
 
 export const TMDBClientContext = createContext<TMDBCClient>(tmdbClient);
 export const CurrentUserContext = createContext<Session | null | undefined>(null);

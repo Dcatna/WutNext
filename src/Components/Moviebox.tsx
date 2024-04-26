@@ -4,14 +4,18 @@ import { Link } from 'react-router-dom';
 import { text } from 'stream/consumers';
 import { supabase } from '../lib/supabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBorderAll,faGripLines, faStar, fas, faCircleMinus} from '@fortawesome/free-solid-svg-icons'
+import { faBorderAll,faGripLines, faStar, fas, faCircleMinus, faMinusCircle} from '@fortawesome/free-solid-svg-icons'
 import { CurrentUserContext } from '../App';
+import { UserList } from '../Pages/Browse';
 
 export interface movieBoxProp {
     item : MovieListResult
+    inList : boolean
+    lst : UserList | undefined
+    //movie_id : string | undefined
 }
 
-const Moviebox = ({item} : movieBoxProp) => {
+const Moviebox = ({item, inList, lst} : movieBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/"
     const client = useContext(CurrentUserContext)
     const [loaded, setLoaded] = useState(false)
@@ -28,7 +32,7 @@ const Moviebox = ({item} : movieBoxProp) => {
                 poster_path: item.poster_path,
                 title: item.title,
                 overview: item.overview,
-                vote_average: item.vote_average
+                vote_average: item.vote_average,
                 
                 }])
     
@@ -44,6 +48,14 @@ const Moviebox = ({item} : movieBoxProp) => {
         }
         
     }
+    async function handleDelete() {
+        const {data, error} = await supabase.from("listitem").delete().match({"list_id" : lst?.list_id, "movie_id" : item.id})
+        if(error) {
+            console.log(error)
+        }else{
+            window.location.reload()
+        }
+    }
 
     return (
         <div className="relative group">
@@ -53,6 +65,10 @@ const Moviebox = ({item} : movieBoxProp) => {
                 <button onClick={(event) => handleFavorites(event, item)}>
                     <FontAwesomeIcon icon={faStar} />
                 </button>
+                {inList && 
+                    <button onClick={handleDelete}> 
+                        <FontAwesomeIcon icon={faMinusCircle} className='text-red-500'/>
+                    </button> }
             </div>
             
         )}

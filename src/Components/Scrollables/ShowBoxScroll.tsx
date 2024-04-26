@@ -69,7 +69,7 @@ const ShowBoxScroll = () => {
             <div className="md:w-3/4 w-full grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {items.map((movie: ShowListResult) => (
                     <div>
-                        <Showbox key={movie.id} item={movie}></Showbox>
+                        <Showbox key={movie.id} item={movie} inList={false} lst={undefined}></Showbox>
                     </div>))}
             </div>
         </div>

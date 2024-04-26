@@ -13,7 +13,7 @@ import { Divide, Filter } from 'lucide-react'
 import Popup from './Popup'
 import Lists from './Lists'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBorderAll,faGripLines, faPlus, faGripLinesVertical} from '@fortawesome/free-solid-svg-icons'
+import {faGripLinesVertical} from '@fortawesome/free-solid-svg-icons'
 import defaultList from "./default_favorite_list.jpg"
 type Props = {}
 interface ListTypes{
@@ -34,9 +34,6 @@ const ListItems = (props: Props) => {
     const [userLists, setUserLists] = useState<UserList[]>()
     const [posterPaths, setPosterPaths] = useState<PosterLists[]>()
     const [refresh, setRefresh] = useState(0)
-    const [loadingMovies, setLoadingMovies] = useState(true);
-    const [loadingShows, setLoadingShows] = useState(true);
-    const [loadingPicutes, setLoadingPictures] = useState(true)
     const [singlePosterPath, setSinglePosterPath] = useState<PosterLists>()
     async function fetchMoviesShowsFromList(){
         const {data, error } = await supabase.from("listitem").select("*").eq("list_id", lst.list_id)
@@ -68,7 +65,6 @@ const ListItems = (props: Props) => {
           media_type: 'movie', // Assuming the type.
           genre_ids: movieDetails.genres.map(genre => genre.id), // Convert genres to IDs.
         };
-        setLoadingMovies(false)
         setMovies(movies => [...movies, movieResult]);
         
       }
@@ -97,7 +93,6 @@ const ListItems = (props: Props) => {
             vote_average: showDetails.vote_average,
             vote_count: showDetails.vote_count,
         };
-        setLoadingShows(false)
         setShows(shows => [...shows, showResult]);
         
     }
@@ -122,7 +117,6 @@ const ListItems = (props: Props) => {
             else {
                 const res = data as PosterLists[]
                 setPosterPaths(res)
-                setLoadingPictures(false)
             }
         }
 
@@ -237,10 +231,10 @@ const ListItems = (props: Props) => {
 
         <div className='grid lg:grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-4 mr-4'>
             {movies.map((movie: MovieListResult, index: number) => (
-                <Moviebox key={index} item={movie}></Moviebox>
+                <Moviebox key={index} item={movie} inList = {true} lst={lst}></Moviebox>
             ))}
             {shows.map((show: ShowListResult, index: number) => (
-                <Showbox key={index} item={show}></Showbox>
+                <Showbox key={index} item={show} inList={true} lst={lst}></Showbox>
             ))}
         </div>
     </div>

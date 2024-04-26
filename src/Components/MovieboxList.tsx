@@ -3,6 +3,7 @@ import Moviebox from './Moviebox'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {MovieListResult} from "../data/types/MovieListResponse";
+import { Underline } from 'lucide-react';
 
 const itemsIndex = (items : MovieListResult[], currItem : MovieListResult) =>{
     for(let i = 0; i<items.length; i++) {
@@ -95,7 +96,7 @@ const Movieboxlist = () => {
             <li key={item.id} style={{
                 margin:'5px'
             }}>
-                    <Moviebox item = {item}/>
+                    <Moviebox item = {item} inList={false} lst={undefined} />
                 </li>
                 ))}
             <button className='slider-button-right' onClick={() => {onRightButtonClick()}} style={{

@@ -4,13 +4,16 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { CurrentUserContext } from '../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBorderAll,faGripLines, faStar, fas} from '@fortawesome/free-solid-svg-icons'
+import { faBorderAll,faGripLines, faStar, fas, faMinusCircle} from '@fortawesome/free-solid-svg-icons'
+import { UserList } from '../Pages/Browse';
 
 export interface showBoxProp{
     item : ShowListResult
+    inList: boolean
+    lst : UserList | undefined
 }
 
-const Showbox = ({item} : showBoxProp) => {
+const Showbox = ({item, inList, lst} : showBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/"
     const client = useContext(CurrentUserContext)
     async function handleFavorites(event: React.MouseEvent, item: ShowListResult) {
@@ -40,6 +43,15 @@ const Showbox = ({item} : showBoxProp) => {
         }
         
     }
+    async function handleDelete() {
+        const {data, error} = await supabase.from("listitem").delete().match({"list_id" : lst?.list_id, "show_id" : item.id})
+        if(error) {
+            console.log(error)
+        }else{
+            window.location.reload()
+        }
+    }
+
     return (
         
         <Link to={'/showinfo'} state={{item}}>
@@ -48,6 +60,10 @@ const Showbox = ({item} : showBoxProp) => {
                 <button onClick={(event) => handleFavorites(event, item)}>
                     <FontAwesomeIcon icon={faStar} />
                 </button>
+                {inList && 
+                    <button onClick={handleDelete}>
+                        <FontAwesomeIcon icon={faMinusCircle} className='text-red-500'/>
+                    </button> }
             </div>
                 <img
                     className="w-full h-full rounded-md animate-in"

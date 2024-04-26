@@ -48,14 +48,14 @@ const HorizontalMovieScroll = ({movieType, showType, movieOrShow} : HoriScrollTy
         const movieItem = item as MovieListResult; // Type assertion
         return (
           <div className='min-w-[200px] px-2'>
-            <MovieItems item={movieItem}/>
+            <MovieItems item={movieItem} inList={false} lst={undefined}/>
           </div>
         );
       } else {
         const showItem = item as ShowListResult; // Type assertion
         return (
           <div className='min-w-[200px] px-2'>
-            <ShowItems item={showItem}/>
+            <ShowItems item={showItem}  inList={false} lst={undefined}/>
           </div>
         );
       }

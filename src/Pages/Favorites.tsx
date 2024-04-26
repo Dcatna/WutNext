@@ -164,10 +164,10 @@ const Favorites = (props: Props) => {
         </div>
         <div className='grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-4 gap-4 mr-4'>
                 {movies.map((movie: MovieListResult, index: number) => (
-                    <Moviebox key={index} item={movie}></Moviebox>
+                    <Moviebox key={index} item={movie} inList={true} lst={undefined}></Moviebox>
                 ))}
                 {shows.map((show: ShowListResult, index: number) => (
-                    <Showbox key={index} item={show}></Showbox>
+                    <Showbox key={index} item={show}  inList={true} lst={undefined}></Showbox>
                 ))}
         </div>
     </div>

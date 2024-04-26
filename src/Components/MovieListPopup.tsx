@@ -39,7 +39,8 @@ const MovieBoxPopup = ({movie, show} : MoviePop) => {
                 "movie_id" : movie!!.item.id,
                 "show_id" : -1,
                 "user_id" : client?.user.id,
-                "poster_path" : movie?.item.poster_path.slice(1, movie.item.poster_path.length)
+                "poster_path" : movie?.item.poster_path.slice(1, movie.item.poster_path.length),
+                "title" : movie?.item.title
             })
             if(error) {
                 console.log(error)
@@ -51,7 +52,8 @@ const MovieBoxPopup = ({movie, show} : MoviePop) => {
                 "movie_id" : -1,
                 "show_id" : show.item.id,
                 "user_id" : client?.user.id,
-                "poster_path" : show.item.poster_path.slice(1, show.item.poster_path.length)
+                "poster_path" : show.item.poster_path.slice(1, show.item.poster_path.length),
+                "title" : show.item.name
             })
             if(error) {
                 console.log(error)

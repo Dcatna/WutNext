@@ -98,7 +98,7 @@ const Showboxlist = () => {
             <li key={item.id} style={{
                 margin:'5px'
             }}>
-                    <Showbox item = {item}/>
+                    <Showbox item = {item} inList={false} lst={undefined}/>
                 </li>
                 ))}
             <button className='slider-button-right' onClick={() => {onRightButtonClick()}} style={{
