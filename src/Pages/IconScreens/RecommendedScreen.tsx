@@ -111,7 +111,7 @@ const RecommendedScreen = () => {
       </div>
         <div className="flex-grow grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 p-4">
         {passItems.map((movie: MovieListResult) => (
-      <Moviebox key={movie.id} item={movie} inList={false} lst={undefined}/>
+      <Moviebox key={movie.id} item={movie} inList={false} lst={undefined} onDelete={undefined}/>
     ))}
       </div>
 

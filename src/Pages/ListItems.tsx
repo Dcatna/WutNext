@@ -123,7 +123,7 @@ const ListItems = (props: Props) => {
         getLists()
         getListPictures()
         
-    }, [client, refresh, lst])
+    }, [client, refresh, lst, movies, shows])
     useEffect(() => {
         async function getListPictures() {
             const {data, error} = await supabase.rpc("select_lists_with_poster_items_for_user_id", { uid: client?.user.id,  lim: 9999, off: 0})
@@ -137,7 +137,7 @@ const ListItems = (props: Props) => {
             }
         }
         getListPictures()
-    }, [client?.access_token, lst])
+    }, [client?.access_token, lst, movies, shows])
         const posters = useMemo<string[]>(() => {
             if(!singlePosterPath?.ids){
                 return []
@@ -165,6 +165,14 @@ const ListItems = (props: Props) => {
     }
     function handleClick() {
         setRefresh(prev => prev+1)
+    }
+    const handleDeleteMovies = (deletedMovieId : number) => {
+        // Update movies array by filtering out the deleted movie
+        setMovies(currentMovies => currentMovies.filter(movie => movie.id !== deletedMovieId));
+    }
+    const handleDeleteShows = (deletedShowId : number) => {
+        // Update movies array by filtering out the deleted movie
+        setShows(currentShows => currentShows.filter(show => show.id !== deletedShowId));
     }
   return (
 
@@ -231,10 +239,10 @@ const ListItems = (props: Props) => {
 
         <div className='grid lg:grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-4 mr-4'>
             {movies.map((movie: MovieListResult, index: number) => (
-                <Moviebox key={index} item={movie} inList = {true} lst={lst}></Moviebox>
+                <Moviebox key={movie.id} item={movie} inList = {true} lst={lst} onDelete={handleDeleteMovies}></Moviebox>
             ))}
             {shows.map((show: ShowListResult, index: number) => (
-                <Showbox key={index} item={show} inList={true} lst={lst}></Showbox>
+                <Showbox key={show.id} item={show} inList={true} lst={lst} onDelete={handleDeleteShows}></Showbox>
             ))}
         </div>
     </div>

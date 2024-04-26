@@ -12,10 +12,11 @@ export interface movieBoxProp {
     item : MovieListResult
     inList : boolean
     lst : UserList | undefined
+    onDelete? : (movieId: number) => void
     //movie_id : string | undefined
 }
 
-const Moviebox = ({item, inList, lst} : movieBoxProp) => {
+const Moviebox = ({item, inList, lst, onDelete} : movieBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/"
     const client = useContext(CurrentUserContext)
     const [loaded, setLoaded] = useState(false)
@@ -53,7 +54,7 @@ const Moviebox = ({item, inList, lst} : movieBoxProp) => {
         if(error) {
             console.log(error)
         }else{
-            window.location.reload()
+            onDelete!!(item.id)
         }
     }
 

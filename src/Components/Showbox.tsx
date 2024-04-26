@@ -11,9 +11,10 @@ export interface showBoxProp{
     item : ShowListResult
     inList: boolean
     lst : UserList | undefined
+    onDelete? : (movieId: number) => void
 }
 
-const Showbox = ({item, inList, lst} : showBoxProp) => {
+const Showbox = ({item, inList, lst, onDelete} : showBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/"
     const client = useContext(CurrentUserContext)
     async function handleFavorites(event: React.MouseEvent, item: ShowListResult) {
@@ -48,13 +49,13 @@ const Showbox = ({item, inList, lst} : showBoxProp) => {
         if(error) {
             console.log(error)
         }else{
-            window.location.reload()
+            onDelete!!(item.id)
         }
     }
 
     return (
         
-        <Link to={'/showinfo'} state={{item}}>
+        
             <div className="group relative">
             <div className="absolute top-0 right-0 m-2 z-10">
                 <button onClick={(event) => handleFavorites(event, item)}>
@@ -65,6 +66,8 @@ const Showbox = ({item, inList, lst} : showBoxProp) => {
                         <FontAwesomeIcon icon={faMinusCircle} className='text-red-500'/>
                     </button> }
             </div>
+            <Link to={'/showinfo'} state={{item}}>
+            <div className='relative'>
                 <img
                     className="w-full h-full rounded-md animate-in"
                     src={partial_url + item.poster_path}
@@ -77,7 +80,9 @@ const Showbox = ({item, inList, lst} : showBoxProp) => {
                     {item.name}
                 </text>
             </div>
-        </Link>
+            </Link>
+            </div>
+         
     )
 }
 
