@@ -20,10 +20,8 @@ const Favorites = (props: Props) => {
     const [shows, setShows] = useState<ShowListResult[]>([])
     const [userLists, setUserLists] = useState<UserList[]>()
     const [posterPaths, setPosterPaths] = useState<PosterLists[]>()
+    const [favoriteID, setFavoriteID] = useState<[number,number]>()
     const [refresh, setRefresh] = useState(0)
-    const [loadingMovies, setLoadingMovies] = useState(true);
-    const [loadingShows, setLoadingShows] = useState(true);
-    const [loadingPicutes, setLoadingPictures] = useState(true)
     async function fetchMoviesShowsFromList(){
         const {data, error } = await supabase.from("favoritemovies").select("*").eq("user_id", client?.user.id)
         if(error) {
@@ -35,7 +33,10 @@ const Favorites = (props: Props) => {
                 } else if (item.show_id !== -1) {
                     fetchShowByID(item.show_id);
                 }
+                
             })
+            
+            
         }
     }
     useEffect(() => {
@@ -52,18 +53,19 @@ const Favorites = (props: Props) => {
           media_type: 'movie', // Assuming the type.
           genre_ids: movieDetails.genres.map(genre => genre.id), // Convert genres to IDs.
         };
-        setLoadingMovies(false)
         setMovies(movies => [...movies, movieResult]);
         
       }
       async function fetchShowByID(show_id: number) {
         const apiKey: string = '11e1be5dc8a3cf947ce265da83199bce';
+        console.log(show_id)
         const res = await fetch(`https://api.themoviedb.org/3/tv/${show_id}?api_key=${apiKey}`);
         if (!res.ok) {
             throw new Error('Network response was not ok');
         }
-        const showDetails: ShowDetails = await res.json();
         
+        const showDetails: ShowDetails = await res.json();
+        console.log(showDetails, "SHOWFETCH")
         // Convert ShowDetails to ShowListResult
         const showResult: ShowListResult = {
             adult: showDetails.adult,
@@ -81,7 +83,6 @@ const Favorites = (props: Props) => {
             vote_average: showDetails.vote_average,
             vote_count: showDetails.vote_count,
         };
-        setLoadingShows(false)
         setShows(shows => [...shows, showResult]);
         
     }
@@ -105,7 +106,6 @@ const Favorites = (props: Props) => {
             else {
                 const res = data as PosterLists[]
                 setPosterPaths(res)
-                setLoadingPictures(false)
             }
         }
 
@@ -113,7 +113,14 @@ const Favorites = (props: Props) => {
         getListPictures()
         
     }, [client, refresh])
-
+    const handleDeleteMovies = (deletedMovieId : number) => {
+        // Update movies array by filtering out the deleted movie
+        setMovies(currentMovies => currentMovies.filter(movie => movie.id !== deletedMovieId));
+    }
+    const handleDeleteShows = (deletedShowId : number) => {
+        // Update movies array by filtering out the deleted movie
+        setShows(currentShows => currentShows.filter(show => show.id !== deletedShowId));
+    }
   return (
     <div className='flex mt-5'>
     <div className='w-1/4 sticky top-0 h-screen overflow-y-auto bg-custom-bluegray'>
@@ -164,10 +171,10 @@ const Favorites = (props: Props) => {
         </div>
         <div className='grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-4 gap-4 mr-4'>
                 {movies.map((movie: MovieListResult, index: number) => (
-                    <Moviebox key={index} item={movie} inList={true} lst={undefined}></Moviebox>
+                    <Moviebox key={movie.id} item={movie} inList={true} lst={undefined} onDelete={handleDeleteMovies}></Moviebox>
                 ))}
                 {shows.map((show: ShowListResult, index: number) => (
-                    <Showbox key={index} item={show}  inList={true} lst={undefined}></Showbox>
+                    <Showbox key={show.id} item={show}  inList={true} lst={undefined} onDelete={handleDeleteShows}></Showbox>
                 ))}
         </div>
     </div>
