@@ -73,7 +73,9 @@ const MovieInfo = () => {
               <p >{movie.item.overview}</p>
               <Link to= "/WatchItem" state = {movie} className='flex'>
                 <p>Watch Movie</p>
-                <FontAwesomeIcon icon={faPlay} />
+                <div className='mt-[2px] ml-1'>
+                  <FontAwesomeIcon icon={faPlay} />
+                </div>
               </Link>
             </div>
           </div>
