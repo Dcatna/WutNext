@@ -65,7 +65,6 @@ const Favorites = (props: Props) => {
         }
         
         const showDetails: ShowDetails = await res.json();
-        console.log(showDetails, "SHOWFETCH")
         // Convert ShowDetails to ShowListResult
         const showResult: ShowListResult = {
             adult: showDetails.adult,
