@@ -1,11 +1,14 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import Moviebox, { movieBoxProp } from '../Components/Moviebox'
 import { MovieListResponse, MovieListResult, MovieListType, ShowListResponse, ShowListResult, ShowListType } from '../data/types/MovieListResponse'
 import { Link } from 'react-router-dom'
 import { showBoxProp } from '../Components/Showbox'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBorderAll,faGripLines, faStar, fas, faCircleMinus, faMinusCircle} from '@fortawesome/free-solid-svg-icons'
+import { CurrentUserContext } from '../App'
+import { supabase } from '../lib/supabaseClient'
 interface HoriScrollType {
     movieType : MovieListType | undefined,
     showType : ShowListType | undefined,
@@ -67,7 +70,42 @@ const HorizontalMovieScroll = ({movieType, showType, movieOrShow} : HoriScrollTy
 const ShowItems = ({item} : showBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/";
     const [loaded, setLoaded] = useState(false);
+    const client = useContext(CurrentUserContext)
+    async function handleFavorites(event: React.MouseEvent, item: ShowListResult) {
+        event.preventDefault(); // Prevent link navigation
+        event.stopPropagation();
+        const {data, error} = await supabase.from("favoritemovies").select("*").eq("show_id", item.id)
+        console.log(data)
+        if(data?.length == 0) {
+            const {data, error} = await supabase.from("favoritemovies").insert([{
+                movie_id: -1,
+                show_id : item.id, 
+                user_id: client?.user.id, 
+                poster_path: item.poster_path,
+                title: item.name,
+                overview: item.overview,
+                vote_average: item.vote_average  
+                }])
+            if(error) {
+                console.log(error, "hi")
+            }
+            else{
+                console.log(data)
+            }
+        }
+        else{
+            console.log("MOVIE IS ALREADY FAVORITED")
+        }
+        
+    }
     return (
+      <div className="group relative">
+      <div className="absolute top-0 right-0 m-2 z-10">
+          <button onClick={(event) => handleFavorites(event, item)}>
+              <FontAwesomeIcon icon={faStar} />
+          </button>
+        </div>
+        
         <Link to={'/showinfo'} state={{ item }} className="block w-full relative m-2 aspect-[3/4]">
             <img
                 onLoad={() => setLoaded(true)}
@@ -83,12 +121,51 @@ const ShowItems = ({item} : showBoxProp) => {
                 </text>
             )}
         </Link>
+        </div>
     )
 }
 const MovieItems = ({item} : movieBoxProp) => {
     const partial_url = "https://image.tmdb.org/t/p/original/";
     const [loaded, setLoaded] = useState(false);
+    const client = useContext(CurrentUserContext)
+
+    async function handleFavorites(event: React.MouseEvent, item: MovieListResult) {
+      event.preventDefault(); // Prevent link navigation
+      event.stopPropagation();
+      const {data, error} = await supabase.from("favoritemovies").select("*").eq("movie_id", item.id)
+      console.log(data)
+      if(data?.length == 0) {
+          const {data, error} = await supabase.from("favoritemovies").insert([{
+              movie_id: item.id,
+              show_id : -1, 
+              user_id: client?.user.id, 
+              poster_path: item.poster_path,
+              title: item.title,
+              overview: item.overview,
+              vote_average: item.vote_average,
+              
+              }])
+  
+          if(error) {
+              console.log(error, "hi")
+          }
+          else{
+              console.log(data)
+          }
+      }
+      else{
+          console.log("MOVIE IS ALREADY FAVORITED")
+      }
+      
+  }
     return (
+      <div className='relative'>
+        <div className="absolute top-0 right-0 m-2 z-10">
+                <button onClick={(event) => handleFavorites(event, item)}>
+                    <FontAwesomeIcon icon={faStar} />
+                </button>
+        </div>
+      
         <Link to={'/info'} state={{ item }} className="block w-full relative m-2 aspect-[3/4]">
             <img
                 onLoad={() => setLoaded(true)}
@@ -104,6 +181,7 @@ const MovieItems = ({item} : movieBoxProp) => {
                 </text>
             )}
         </Link>
+        </div>
     )
 }
 

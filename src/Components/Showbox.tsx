@@ -45,11 +45,21 @@ const Showbox = ({item, inList, lst, onDelete} : showBoxProp) => {
         
     }
     async function handleDelete() {
-        const {data, error} = await supabase.from("listitem").delete().match({"list_id" : lst?.list_id, "show_id" : item.id})
-        if(error) {
-            console.log(error)
+        if(lst!=undefined){
+            const {data, error} = await supabase.from("listitem").delete().match({"list_id" : lst?.list_id, "show_id" : item.id})
+            if(error) {
+                console.log(error)
+            }else{
+                onDelete!!(item.id)
+            }
         }else{
-            onDelete!!(item.id)
+            console.log("hi", client?.user.id, item.id)
+            const {data, error} = await supabase.from("favoritemovies").delete().match({"show_id" : item.id, "user_id" : client?.user.id, "overview" : item.overview, "movie_id" : -1, "title" : item.name})
+            if(error) {
+                console.log(error)
+            }else{
+                onDelete!!(item.id)
+            }
         }
     }
 
