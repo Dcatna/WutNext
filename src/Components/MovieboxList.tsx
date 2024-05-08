@@ -3,7 +3,7 @@ import Moviebox from './Moviebox'
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {MovieListResult} from "../data/types/MovieListResponse";
-import { Underline } from 'lucide-react';
+//import { Underline } from 'lucide-react';
 
 const itemsIndex = (items : MovieListResult[], currItem : MovieListResult) =>{
     for(let i = 0; i<items.length; i++) {

@@ -14,7 +14,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines, faPlus, faGripLinesVertical} from '@fortawesome/free-solid-svg-icons'
 import { favs } from '../Components/Profile'
 import defaultList from "./default_favorite_list.jpg"
-import { Divide } from 'lucide-react'
 export interface UserList {
     list_id: string
     user_id: string 
