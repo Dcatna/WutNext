@@ -57,13 +57,24 @@ const MovieInfo = () => {
       }));
       setSimilarMovies(convertedMovies)
     }
-    
+    async function getComments() {
+      const { data, error } = await supabase
+        .from("comment")
+        .select("*, users:users!comment_user_id_fkey(username, profile_image)")
+        .eq("movie_id", movie.item.id)
+        .order("created_at", { ascending: false });
+      if (error) {
+        throw error;
+      } else {
+        setComments(data as commentType[]);
+      }
+    }
    
     useEffect(() => {
         fetchMovieTrailer()
         fetchCredits()
         fetchSimilarMovies()
-        //getComments()
+        getComments()
     }, [movie])
 
     const addNewComment = (newComment : commentType) => {

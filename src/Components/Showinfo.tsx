@@ -11,6 +11,10 @@ import { showBoxProp } from './Showbox'
 import MovieBoxPopup from './MovieListPopup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay} from '@fortawesome/free-solid-svg-icons'
+import { commentType } from './MovieInfo'
+import CommentPopup from './CommentPopup'
+import CommentBox from './CommentBox'
+import { supabase } from '../lib/supabaseClient'
 const partial_url = "https://image.tmdb.org/t/p/original/"
 
 const Showinfo = () => {
@@ -21,6 +25,8 @@ const Showinfo = () => {
     const [videoData, setVideoData] = useState<MovieTrailer>()
     const [actors, setActors] = useState<Cast[]>()
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>()
+    const [comments, setComments] = useState<commentType[]>([])
+
     async function fetchShowTrailer() {
       const video_response: Promise<MovieTrailer> = client.fetchShowTrailer(show.item.id);
       
@@ -44,14 +50,29 @@ const Showinfo = () => {
       }));
       setSimilarMovies(convertedMovies)
     }
+    async function getComments() {
+      const { data, error } = await supabase
+        .from("comment")
+        .select("*, users:users!comment_user_id_fkey(username, profile_image)")
+        .eq("show_id", show.item.id)
+        .order("created_at", { ascending: false });
+      if (error) {
+        throw error;
+      } else {
+        setComments(data as commentType[]);
+      }
+    }
     useEffect(() => {
 
         fetchCredits()
         fetchSimilarShows()
         fetchShowTrailer()
+        getComments()
     }, [show])
 
-
+    const addNewComment = (newComment : commentType) => {
+      setComments(prevComments => [newComment, ...prevComments]);
+    }
   return (
     <div className='overflow-x-hidden overflow-y-hidden'>
     <div className='fixed right-4 top-4 z-50'>
@@ -86,6 +107,11 @@ const Showinfo = () => {
           <ActorBox actor={actor}></ActorBox>
         ))}
       </div>
+      <p className='mt-5 ml-[40px] mb-5'>Comments</p>
+        <div className='ml-[45px]'>
+          {comments?.length != 0 ? <CommentBox comment={comments[0]} singleComment={true}></CommentBox>: <div>There are no comments</div>}
+          <CommentPopup movieorshow={show.item.id} isMovie={false} addNewComment = {addNewComment}></CommentPopup>
+        </div>
       <p className='mt-5 ml-[40px]'>Media</p>
       <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'40px'}}>
         {videoData?.results.map((video) => (

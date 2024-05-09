@@ -21,20 +21,33 @@ const CommentPopup = ({ movieorshow, isMovie, addNewComment }: allComments) => {
   //console.log(allComment, comments)
 
   async function getComments() {
-    const { data, error } = await supabase
-      .from("comment")
-      .select("*, users:users!comment_user_id_fkey(username, profile_image)")
-      .eq("movie_id", movieorshow)
-      .order("created_at", { ascending: false });
-    if (error) {
-      throw error;
-    } else {
-      setAllComment(data as commentType[]);
+    if(isMovie == true) {
+        const { data, error } = await supabase
+        .from("comment")
+        .select("*, users:users!comment_user_id_fkey(username, profile_image)")
+        .eq("movie_id", movieorshow)
+        .order("created_at", { ascending: false });
+        if (error) {
+        throw error;
+        } else {
+        setAllComment(data as commentType[]);
+        }
+    }else{
+        const { data, error } = await supabase
+        .from("comment")
+        .select("*, users:users!comment_user_id_fkey(username, profile_image)")
+        .eq("show_id", movieorshow)
+        .order("created_at", { ascending: false });
+        if (error) {
+        throw error;
+        } else {
+        setAllComment(data as commentType[]);
+        }
     }
   }
   useEffect(() => {
     getComments();
-  }, []);
+  }, [movieorshow]);
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); // Prevent the default form submission behavior
     if(currComment != ""){
@@ -64,18 +77,32 @@ const CommentPopup = ({ movieorshow, isMovie, addNewComment }: allComments) => {
             //console.log(allComment, "ALLLLL")
           }
 
-    }
-    // else{
-    //     const {data, error} = await supabase.from("comment").insert(
-    //         {'user_id': client?.user.id,
-    //         'created_at' : date,
-    //         'message' : currComment,
-    //         'movie_id' : -1,
-    //         'show_id' : comments[0].show_id})
-    //     if(error){
-    //         throw error
-    //     }
-    // }
+        }else{
+            const date = new Date().toISOString;
+          const { data, error } = await supabase
+            .from("comment")
+            .insert({
+              user_id: client?.user.id,
+              created_at: date,
+              message: currComment,
+              movie_id: -1,
+              show_id: movieorshow,
+            })
+            .select();
+          if (error) {
+            throw error;
+          } else {
+            const res = data[0] as commentType;
+            //console.log(data, "DAADA", res, "SDFSDF")
+            //.sort((a : commentType, b : commentType) => Date.parse(b.created_at) - Date.parse(a.created_at))
+            //addNewComment(res)
+            setAllComment((prev) => {
+              return [res, ...prev];
+            });
+            setCurrComment("");
+            //console.log(allComment, "ALLLLL")
+          }
+        }
     }
     
   }
@@ -118,6 +145,7 @@ const CommentPopup = ({ movieorshow, isMovie, addNewComment }: allComments) => {
           className="bg-gray-100 rounded-md flex-1 p-2 text-black"
           placeholder="Comment..."
           type="text"
+          value={currComment}
           onChange={(letter) => setCurrComment(letter.target.value)}
         />
         <Button type="submit" className="px-4 text-black font-bold">
