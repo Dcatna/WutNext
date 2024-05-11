@@ -105,7 +105,7 @@ const Showinfo = () => {
       </div>
       <p className='mt-5 ml-[40px] mb-5'>Comments</p>
         <div className='ml-[45px]'>
-          {comments?.length != 0 ? <CommentBox comment={comments[0]} singleComment={true}></CommentBox>: <div>There are no comments</div>}
+          {comments?.length != 0 ? <CommentBox comment={comments[0]} singleComment={true} reply={undefined}></CommentBox>: <div>There are no comments</div>}
           <CommentPopup movieorshow={show.item.id} isMovie={false} ></CommentPopup>
         </div>
       <p className='mt-5 ml-[40px]'>Media</p>

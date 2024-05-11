@@ -72,7 +72,7 @@ const CommentPopup = ({ movieorshow, isMovie }: allComments) => {
           }
 
         }else{
-            const date = new Date().toISOString;
+          const date = new Date().toISOString;
           const { data, error } = await supabase
             .from("comment")
             .insert({
@@ -121,11 +121,12 @@ const CommentPopup = ({ movieorshow, isMovie }: allComments) => {
     >
       <div className="overflow-y-auto max-h-[93vh]">
         {allComment.map((comment: CommentWithReply) => (
-          <div className="last">
+          <div className="last mt-2">
             <CommentBox
               comment={comment}
               key={comment.id}
               singleComment={false}
+              reply={undefined}
             ></CommentBox>
           </div>
         ))}

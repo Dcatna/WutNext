@@ -5,17 +5,21 @@ import { number } from 'yup'
 import defaultimage from "./user_default.jpg"
 import { CommentWithReply } from './CommentPopup'
 import { Divide } from 'lucide-react'
+import ReplyBox from './ReplyBox'
 type Props = {}
 export interface Comment{
     comment : CommentWithReply
     singleComment : boolean
+    reply : replyType | undefined
+    //isReply : boolean
 }
-interface replyType{
+export interface replyType{
     id : number,
     created_at : string,
     user_id : string,
     message : string,
     cid : number
+    users : {username : string | undefined, profile_image : string | undefined}
 }
 const CommentBox = ({comment, singleComment} : Comment) => {
     //const [userImage, setUserImage] = useState<string>()
@@ -23,10 +27,10 @@ const CommentBox = ({comment, singleComment} : Comment) => {
     const [image, setImage] = useState<string>("")
     const [showReplies, setShowReplies] = useState(false)
     const [replies, setReplies] = useState<replyType[]>([])
-    const getImageUrl = () => {
+    const getImageUrl = (profile_image : string | undefined) => {
         
-        if (comment.profile_image) {
-            const {data} = supabase.storage.from("profile_pictures").getPublicUrl(comment.profile_image)
+        if (profile_image) {
+            const {data} = supabase.storage.from("profile_pictures").getPublicUrl(profile_image)
             
             if(data.publicUrl != undefined){
                 setImage(data.publicUrl)
@@ -38,23 +42,23 @@ const CommentBox = ({comment, singleComment} : Comment) => {
         }
     }
     async function getReplies(){
-        const {data, error} = await supabase.from("reply").select("*").eq("cid", comment.id)
-        if(error) {
-            throw error
-        }else{
+        const {data, error} = await supabase.from("reply").select("*, user:users!reply_user_id_fkey(username, profile_image)").eq("cid", comment.id).order("created_at", {ascending: false})
+        
+            console.log(data as replyType[], "REPLY")
             setReplies(data as replyType[])
-        }
+        
     }
     useEffect(() => {
-        getImageUrl()
+      
+        getImageUrl(comment.profile_image)
         getReplies()
-    },[showReplies])
+    },[])
     const toggleReplies = () => {
         setShowReplies(!showReplies)
     }
   return (
     <div className='flex'>
-        <img className="rounded-full h-20 w-20 border-2 border-gray-300" src={image} alt="" />
+        <img className="rounded-full h-12 w-12 border-2 border-gray-300" src={image} alt="" />
         <div className='col ml-2'>
             {singleComment == true ?
             <div className='flex text-white'>
@@ -85,7 +89,7 @@ const CommentBox = ({comment, singleComment} : Comment) => {
                     <div className='ml-2'>
                         {replies.map((reply : replyType) => (
                             <div>
-                                {reply.message}
+                                <ReplyBox key={reply.id} reply={reply}></ReplyBox>
                             </div>
                         ))}
                         <p className = "cursor-pointer" onClick={toggleReplies}>Hide Replies</p>
