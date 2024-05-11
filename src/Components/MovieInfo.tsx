@@ -12,7 +12,10 @@ import MovieBoxPopup from './MovieListPopup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay} from '@fortawesome/free-solid-svg-icons'
 import CommentBox from './CommentBox'
-import CommentPopup from './CommentPopup'
+import CommentPopup, { CommentWithReply } from './CommentPopup'
+import { User } from '@supabase/supabase-js'
+import { UUID } from 'crypto'
+import { commentWithReply } from './CommentWithReplies'
 
 const partial_url = "https://image.tmdb.org/t/p/original/"
 export interface commentType{
@@ -24,6 +27,9 @@ export interface commentType{
   show_id : number,
   users : {username : string | undefined, profile_image : string | undefined}
 }
+export type userType = {
+  uid : string | undefined,
+}
 const MovieInfo = () => {
     const client2 = useContext(CurrentUserContext)
     const location = useLocation()
@@ -32,7 +38,7 @@ const MovieInfo = () => {
     const [videoData, setVideoData] = useState<MovieTrailer>()
     const [actors, setActors] = useState<Cast[]>()
     const [similarMovies, setSimilarMovies] = useState<SimilarMovie[]>()
-    const [comments, setComments] = useState<commentType[]>([])
+    const [comments, setComments] = useState<CommentWithReply[]>([])
 
     async function fetchMovieTrailer() {
         const video_response: Promise<MovieTrailer> = client.fetchMovieTrailer(movie.item.id);
@@ -58,28 +64,22 @@ const MovieInfo = () => {
       setSimilarMovies(convertedMovies)
     }
     async function getComments() {
-      const { data, error } = await supabase
-        .from("comment")
-        .select("*, users:users!comment_user_id_fkey(username, profile_image)")
-        .eq("movie_id", movie.item.id)
-        .order("created_at", { ascending: false });
-      if (error) {
-        throw error;
-      } else {
-        setComments(data as commentType[]);
-      }
+      console.log(client2?.user.id, "USERS")
+       const data = await commentWithReply(client2?.user.id, movie.item.id, -1)
+        setComments(data as CommentWithReply[]);
+      
     }
    
     useEffect(() => {
         fetchMovieTrailer()
         fetchCredits()
         fetchSimilarMovies()
-        getComments()
+        getComments().catch()
     }, [movie])
 
-    const addNewComment = (newComment : commentType) => {
-      setComments(prevComments => [newComment, ...prevComments]);
-    }
+    // const addNewComment = (newComment : CommentWithReply) => {
+    //   setComments(prevComments => [newComment, ...prevComments]);
+    // }
     
   return (
     <div className='overflow-x-hidden overflow-y-hidden'>
@@ -117,7 +117,7 @@ const MovieInfo = () => {
       <p className='mt-5 ml-[40px] mb-5'>Comments</p>
         <div className='ml-[45px]'>
           {comments?.length != 0 ? <CommentBox comment={comments[0]} singleComment={true}></CommentBox>: <div>There are no comments</div>}
-          <CommentPopup movieorshow={movie.item.id} isMovie={true} addNewComment = {addNewComment}></CommentPopup>
+          <CommentPopup movieorshow={movie.item.id} isMovie={true} ></CommentPopup>
         </div>
       <p className='mt-5 ml-[40px] mb-5'>Media</p>
       <div className='flex overflow-x-auto ' style={{width: '1000px', marginLeft:'40px'}}>

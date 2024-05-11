@@ -3,9 +3,10 @@ import { commentType } from './MovieInfo'
 import { supabase } from '../lib/supabaseClient'
 import { number } from 'yup'
 import defaultimage from "./user_default.jpg"
+import { CommentWithReply } from './CommentPopup'
 type Props = {}
-interface Comment{
-    comment : commentType
+export interface Comment{
+    comment : CommentWithReply
     singleComment : boolean
 }
 const CommentBox = ({comment, singleComment} : Comment) => {
@@ -14,8 +15,8 @@ const CommentBox = ({comment, singleComment} : Comment) => {
     const [image, setImage] = useState<string>("")
     const getImageUrl = () => {
         
-        if (comment.users?.profile_image) {
-            const {data} = supabase.storage.from("profile_pictures").getPublicUrl(comment.users.profile_image)
+        if (comment.profile_image) {
+            const {data} = supabase.storage.from("profile_pictures").getPublicUrl(comment.profile_image)
             
             if(data.publicUrl != undefined){
                 setImage(data.publicUrl)
@@ -36,7 +37,7 @@ const CommentBox = ({comment, singleComment} : Comment) => {
         <div className='col ml-2'>
             {singleComment == true ?
             <div className='flex text-white'>
-                {comment.users?.username}
+                {comment.username}
                 <div className='ml-2'>
                     {date.toLocaleDateString("en-US", {
                         month : 'long',
@@ -45,7 +46,7 @@ const CommentBox = ({comment, singleComment} : Comment) => {
                     })}
                 </div>
             </div> :  <div className='flex text-black'>
-                {comment.users?.username}
+                {comment.username}
                 <div className='ml-2'>
                     {date.toLocaleDateString("en-US", {
                         month : 'long',
@@ -56,8 +57,10 @@ const CommentBox = ({comment, singleComment} : Comment) => {
             </div>}
             {singleComment == true ? <div className='text-white break-words overflow-hidden w-[400px]'>
                 <p className='break-words'>{comment.message}</p>
-            </div> : <div className='text-black break-words overflow-hidden w-[400px]'>
+            </div> : <div className='text-black break-words overflow-hidden w-[400px] flex flex-col'>
                 <p className='break-words'>{comment.message}</p>
+                {comment.replies == 0 ? <div></div> : <p className='break-words'>--Replies {comment.replies}</p>}
+                
             </div>}
         </div>
     </div>
