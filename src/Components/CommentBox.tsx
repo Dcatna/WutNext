@@ -19,7 +19,7 @@ export interface replyType{
     user_id : string,
     message : string,
     cid : number
-    users : {username : string | undefined, profile_image : string | undefined}
+    user : {username : string | undefined, profile_image : string | undefined}
 }
 const CommentBox = ({comment, singleComment} : Comment) => {
     //const [userImage, setUserImage] = useState<string>()
@@ -44,8 +44,9 @@ const CommentBox = ({comment, singleComment} : Comment) => {
     async function getReplies(){
         const {data, error} = await supabase.from("reply").select("*, user:users!reply_user_id_fkey(username, profile_image)").eq("cid", comment.id).order("created_at", {ascending: false})
         
-            console.log(data as replyType[], "REPLY")
+            //console.log(data as replyType[], "REPLY")
             setReplies(data as replyType[])
+            
         
     }
     useEffect(() => {
@@ -56,6 +57,7 @@ const CommentBox = ({comment, singleComment} : Comment) => {
     const toggleReplies = () => {
         setShowReplies(!showReplies)
     }
+    console.log(replies, "REPLY")
   return (
     <div className='flex'>
         <img className="rounded-full h-12 w-12 border-2 border-gray-300" src={image} alt="" />

@@ -8,10 +8,10 @@ interface actualReply{
 }
 const ReplyBox = ({reply} : actualReply) => {
     //const [userImage, setUserImage] = useState<string>()
-   // const date = new Date(reply.created_at)
+    const date = new Date(reply.created_at)
     const [image, setImage] = useState<string>("")
-    const [showReplies, setShowReplies] = useState(false)
-    const [replies, setReplies] = useState<replyType[]>([])
+    // const [showReplies, setShowReplies] = useState(false)
+    // const [replies, setReplies] = useState<replyType[]>([])
 
     const getImageUrl = (profile_image : string | undefined) => {
         
@@ -28,24 +28,24 @@ const ReplyBox = ({reply} : actualReply) => {
         }
     }
     useEffect(() => {
-        console.log(reply.users?.username, "USERS")
-        getImageUrl(reply.users?.profile_image)
+        getImageUrl(reply.user?.profile_image)
     }, [])
   return (
     <div className='flex'>
         <img className="rounded-full h-12 w-12 border-2 border-gray-300" src={image} alt="" />
         <div className='col ml-2'>
              <div className='flex text-black'>
-                {reply.users?.username}
+                {reply.user?.username}
                 <div className='ml-2'>
-                    {/* {date.toLocaleDateString("en-US", {
+                    {date.toLocaleDateString("en-US", {
                         month : 'long',
                         day : 'numeric',
                         year : 'numeric'
-                    })} */}
+                    })}
                 </div>
-                {reply.message}
+                
             </div>
+            {reply.message}
         </div>
     </div>
   )
