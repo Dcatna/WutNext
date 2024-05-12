@@ -25,6 +25,7 @@ export const router = createBrowserRouter([
                 element:<Home />,
                 children: [
                     {path: "/home", element:<ContentPreview/>},
+                    {path: "/home/list", element:<ContentPreview/>}, // TODO (show all user lists or list browse screen)
                     {
                         path:"/home/list/:listId",
                         element: <ListItems/>,
