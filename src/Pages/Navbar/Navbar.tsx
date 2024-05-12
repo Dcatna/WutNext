@@ -37,10 +37,10 @@ const Navbar = (props: Props) => {
     <nav>
         <div className="w-screen flex justify-center items-center">
             <Button asChild variant="ghost">
-                <Link to="/">Home</Link>
+                <Link to="/home">Home</Link>
             </Button>
             <Button asChild variant="ghost">
-                <Link to="/home">Browse</Link>
+                <Link to="/browse">Browse</Link>
             </Button>
             <Button asChild variant="ghost" className="rounded-md">
                 <Link to="/recommended">Recommended</Link>

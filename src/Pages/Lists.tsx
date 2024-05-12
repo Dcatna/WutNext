@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { PosterLists } from "./Browse"
+import { PosterLists } from "./Home"
 import { useContext, useMemo } from "react"
 import movieicon from "./movieicon.png"
 import { CurrentUserContext } from "../App"
@@ -27,7 +27,7 @@ const Lists = ({item} : PL) => {
     
     return (
         
-       <Link to={'/listitems'} state={item}>
+       <Link to={`/home/list/${item.list_id}`} state={item}>
             <div className='w-full rounded-md hover:bg-black/50 text-center flex flex-relative p-1'>   
                 {posters.length == 1 ? 
                     <div className='w-[65px] grid grid-cols rounded-lg overflow-hidden'>

@@ -1,6 +1,6 @@
 import React, { createContext } from 'react';
 import logo from './logo.svg';
-import HomePage from './Pages/Home/HomePage';
+import BrowsePage from './Pages/Home/BrowsePage';
 import { Outlet } from 'react-router-dom';
 import {
   QueryClient,
@@ -30,7 +30,7 @@ function App() {
               <QueryClientProvider client={queryClient}>
                 <div className='overflow-x-hidden'>
 
-                <Navbar></Navbar>
+                <Navbar/>
                 
                 <Outlet/>
                 </div>

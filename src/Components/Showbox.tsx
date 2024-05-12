@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabaseClient';
 import { CurrentUserContext } from '../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines, faStar, fas, faMinusCircle} from '@fortawesome/free-solid-svg-icons'
-import { UserList } from '../Pages/Browse';
+import { UserList } from '../Pages/Home';
 
 export interface showBoxProp{
     item : ShowListResult

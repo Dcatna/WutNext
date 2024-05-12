@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
-import Navbar from '../Navbar/Navbar'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBorderAll,faGripLines} from '@fortawesome/free-solid-svg-icons'
-import TrendingScreen from '../IconScreens/TrendingScreen'
 import MovieboxScroll from '../../Components/Scrollables/MovieBoxScroll'
 import ShowBoxScroll from '../../Components/Scrollables/ShowBoxScroll'
 
 type Screen = "MOVIE" | "SHOW"
 
-const HomePage = () => {
+const BrowsePage = () => {
     const [screen, setScreen] = useState<Screen>("MOVIE")
 
    return (
@@ -32,4 +28,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default BrowsePage

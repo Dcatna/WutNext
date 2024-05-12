@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBorderAll,faGripLines, faStar, fas, faCircleMinus, faMinusCircle} from '@fortawesome/free-solid-svg-icons'
 import { CurrentUserContext } from '../App';
-import { UserList } from '../Pages/Browse';
+import { UserList } from '../Pages/Home';
 
 export interface movieBoxProp {
     item : MovieListResult

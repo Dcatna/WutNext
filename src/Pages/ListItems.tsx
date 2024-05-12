@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { PosterLists, UserList } from './Browse'
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom'
+import { PosterLists, UserList } from './Home'
 import { supabase } from '../lib/supabaseClient'
 import { MovieListResponse, MovieListResult, ShowListResult } from '../data/types/MovieListResponse'
 import { MovieDetails, ShowDetails } from '../data/types/types'
@@ -15,6 +15,8 @@ import Lists from './Lists'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faGripLinesVertical} from '@fortawesome/free-solid-svg-icons'
 import defaultList from "./default_favorite_list.jpg"
+import {getListsByUserId} from "../data/userlists";
+import userPreferences from "../Components/ProfileNav/UserPreferences";
 type Props = {}
 interface ListTypes{
     list_id : string,
@@ -25,18 +27,26 @@ interface ListTypes{
 }
 
 const ListItems = (props: Props) => {
+    const params = useParams()
+
+    const listId = params['listId']
     const location = useLocation()
     const lst : UserList = location.state
     const client = useContext(CurrentUserContext)
     const nav = useNavigate()
+
     const [movies, setMovies] = useState<MovieListResult[]>([])
     const [shows, setShows] = useState<ShowListResult[]>([])
     const [userLists, setUserLists] = useState<UserList[]>()
     const [posterPaths, setPosterPaths] = useState<PosterLists[]>()
     const [refresh, setRefresh] = useState(0)
     const [singlePosterPath, setSinglePosterPath] = useState<PosterLists>()
+
     async function fetchMoviesShowsFromList(){
-        const {data, error } = await supabase.from("listitem").select("*").eq("list_id", lst.list_id)
+        const {data, error } = await supabase
+            .from("listitem"
+            ).select("*")
+            .eq("list_id", listId)
         if(error) {
             console.log(error)
         }else{
@@ -53,7 +63,7 @@ const ListItems = (props: Props) => {
         setMovies([])
         setShows([])
         fetchMoviesShowsFromList()
-    }, [lst])
+    }, [listId])
     async function fetchMovieByID(movie_id: number) {
         const apiKey: string = '11e1be5dc8a3cf947ce265da83199bce';
         const res = await fetch(`https://api.themoviedb.org/3/movie/${movie_id}?api_key=${apiKey}`);
@@ -96,34 +106,18 @@ const ListItems = (props: Props) => {
         setShows(shows => [...shows, showResult]);
         
     }
-    
+
     useEffect(() => {
 
         async function getLists(){
-            const {data, error} = await supabase.from("userlist").select("*").eq("user_id", client?.user.id)
-            console.log(data, "lsits")
-            if(error){
-                console.log(error)
-            }
-            else{
-                setUserLists(data as UserList[])
-            }
-        }
-        async function getListPictures() {
-            const {data, error} = await supabase.rpc("select_lists_with_poster_items_for_user_id", { uid: client?.user.id,  lim: 9999, off: 0})
-            if(error) {
-                console.log(error)
-            }
-            else {
-                const res = data as PosterLists[]
-                setPosterPaths(res)
-            }
+            const data = await getListsByUserId(client?.user.id)
+
+            setUserLists(data)
         }
 
-        getLists()
-        getListPictures()
-        
-    }, [client, refresh, lst, movies, shows])
+        getLists().catch(e => console.log(e))
+    }, [client, refresh, listId, movies, shows])
+
     useEffect(() => {
         async function getListPictures() {
             const {data, error} = await supabase.rpc("select_lists_with_poster_items_for_user_id", { uid: client?.user.id,  lim: 9999, off: 0})
@@ -132,12 +126,13 @@ const ListItems = (props: Props) => {
             }
             else {
                 const res = data as PosterLists[]
-                const foundElement = res.find(ll => ll.list_id == lst.list_id)
+                const foundElement = res.find(ll => ll.list_id === listId)
                 setSinglePosterPath(foundElement)
             }
         }
-        getListPictures()
-    }, [client?.access_token, lst, movies, shows])
+        getListPictures().catch()
+    }, [client?.access_token, listId, movies, shows])
+
         const posters = useMemo<string[]>(() => {
             if(!singlePosterPath?.ids){
                 return []
@@ -153,18 +148,15 @@ const ListItems = (props: Props) => {
                     return posterData[2]
                 }) ?? []) 
             }
-        }, [singlePosterPath?.ids, lst])
+        }, [singlePosterPath?.ids, listId])
     
     async function deleteList() {
-        const {data, error} = await supabase.from("userlist").delete().match({"list_id" : lst.list_id})
+        const {data, error} = await supabase.from("userlist").delete().match({"list_id" : listId})
         if(error) {
             console.log(error)
         }
         nav("/")
         
-    }
-    function handleClick() {
-        setRefresh(prev => prev+1)
     }
     const handleDeleteMovies = (deletedMovieId : number) => {
         // Update movies array by filtering out the deleted movie
@@ -175,41 +167,6 @@ const ListItems = (props: Props) => {
         setShows(currentShows => currentShows.filter(show => show.id !== deletedShowId));
     }
   return (
-
-    <div className='flex mt-5'>
-    <div className='w-1/4 sticky top-0 h-screen overflow-y-auto bg-custom-bluegray'>
-        <div>
-            <div className='flex justify-between items-center'>
-                <div className='flex items-center'>
-                    <FontAwesomeIcon className='mt-1 size-6' icon={faGripLinesVertical} />
-                    <p className='ml-1 text-lg'>Your Library</p>
-                </div>
-                <div onClick={handleClick} className='mt-1 hover:bg-slate-800'>
-                    <Popup></Popup>
-                </div>
-            </div>
-        </div>
-        <Link to="/favorites">
-        <div className='w-full rounded-md hover:bg-black/50 text-center flex flex-relative p-1 mt-1'> 
-            <div className='w-[65px] grid grid-cols rounded-lg overflow-hidden'>
-                <img src={defaultList} alt="" className='w-full h-full object-cover aspect-1'/>
-            </div>
-            <div className='flex items-center ml-2'>
-                <div className='flex flex-col '>
-                    <p className='text-left'>Favorites </p>
-                    <p className='text-left'>Created By: {client?.user.email?.slice(0, client?.user.email?.indexOf("@"))}</p>
-                </div> 
-            </div>
-            
-        </div>
-        </Link>
-        <div className=''>
-            {posterPaths?.map((lst: PosterLists, index: number) => (
-                <Lists key={index} item={lst}></Lists> 
-            ))}
-        </div>
-    </div>
-
     <div className='w-3/4 flex flex-col ml-16 mb-8'>
         <div className='flex justify-between items-start mb-4 w-full'>
             <div className='flex space-x-4'>
@@ -246,8 +203,6 @@ const ListItems = (props: Props) => {
             ))}
         </div>
     </div>
-</div>
-
   )
 }
 
