@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import defaultimage from "./user_default.jpg"
 import { replyType } from './CommentBox'
+import { Divide } from 'lucide-react'
 
 interface actualReply{
     reply : replyType
 }
 const ReplyBox = ({reply} : actualReply) => {
-    //const [userImage, setUserImage] = useState<string>()
     const date = new Date(reply.created_at)
     const [image, setImage] = useState<string>("")
-    // const [showReplies, setShowReplies] = useState(false)
-    // const [replies, setReplies] = useState<replyType[]>([])
 
     const getImageUrl = (profile_image : string | undefined) => {
         
@@ -35,7 +33,7 @@ const ReplyBox = ({reply} : actualReply) => {
         <img className="rounded-full h-12 w-12 border-2 border-gray-300" src={image} alt="" />
         <div className='col ml-2'>
              <div className='flex text-black'>
-                {reply.user?.username}
+                {reply.user?.username == undefined ? <p>deleted_user</p> : reply.user.username}
                 <div className='ml-2'>
                     {date.toLocaleDateString("en-US", {
                         month : 'long',

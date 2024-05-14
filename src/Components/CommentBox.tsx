@@ -10,8 +10,9 @@ type Props = {}
 export interface Comment{
     comment : CommentWithReply
     singleComment : boolean
-    reply : replyType | undefined
-    //isReply : boolean
+    onReplyClick : (() => void) | undefined
+    replyActive : boolean 
+    refreshReplies : (() => void) | undefined
 }
 export interface replyType{
     id : number,
@@ -21,12 +22,14 @@ export interface replyType{
     cid : number
     user : {username : string | undefined, profile_image : string | undefined}
 }
-const CommentBox = ({comment, singleComment} : Comment) => {
+const CommentBox = ({comment, singleComment, onReplyClick, replyActive, refreshReplies} : Comment) => {
     //const [userImage, setUserImage] = useState<string>()
     const date = new Date(comment.created_at)
     const [image, setImage] = useState<string>("")
     const [showReplies, setShowReplies] = useState(false)
     const [replies, setReplies] = useState<replyType[]>([])
+    const [toggleRelpy, setToggleReply] = useState(false)
+
     const getImageUrl = (profile_image : string | undefined) => {
         
         if (profile_image) {
@@ -53,8 +56,9 @@ const CommentBox = ({comment, singleComment} : Comment) => {
       
         getImageUrl(comment.profile_image)
         getReplies()
-    },[])
-    const toggleReplies = () => {
+    },[replyActive, refreshReplies])
+    const toggleReplies = async () => {
+        await getReplies()
         setShowReplies(!showReplies)
     }
     console.log(replies, "REPLY")
@@ -86,7 +90,9 @@ const CommentBox = ({comment, singleComment} : Comment) => {
                 <p className='break-words'>{comment.message}</p>
             </div> : <div className='text-black break-words overflow-hidden w-[400px] flex flex-col'>
                 <p className='break-words'>{comment.message}</p>
-                {comment.replies > 0 && !showReplies && <p onClick={toggleReplies} className='break-words ml-2 cursor-pointer'>View {comment.replies} more reply</p>}
+
+                <p onClick={onReplyClick} className='cursor-pointer ml-2 '>Reply</p>
+                {comment.replies > 0 && !showReplies && <p onClick={toggleReplies} className='break-words ml-3 cursor-pointer'>View {comment.replies} more reply</p>}
                 {showReplies && (
                     <div className='ml-2'>
                         {replies.map((reply : replyType) => (
