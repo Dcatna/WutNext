@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter, redirect } from "react-router-dom";
 import App from "../App";
 import BrowsePage from "../Pages/Home/BrowsePage";
 import Loginbox from "../Pages/Login/Loginbox";
@@ -15,12 +15,15 @@ import ListItems from "../Pages/ListItems";
 import WatchItem from "../Components/WatchItem"
 import Favorites from "../Pages/Favorites";
 import WatchShow from "../Components/WatchShow";
+import UserProfile from "../Components/UserProfile";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
+        
         children: [
+            {path: "/", element: <Navigate to="/home" replace /> },
             {path:"/home",
                 element:<Home />,
                 children: [
@@ -36,6 +39,8 @@ export const router = createBrowserRouter([
                         },
                     },
                     {path:"/home/favorites", element: <Favorites></Favorites>},
+                    {path:"/home/userprofile/:userId", element: <UserProfile></UserProfile>},
+
                 ]
             },
             {path:"/browse", element:<BrowsePage />},
@@ -45,7 +50,6 @@ export const router = createBrowserRouter([
             {path:"/pool", element:<ProtectedRoute><Pool/></ProtectedRoute> },
             {path:"/info", element: <MovieInfo/>},
             {path:"/showinfo", element: <Showinfo/>},
-
             {path:"/WatchItem", element: <WatchItem></WatchItem>},
 
             {path:"/WatchShow", element: <WatchShow></WatchShow>}

@@ -6,7 +6,10 @@ import defaultimage from "./user_default.jpg"
 import { CommentWithReply } from './CommentPopup'
 import { Divide } from 'lucide-react'
 import ReplyBox from './ReplyBox'
-type Props = {}
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart} from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
+
 export interface Comment{
     comment : CommentWithReply
     singleComment : boolean
@@ -64,33 +67,40 @@ const CommentBox = ({comment, singleComment, onReplyClick, replyActive, refreshR
     console.log(replies, "REPLY")
   return (
     <div className='flex'>
-        <img className="rounded-full h-12 w-12 border-2 border-gray-300" src={image} alt="" />
+        <Link to={`/home/userprofile/${comment.user_id}`} state={comment}>
+            <img className="rounded-full h-12 w-12 border-2 border-gray-300" src={image} alt="" />
+        </Link>
         <div className='col ml-2'>
-            {singleComment == true ?
-            <div className='flex text-white'>
-                {comment.username}
-                <div className='ml-2'>
-                    {date.toLocaleDateString("en-US", {
-                        month : 'long',
-                        day : 'numeric',
-                        year : 'numeric'
-                    })}
-                </div>
-            </div> :  <div className='flex text-black'>
-                {comment.username}
-                <div className='ml-2'>
-                    {date.toLocaleDateString("en-US", {
-                        month : 'long',
-                        day : 'numeric',
-                        year : 'numeric'
-                    })}
-                </div>
-            </div>}
+            <Link to={`/home/userprofile/${comment.user_id}`} state={comment}>
+                {singleComment == true ?
+                <div className='flex text-white'>
+                    {comment.username}
+                    <div className='ml-2'>
+                        {date.toLocaleDateString("en-US", {
+                            month : 'long',
+                            day : 'numeric',
+                            year : 'numeric'
+                        })}
+                    </div>
+                </div> : <div className='flex text-black'>
+                    {comment.username}
+                    <div className='ml-2'>
+                        {date.toLocaleDateString("en-US", {
+                            month : 'long',
+                            day : 'numeric',
+                            year : 'numeric'
+                        })}
+                    </div>
+                    
+                </div>}
+            </Link>
             {singleComment == true ? <div className='text-white break-words overflow-hidden w-[400px]'>
                 <p className='break-words'>{comment.message}</p>
             </div> : <div className='text-black break-words overflow-hidden w-[400px] flex flex-col'>
-                <p className='break-words'>{comment.message}</p>
-
+                <div className='relative'>
+                    <p className='break-words'>{comment.message}</p>
+                    <FontAwesomeIcon icon={faHeart} className='absolute right-0 top-1/2 transform -translate-y-1/2' />
+                </div>
                 <p onClick={onReplyClick} className='cursor-pointer ml-2 '>Reply</p>
                 {comment.replies > 0 && !showReplies && <p onClick={toggleReplies} className='break-words ml-3 cursor-pointer'>View {comment.replies} more reply</p>}
                 {showReplies && (

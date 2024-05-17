@@ -27,11 +27,11 @@ export interface favs {
   show_id : number
 }
 
-type Screens = "MOVIE" | "SHOW" | "PROFILE" | "ACTIVITY" | "PREFERENCES" | "SETTINGS" | "LISTS"
+type Screens = "MOVIE" | "LISTS"
 
 const Profile = () => {
   const currentUserSession = useContext(CurrentUserContext) 
-  const [currScreen, setCurrScreen] = useState<Screens>("PROFILE")
+  const [currScreen, setCurrScreen] = useState<Screens>("LISTS")
   console.log(currentUserSession?.user.id)
   return (
     <div className='overflow-x-hidden'>
@@ -45,36 +45,18 @@ const Profile = () => {
     <div className='mt-10'>
       <div className='items-center justify-center flex'>
         <div>
-          <Button onClick={() => setCurrScreen("PROFILE")} variant="ghost">
+          <Button onClick={() => setCurrScreen("LISTS")} variant="ghost">
               Profile
           </Button>
           <Button onClick={() => setCurrScreen("MOVIE")} variant="ghost" className="rounded-md">
               Favorite Movies
           </Button>
-          <Button onClick={() => setCurrScreen("SHOW")} variant="ghost" className="rounded-md">
-              Favorites Shows
-          </Button>
-          <Button onClick={() => setCurrScreen("ACTIVITY")} variant="ghost" className="rounded-md">
-              Activity
-          </Button>
-          <Button onClick={() => setCurrScreen("PREFERENCES")} variant="ghost" className="rounded-md">
-              Preferences
-          </Button>
-          <Button onClick={() => setCurrScreen("LISTS")} variant="ghost" className="rounded-md">
-              Lists
-          </Button>
-          <Button onClick={() => setCurrScreen("SETTINGS")} variant="ghost" className="rounded-md">
-              Settings
-          </Button>
+          
         </div>
       </div>
         <div className='' style={{marginLeft:"400px"}}>
           {currScreen === "MOVIE" && <UserFavMovies/>}
-          {currScreen === "SHOW" && <UserFavShows/>}
-          {currScreen === "PROFILE" && <UserProfile/>}
-          {currScreen === "PREFERENCES" && <UserPreferences/>}
-          {currScreen === "ACTIVITY" && <UserActivity/>}
-          {currScreen === "SETTINGS" && <UserSettings/>}
+          
           {currScreen === "LISTS" && <UserLists/>}
         </div>
       </div>
